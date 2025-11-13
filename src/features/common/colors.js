@@ -4,7 +4,8 @@ const colors= {
   point:"#1768AC",
   profile:"#446095",
   background: "#FFFFFF",
-  box:"#EBEEF2"
+  box:"#EBEEF2",
+  logo:"#FFFFFF"
 };
 
 export default colors;
