@@ -5,7 +5,6 @@ import MainPage from './features/main/pages/MainPage';
 import RootLayout from './features/layout/RootLayout';
 
 
-
 function App() {
 
   return (
