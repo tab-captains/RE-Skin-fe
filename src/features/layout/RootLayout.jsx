@@ -10,7 +10,8 @@ const FixedNav = styled.div`
   left: 0;
   width: 100%;
   z-index:1000;
-`
+  border-bottom:0;
+`;
 const MainContent =styled.div`
 padding-top: 45px;
 `
@@ -18,15 +19,15 @@ padding-top: 45px;
 const RootLayout = ()=>{
 
 return(
-    <>
-    <GlobalStyle />
-    <FixedNav>
-      <Navbar />
-    </FixedNav>
-    <MainContent>
-      <Outlet />
-    </MainContent>
-    </>
+  <>
+  <GlobalStyle />
+  <FixedNav>
+    <Navbar />
+  </FixedNav>
+  <MainContent>
+    <Outlet />
+  </MainContent>
+  </>
 )
 
 }
