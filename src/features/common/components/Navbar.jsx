@@ -27,13 +27,13 @@ const RightGroup = styled.div`
 `
 const Menu = styled(GiHamburgerMenu)`
   font-weight: bold;
-  font-size: 1.5em;
+  font-size: 1.3em;
   color: ${colors.logo};
   text-decoration: none;
 `
 const Logo = styled(Link)`
 font-weight: bold;
-font-size: 1.5em;
+font-size: 1.3em;
 color: ${colors.logo};
 text-decoration: none;
 `
@@ -61,7 +61,7 @@ const Navbar = ()=>{
     <Nav>
       <LeftGroup> 
         <Menu />
-        <Logo>RE:SKIN</Logo>
+        <Logo to = '/'>Re:Skin</Logo>
       </LeftGroup>
       <RightGroup>
         <NavButton to = '/community'>커뮤니티</NavButton>
