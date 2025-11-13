@@ -64,9 +64,9 @@ const Navbar = ()=>{
         <Logo>RE:SKIN</Logo>
       </LeftGroup>
       <RightGroup>
-        <NavButton>커뮤니티</NavButton>
-        <NavButton>피부 분석</NavButton>
-        <LoginButton>로그인 / 회원가입</LoginButton>
+        <NavButton to = '/community'>커뮤니티</NavButton>
+        <NavButton to ='/analysisOverview'>피부 분석</NavButton>
+        <LoginButton to = '/login'>로그인 / 회원가입</LoginButton>
       </RightGroup>
     </Nav>
   )
