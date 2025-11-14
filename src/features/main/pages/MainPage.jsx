@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 import colors from "../../common/colors";
 import skinTypeIcon from '../../../assets/images/skinTypeIcon.png';
 const MainPage=()=>{
+  console.log("MainPage 렌더링"); 
   const navigate = useNavigate();
 
   return(
@@ -15,12 +16,40 @@ const MainPage=()=>{
         <AnalyzeButton onClick={() => navigate("/login")}>피부 분석하기 -&gt;</AnalyzeButton>
       </LeftSection>
       <RightSection>
+        <BoxSectionTop>
         <Icon src={skinTypeIcon} alt="../../../assets/images/skinTypeIcon.png"></Icon>
+        <RecentAnalysis>
+          <p style={{fontSize: '10px', height: '11px', margin: '3px', color: "gray"}}>최근 분석</p>
+          <p style={{fontSize: '15px', height: '12px',margin: '3px', fontWeight: "bold" , color: colors.primary}}>민감성</p> 
+        </RecentAnalysis> 
+        </BoxSectionTop>
+        <BoxSectionBot>
+          <Detail>
+            <Symptom>여드름</Symptom>
+            <ResultPreview>관리 필요</ResultPreview>
+          </Detail>
+          <Detail>
+            <Symptom>모공</Symptom>
+            <ResultPreview>적음</ResultPreview>
+          </Detail>
+          <Detail>
+            <Symptom>주름</Symptom>
+            <ResultPreview>관리 필요</ResultPreview>
+          </Detail>
+          <Detail>
+            <Symptom>입술건조</Symptom>
+            <ResultPreview>관리 필요</ResultPreview>
+          </Detail>
+        </BoxSectionBot>
+        <Symptom style ={{fontSize: '13px', height:'15px', padding: 0}}> 추천 루틴</Symptom>
+        <Symptom style ={{fontSize: '13px', height:'15px',color: colors.primary}}>진정 위주 스킨케어 + 페이셜 수분 마스크 주 2회 권장</Symptom>
       </RightSection>
     </Container>
   );
 };
 export default MainPage;
+
+
 
 const Container=styled.div`
   display: flex;
@@ -38,14 +67,16 @@ const LeftSection=styled.div`
   max-width: 600px;
 `
 const RightSection = styled.div`
-  width: 300px;
-  height: 150px;
+  width: 360px;
+  height: 190px;
   border-radius: 10px;
   padding: 15px;
   border: 1px solid black;
-  justify-content: center;
-
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `
+
 const Title=styled.div`
   font-weight: bold;
   font-size: 2.5rem;
@@ -82,3 +113,51 @@ const Icon = styled.img`
   height: 45px;
   object-fit: contain;
 `;
+const RecentAnalysis = styled.div` 
+display: flex;
+text-align: left;
+flex-direction: column;
+padding: 0 5px;`
+
+const BoxSectionTop=styled.div`
+display:flex;
+flex-direction: row;
+justify-content: flex-start;
+gap: 10px;              
+padding-bottom: 10px;
+border-bottom: 1px solid #e5e5e5;
+`
+const BoxSectionBot=styled.div`
+display:flex;
+flex-direction: row;
+justify-content: space-between;
+gap: 10px;
+padding: 10px 0;     
+`
+
+const Detail = styled.div `
+width: 65px;
+height: 35px;
+border-radius: 7px;
+padding: 5px;
+border: 1px solid gray;
+display: flex;
+justify-content: center;
+flex-direction: column;
+text-align: center;
+`
+
+const Symptom= styled.div`
+  height: 10px;
+  font-size: 10px;
+  color: gray;
+  margin: 3px;
+`
+
+const ResultPreview = styled.div`
+font-size: 13px;
+color: ${colors.primary};
+margin: 3px;
+font-weight: bold;
+`
+

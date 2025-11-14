@@ -36,12 +36,25 @@ font-weight: bold;
 font-size: 1.3em;
 color: ${colors.logo};
 text-decoration: none;
+transition: background-color 0.2s ease;
+
+&:hover {
+  text-shadow: 0 2px 4px ${colors.profile};
+  transform: translateY(-2px); // 살짝 올라오는 효과
+
+}
 `
 
 const NavButton = styled(Link)`
   font-size: 0.8em;
   color: white;
   text-decoration: none;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    color:${colors.primary};
+    color: gray;
+  }
 `
 
 const LoginButton =styled(Link)`
@@ -52,6 +65,12 @@ const LoginButton =styled(Link)`
   color: white;
   background-color: ${colors.primary};
   text-decoration: none;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    color:${colors.primary};
+    background-color: white;
+  }
 `
 
 
