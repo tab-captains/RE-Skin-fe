@@ -20,7 +20,7 @@ const MainPage=()=>{
         <Icon src={skinTypeIcon} alt="../../../assets/images/skinTypeIcon.png"></Icon>
         <RecentAnalysis>
           <p style={{fontSize: '10px', height: '11px', margin: '3px', color: "gray"}}>최근 분석</p>
-          <p style={{fontSize: '15px', height: '12px',margin: '3px', fontWeight: "bold" , color: colors.primary}}>민감성</p> 
+          <p style={{fontSize: '17px', height: 'auto',margin: '3px', fontWeight: "bold" , color: colors.primary}}>민감성</p> 
         </RecentAnalysis> 
         </BoxSectionTop>
         <BoxSectionBot>
@@ -41,14 +41,15 @@ const MainPage=()=>{
             <ResultPreview>관리 필요</ResultPreview>
           </Detail>
         </BoxSectionBot>
-        <Symptom style ={{fontSize: '13px', height:'15px', padding: 0}}> 추천 루틴</Symptom>
-        <Symptom style ={{fontSize: '13px', height:'15px',color: colors.primary}}>진정 위주 스킨케어 + 페이셜 수분 마스크 주 2회 권장</Symptom>
+        <FooterWrapper>
+        <FooterText>추천 루틴</FooterText>
+        <FooterText style={{color: colors.primary, marginBottom: "20px"}}>진정 위주 스킨케어 + 페이셜 수분 마스크 주 2회 권장</FooterText>
+        </FooterWrapper>
       </RightSection>
     </Container>
   );
 };
 export default MainPage;
-
 
 
 const Container=styled.div`
@@ -60,7 +61,6 @@ const Container=styled.div`
   padding: 120px 100px;
 `
 const LeftSection=styled.div`
-
   flex-direction: column;
   text-align:left;
   padding: 20px;
@@ -68,13 +68,13 @@ const LeftSection=styled.div`
 `
 const RightSection = styled.div`
   width: 360px;
-  height: 190px;
+  height: 170px;
   border-radius: 10px;
   padding: 15px;
   border: 1px solid black;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 7px;
 `
 
 const Title=styled.div`
@@ -114,37 +114,38 @@ const Icon = styled.img`
   object-fit: contain;
 `;
 const RecentAnalysis = styled.div` 
-display: flex;
-text-align: left;
-flex-direction: column;
-padding: 0 5px;`
+  display: flex;
+  text-align: left;
+  flex-direction: column;
+  padding: 0 5px;
+`
 
 const BoxSectionTop=styled.div`
-display:flex;
-flex-direction: row;
-justify-content: flex-start;
-gap: 10px;              
-padding-bottom: 10px;
-border-bottom: 1px solid #e5e5e5;
+  display:flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 5px;              
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e5e5e5;
 `
 const BoxSectionBot=styled.div`
-display:flex;
-flex-direction: row;
-justify-content: space-between;
-gap: 10px;
-padding: 10px 0;     
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0 0 0;     
 `
 
 const Detail = styled.div `
-width: 65px;
-height: 35px;
-border-radius: 7px;
-padding: 5px;
-border: 1px solid gray;
-display: flex;
-justify-content: center;
-flex-direction: column;
-text-align: center;
+  width: 65px;
+  height: 35px;
+  border-radius: 7px;
+  padding: 5px;
+  border: 1px solid gray;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
 `
 
 const Symptom= styled.div`
@@ -155,9 +156,24 @@ const Symptom= styled.div`
 `
 
 const ResultPreview = styled.div`
-font-size: 13px;
-color: ${colors.primary};
-margin: 3px;
-font-weight: bold;
+  font-size: 13px;
+  color: ${colors.primary};
+  margin: 3px;
+  font-weight: bold;
+`
+const FooterWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;    
+  margin: 6px 0 0 2px;
 `
 
+const FooterText =styled.div`
+  height: auto;
+  color: gray;
+  margin: 0;
+  font-size: 13px;
+  padding: 0;
+  line-height: 1.2; 
+
+`
