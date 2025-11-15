@@ -1,63 +1,136 @@
-const LoginForm = () => {
-  return (
-    <div
-      style={{
-        width: "420px",
-        padding: "40px 30px",
-        background: "white",
-        borderRadius: "16px",
-        boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
-        textAlign: "center",
-      }}
-    >
-      <h1 style={{ marginBottom: "30px" }}>Login</h1>
+import React, { useState } from "react";
 
+function LoginForm({ onLogin, onKakaoLogin }) {
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
+
+  const validatePassword = (pw) => {
+    const regExp =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    return regExp.test(pw);
+  };
+
+  const handleLoginClick = (e) => {
+    e.preventDefault();
+
+    if (id.trim() === "") {   // 아이디 체크
+      alert("아이디를 입력해주세요.");
+      return;
+    }
+
+    if (!validatePassword(password)) {  // 비밀번호 체크
+      alert(
+        "비밀번호는 8자 이상이며, 영문 / 숫자 / 특수문자를 모두 포함해야 합니다."
+      );
+      return;
+    }
+
+    if (onLogin) {
+      onLogin({ id, password });
+    }
+  };
+
+  return (
+    <form>
+      <h2
+        style={{
+          textAlign: "center",
+          fontSize: "28px",
+          fontWeight: "700",
+          marginBottom: "35px",
+        }}
+      >
+        Login
+      </h2>
+
+      {/* 아이디 입력 */}
       <input
         type="text"
         placeholder="아이디를 입력하세요"
-        style={inputStyle}
+        value={id}
+        onChange={(e) => setId(e.target.value)}
+        style={{
+          width: "100%",
+          padding: "16px",
+          borderRadius: "10px",
+          border: "1px solid #dcdcdc",
+          fontSize: "16px",
+          marginBottom: "15px",
+        }}
       />
 
+      {/* 비밀번호 입력 */}
       <input
         type="password"
         placeholder="비밀번호 (8자이상 + 영문,숫자,특수문자)"
-        style={inputStyle}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        style={{
+          width: "100%",
+          padding: "16px",
+          borderRadius: "10px",
+          border: "1px solid #dcdcdc",
+          fontSize: "16px",
+          marginBottom: "25px",
+        }}
       />
 
-      <button style={blackButton}>로그인</button>
+      {/* 로그인 버튼 */}
+      <button
+        type="button"
+        onClick={handleLoginClick}
+        style={{
+          width: "100%",
+          backgroundColor: "#111",
+          color: "#fff",
+          padding: "16px",
+          borderRadius: "10px",
+          fontSize: "16px",
+          border: "none",
+          cursor: "pointer",
+          marginBottom: "20px",
+        }}
+      >
+        로그인
+      </button>
 
-      <button style={kakaoButton}>💬 kakao login</button>
+      {/* 카카오 버튼 */}
+      <button
+        type="button"
+        onClick={onKakaoLogin}
+        style={{
+          width: "100%",
+          backgroundColor: "#FEE500",
+          padding: "16px",
+          borderRadius: "10px",
+          fontSize: "16px",
+          border: "none",
+          cursor: "pointer",
+          color: "#3A1D1D",
+          fontWeight: "600",
+        }}
+      >
+        🗨 kakao login
+      </button>
 
-      <div style={{ marginTop: "20px" }}>
-        <a href="#">회원가입</a> / <a href="#">비밀번호찾기</a>
+      {/* 하단 링크 */}
+      <div
+        style={{
+          marginTop: "25px",
+          textAlign: "center",
+          fontSize: "14px",
+        }}
+      >
+        <span style={{ cursor: "pointer", textDecoration: "underline" }}>
+          회원가입
+        </span>{" "}
+        /{" "}
+        <span style={{ cursor: "pointer", textDecoration: "underline" }}>
+          비밀번호찾기
+        </span>
       </div>
-    </div>
+    </form>
   );
-};
-
-const inputStyle = {
-  width: "100%",
-  padding: "13px",
-  marginBottom: "15px",
-  borderRadius: "8px",
-  border: "1px solid #ddd",
-};
-
-const blackButton = {
-  width: "100%",
-  padding: "13px",
-  backgroundColor: "#000",
-  color: "white",
-  borderRadius: "8px",
-  marginTop: "10px",
-};
-
-const kakaoButton = {
-  width: "100%",
-  padding: "13px",
-  backgroundColor: "#FEE500",
-  borderRadius: "8px",
-  marginTop: "15px",
-};
+}
 
 export default LoginForm;

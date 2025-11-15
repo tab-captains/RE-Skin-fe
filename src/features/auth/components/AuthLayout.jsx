@@ -1,5 +1,3 @@
-// src/Auth/components/AuthLayout.jsx
-
 import React from "react";
 
 function AuthLayout({ children }) {
