@@ -13,12 +13,14 @@ function LoginForm({ onLogin, onKakaoLogin }) {
   const handleLoginClick = (e) => {
     e.preventDefault();
 
-    if (id.trim() === "") {   // 아이디 체크
+    if (id.trim() === "") {
+      // 아이디 체크
       alert("아이디를 입력해주세요.");
       return;
     }
 
-    if (!validatePassword(password)) {  // 비밀번호 체크
+    if (!validatePassword(password)) {
+      // 비밀번호 체크
       alert(
         "비밀번호는 8자 이상이며, 영문 / 숫자 / 특수문자를 모두 포함해야 합니다."
       );
@@ -43,7 +45,7 @@ function LoginForm({ onLogin, onKakaoLogin }) {
         Login
       </h2>
 
-      {/* 아이디 입력 */}
+      {/* 아이디 입력*/}
       <input
         type="text"
         placeholder="아이디를 입력하세요"
@@ -56,6 +58,7 @@ function LoginForm({ onLogin, onKakaoLogin }) {
           border: "1px solid #dcdcdc",
           fontSize: "16px",
           marginBottom: "15px",
+          boxSizing: "border-box",
         }}
       />
 
@@ -72,6 +75,7 @@ function LoginForm({ onLogin, onKakaoLogin }) {
           border: "1px solid #dcdcdc",
           fontSize: "16px",
           marginBottom: "25px",
+          boxSizing: "border-box",
         }}
       />
 
@@ -80,15 +84,19 @@ function LoginForm({ onLogin, onKakaoLogin }) {
         type="button"
         onClick={handleLoginClick}
         style={{
-          width: "100%",
+          width: "90%", 
+          display: "block", 
+          marginLeft: "auto", 
+          marginRight: "auto", 
           backgroundColor: "#111",
           color: "#fff",
-          padding: "16px",
+          padding: "14px",
           borderRadius: "10px",
-          fontSize: "16px",
+          fontSize: "15px",
           border: "none",
           cursor: "pointer",
-          marginBottom: "20px",
+          marginBottom: "12px",
+          boxSizing: "border-box",
         }}
       >
         로그인
@@ -99,15 +107,19 @@ function LoginForm({ onLogin, onKakaoLogin }) {
         type="button"
         onClick={onKakaoLogin}
         style={{
-          width: "100%",
+          width: "90%", 
+          display: "block",
+          marginLeft: "auto", 
+          marginRight: "auto", 
           backgroundColor: "#FEE500",
-          padding: "16px",
+          padding: "14px",
           borderRadius: "10px",
-          fontSize: "16px",
+          fontSize: "15px",
           border: "none",
           cursor: "pointer",
           color: "#3A1D1D",
           fontWeight: "600",
+          boxSizing: "border-box",
         }}
       >
         🗨 kakao login

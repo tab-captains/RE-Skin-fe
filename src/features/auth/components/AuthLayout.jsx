@@ -16,7 +16,7 @@ function AuthLayout({ children }) {
         style={{
           width: "420px",
           background: "#fff",
-          padding: "40px 30px",
+          padding: "30px 20px",
           borderRadius: "12px",
           boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
         }}
