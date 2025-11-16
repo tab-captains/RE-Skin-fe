@@ -4,6 +4,7 @@ const colors= {
   point:"#1768AC",
   profile:"#446095",
   background: "#FFFFFF",
+  weather: "rgba(87, 115, 170, 0.8)",
   box:"#EBEEF2",
   logo:"#FFFFFF"
 };
