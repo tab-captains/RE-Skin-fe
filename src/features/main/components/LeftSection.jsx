@@ -17,7 +17,7 @@ const LeftSection =()=>{
 const Wrapper=styled.div`
   flex-direction: column;
   text-align:left;
-  padding: 20px;
+  padding: 20px 20px 20px 0;
   max-width: 600px;
 `
 
