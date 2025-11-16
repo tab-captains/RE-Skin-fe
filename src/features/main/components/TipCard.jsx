@@ -3,13 +3,13 @@ import colors from "../../common/colors";
 
 const TipCard=({tips})=>
   { return ( 
-  <Wrapper> {tips.map((tip, idx) => ( 
-    <TipBox key={idx}> 
-      <Title>{tip.title}</Title> 
-      <Content>{tip.content}</Content>
-    </TipBox> 
-  ))} 
- </Wrapper> 
+    <Wrapper> {tips.map((tip, idx) => ( 
+      <TipBox key={idx}> 
+        <Title>{tip.title}</Title> 
+        <Content>{tip.content}</Content>
+      </TipBox> 
+    ))} 
+  </Wrapper> 
   )
 }
 
@@ -22,9 +22,9 @@ const Wrapper = styled.div `
 `;
 
 const TipBox = styled.div`
-  width: calc(650px  / 3);
+  flex: 1;
   height: 100px;
-  padding: 15px;
+  padding: 12px 15px;
   background-color: ${colors.box};
   border-radius: 12px;
   display: flex;
