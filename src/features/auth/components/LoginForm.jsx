@@ -45,7 +45,7 @@ function LoginForm({ onLogin, onKakaoLogin }) {
         Login
       </h2>
 
-      {/* 아이디 입력*/}
+      {/* 아이디 입력 */}
       <input
         type="text"
         placeholder="아이디를 입력하세요"
@@ -58,7 +58,7 @@ function LoginForm({ onLogin, onKakaoLogin }) {
           border: "1px solid #dcdcdc",
           fontSize: "16px",
           marginBottom: "15px",
-          boxSizing: "border-box",
+          boxSizing: "border-box", // 👈 수정된 부분
         }}
       />
 
@@ -75,7 +75,7 @@ function LoginForm({ onLogin, onKakaoLogin }) {
           border: "1px solid #dcdcdc",
           fontSize: "16px",
           marginBottom: "25px",
-          boxSizing: "border-box",
+          boxSizing: "border-box", 
         }}
       />
 
@@ -84,10 +84,7 @@ function LoginForm({ onLogin, onKakaoLogin }) {
         type="button"
         onClick={handleLoginClick}
         style={{
-          width: "90%", 
-          display: "block", 
-          marginLeft: "auto", 
-          marginRight: "auto", 
+          width: "100%",
           backgroundColor: "#111",
           color: "#fff",
           padding: "14px",
@@ -96,7 +93,7 @@ function LoginForm({ onLogin, onKakaoLogin }) {
           border: "none",
           cursor: "pointer",
           marginBottom: "12px",
-          boxSizing: "border-box",
+          boxSizing: "border-box", 
         }}
       >
         로그인
@@ -107,10 +104,7 @@ function LoginForm({ onLogin, onKakaoLogin }) {
         type="button"
         onClick={onKakaoLogin}
         style={{
-          width: "90%", 
-          display: "block",
-          marginLeft: "auto", 
-          marginRight: "auto", 
+          width: "100%",
           backgroundColor: "#FEE500",
           padding: "14px",
           borderRadius: "10px",
@@ -146,3 +140,4 @@ function LoginForm({ onLogin, onKakaoLogin }) {
 }
 
 export default LoginForm;
+
