@@ -15,13 +15,40 @@ const MainPage=()=>{
     </Bottom>
     <Footer>
       <Text>지금 바로 피부 상태를 확인해보세요.</Text>
-      <AnalyzerButton></AnalyzerButton>
+      <AnalyzeButton>피부 분석하기</AnalyzeButton>
     </Footer>
     </Container>
   );
 };
 export default MainPage;
 
+const Footer = styled.div`
+  margin: 50px;
+  text-align: center;
+
+`
+const Text = styled.div`
+  font-weight: bold;
+  color: black;
+  margin-bottom: 30px;
+`
+const AnalyzeButton=styled.button`
+  border: none;
+  border-radius: 20px;
+  width: 140px;
+  padding: 10px;
+  text-align: center;
+  font-size: 0.8em;
+  color: white;
+  background-color: ${colors.primary};
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: ${colors.textAccent};
+  }
+`
 
 const Container = styled.div`
   display: flex;
