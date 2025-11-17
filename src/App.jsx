@@ -4,6 +4,7 @@ import './App.css'
 import MainPage from './features/main/pages/MainPage';
 import RootLayout from './features/layout/RootLayout';
 import LoginPage from './features/auth/pages/LoginPage';
+import RegisterPage from './features/auth/pages/RegisterPage';
 import AnalysisOverviewPage from './features/analysis/pages/AnalysisOverviewPage';
 import CommunityPage from './features/community/pages/CommunityPage';
 
@@ -18,6 +19,7 @@ function App() {
           <Route index element={< MainPage/>} />
           <Route path="analysisOverview" element={<AnalysisOverviewPage />}/>
           <Route path="login" element={<LoginPage />}/>
+          <Route path="register" element={<RegisterPage />} />
           <Route path="community" element={<CommunityPage />}/>
       </Route>
       </Routes>
