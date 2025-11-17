@@ -11,7 +11,7 @@ const useReveal = (options = {}) => {
     };
 
     const observer = new IntersectionObserver(callback, {
-      threshold: [0.5, 0.1],
+      threshold: [0.5, 0.4],
       ...options,
     });
 

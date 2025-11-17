@@ -49,7 +49,7 @@ export default BoardCard;
 
 
   const PreviewCardItem = ({ children }) => {
-  const { ref, isRevealed } = useReveal({ threshold: [0.5, 0.1] });
+  const { ref, isRevealed } = useReveal({ threshold: [0.5, 0.4] });
 
   return (
     <PreviewCard ref={ref} className={isRevealed ? "visible" : ""}>
