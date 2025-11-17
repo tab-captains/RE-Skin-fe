@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import colors from "../../common/colors"
 import LeftSection from "../components/LeftSection";
 import RightSection from "../components/RightSection";
 import BottomSection from "../components/BottomSection";
@@ -12,6 +13,10 @@ const MainPage=()=>{
     <Bottom>
       <BottomSection />
     </Bottom>
+    <Footer>
+      <Text>지금 바로 피부 상태를 확인해보세요.</Text>
+      <AnalyzerButton></AnalyzerButton>
+    </Footer>
     </Container>
   );
 };
