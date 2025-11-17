@@ -1,12 +1,15 @@
 import styled from "styled-components";
 import colors from "../../common/colors";
+import useReveal from "../../common/hooks/useReveal"
 import ProfileIcon from "../../common/components/ProfileIcon"
 
 const BoardCard = () => {
   return (
       <PopularContainer>
       <p style={{margin: "5px",marginTop:"7px", fontWeight:"bold"}}>오늘의 인기 게시글</p>
-      <PreviewCard >
+
+
+      <PreviewCardItem >
         <ProfileIcon  name="윤규리" size={30}/>
         <TextWrapper>
           <Title>제목이 위치할 자리.</Title>
@@ -15,8 +18,9 @@ const BoardCard = () => {
             <Tag>#태그2</Tag>
           </TagWrapper>
         </TextWrapper>
-      </PreviewCard>
-      <PreviewCard >
+      </PreviewCardItem>
+
+      <PreviewCardItem >
         <ProfileIcon  name="윤규리" size={30}/>
         <TextWrapper>
           <Title>제목이 위치할 자리.</Title>
@@ -25,8 +29,9 @@ const BoardCard = () => {
             <Tag>#태그2</Tag>
           </TagWrapper>
         </TextWrapper>
-      </PreviewCard>
-        <PreviewCard >
+      </PreviewCardItem>
+
+        <PreviewCardItem >
         <ProfileIcon  name="윤규리" size={30}/>
         <TextWrapper>
           <Title>제목이 위치할 자리.</Title>
@@ -35,12 +40,25 @@ const BoardCard = () => {
             <Tag>#태그2</Tag>
           </TagWrapper>
         </TextWrapper>
-      </PreviewCard>
+      </PreviewCardItem>
     </PopularContainer>
   );
 };
 
 export default BoardCard;
+
+
+  const PreviewCardItem = ({ children }) => {
+  const { ref, isRevealed } = useReveal({ threshold: [0.5, 0.1] });
+
+  return (
+    <PreviewCard ref={ref} className={isRevealed ? "visible" : ""}>
+      {children}
+    </PreviewCard>
+  );
+};
+
+
 
 const TextWrapper = styled.div`
   display: flex;
@@ -85,6 +103,14 @@ const PreviewCard = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease-out;
+  
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   &:hover {
     background: #eceff3;
