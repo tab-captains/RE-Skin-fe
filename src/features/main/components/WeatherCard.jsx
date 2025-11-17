@@ -36,7 +36,7 @@ const Wrapper = styled.div`
   width: 600px;
   height: 170px;
   padding: 20px 30px;
-  border-radius: 15px;
+  border-radius: 10px;
   border: 1px solid ${colors.weather};
   background-color:${colors.weather};
   display: flex;
@@ -73,5 +73,6 @@ const GaugesWrapper = styled.div`
   display: flex;
   flex: 0.8; 
   justify-content: space-between;
+  
 `;
 export default WeatherCard;

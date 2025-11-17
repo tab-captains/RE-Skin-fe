@@ -64,7 +64,7 @@ const Top=styled.div`
   align-items: center;
   gap: 80px;
   min-height: 50vh;
-  padding: 120px 100px;
+  padding: 100px 80px;
 `
 const Bottom=styled.div`
   display: flex;
@@ -72,5 +72,5 @@ const Bottom=styled.div`
   align-items: center;
   gap: 80px;
   min-height: 50vh;
-  padding: 0 100px;
+  padding: 0 80px;
 `
