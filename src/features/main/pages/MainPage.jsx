@@ -3,7 +3,9 @@ import colors from "../../common/colors"
 import LeftSection from "../components/LeftSection";
 import RightSection from "../components/RightSection";
 import BottomSection from "../components/BottomSection";
+import {useNavigate} from "react-router-dom";
 const MainPage=()=>{
+  const navigate =useNavigate();
   return(
     <Container>
     <Top>
@@ -15,7 +17,7 @@ const MainPage=()=>{
     </Bottom>
     <Footer>
       <Text>지금 바로 피부 상태를 확인해보세요.</Text>
-      <AnalyzeButton>피부 분석하기</AnalyzeButton>
+      <AnalyzeButton onClick={() => navigate("/login")}>피부 분석하기</AnalyzeButton>
     </Footer>
     </Container>
   );
