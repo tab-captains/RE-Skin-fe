@@ -85,7 +85,7 @@ const Tag = styled.div`
 `;
 
 const PopularContainer = styled.div`
-  width: 350px;
+  width: 360px;
   background: ${colors.box};
   padding: 10px 15px 15px 15px;
   border-radius: 15px;
@@ -93,6 +93,10 @@ const PopularContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+  cursor: pointer;
+  &:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  }
 `;
 
 const PreviewCard = styled.div`

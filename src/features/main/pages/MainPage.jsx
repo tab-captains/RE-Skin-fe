@@ -106,7 +106,7 @@ const Top=styled.div`
   justify-content: flex-start;
   align-items: center;
   gap: 80px;
-  min-height: ${({ $isLoggedIn }) => ($isLoggedIn ? "10vh" : "50vh")};
+  min-height: ${({ $isLoggedIn }) => ($isLoggedIn ? "0" : "50vh")};
   padding: ${({ $isLoggedIn }) => ($isLoggedIn ? "0" : "100px 80px 120px 80px")};
 `
 const Bottom=styled.div`

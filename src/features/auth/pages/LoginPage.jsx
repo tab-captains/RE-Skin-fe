@@ -23,7 +23,10 @@ const LoginPage = () => {
     */
 
     const fakeToken ="123456";
-    login(fakeToken);
+    login({
+      token: fakeToken,
+      username: id   
+    });
     alert("로그인 성공!");
     navigate("/");
   } catch(err) {
