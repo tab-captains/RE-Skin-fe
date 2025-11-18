@@ -36,11 +36,11 @@ const TextItem = ({ children }) => {
   );
 };
 
-const ButtonItem = ({ children }) => {
+const ButtonItem = ({ children, ...props }) => {
   const { ref, isRevealed } = useReveal({ threshold: [0.5, 0.4] });
 
   return (
-    <AnalyzeButton ref={ref} className={isRevealed ? "visible" : ""}>
+    <AnalyzeButton ref={ref} className={isRevealed ? "visible" : ""} {...props}>
       {children}
     </AnalyzeButton>
   );
@@ -53,6 +53,9 @@ const Footer = styled.div`
 
 `
 const Text = styled.div`
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 1s ease-out;
   font-weight: bold;
   font-size: 1rem;
   color: black;
@@ -61,12 +64,10 @@ const Text = styled.div`
     opacity: 1;
     transform: translateY(0);
   }
-
-  &:hover {
-    background: #eceff3;
-  }
 `
 const AnalyzeButton=styled.button`
+  opacity: 0;
+  transform: translateY(20px);
   border: none;
   border-radius: 20px;
   width: 160px;
@@ -77,7 +78,7 @@ const AnalyzeButton=styled.button`
   background-color: ${colors.primary};
   cursor: pointer;
   text-decoration: none;
-  transition: background-color 0.2s ease;
+  transition: all 1s ease-out, background-color 0.2s ease;
 
    &.visible {
     opacity: 1;
