@@ -4,8 +4,11 @@ import WeatherCard from "./WeatherCard";
 import TipCard from "./TipCard";
 import BoardCard from './BoardCard';
 import useReveal from "../../common/hooks/useReveal";
+import { useAuth } from "../../auth/context/AuthContext";
+
 const BottomSection = () => {
   const { ref, isRevealed } = useReveal({ threshold: 0.2 });
+  const { isLoggedIn } = useAuth();
   return(
     <Container>
       <LeftWrapper>
@@ -19,7 +22,12 @@ const BottomSection = () => {
       ]}/>
       </TipCardItem>
       </LeftWrapper>
-      <BoardCard />
+      <BoardWrapper $isLoggedIn={isLoggedIn}>
+        {isLoggedIn && (
+        <ExtraButton onClick={() => alert("새 기능")}>AI 피부분석 시작하기 -&gt;</ExtraButton>
+        )}
+        <BoardCard />
+      </BoardWrapper>
     </Container>
   );
 };
@@ -68,3 +76,27 @@ const Container =styled.div`
   width: 100%;
   gap: 10px;
 `
+const BoardWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 0;
+  align-items: center;
+`;
+
+const ExtraButton = styled.button`
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  width: 350px;
+  height: 50px;
+  font-size: 1em;
+  color: white;
+  background-color: ${colors.primary};
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: ${colors.textAccent};
+  }
+`;

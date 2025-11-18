@@ -3,24 +3,29 @@ import colors from "../../common/colors"
 import LeftSection from "../components/LeftSection";
 import RightSection from "../components/RightSection";
 import BottomSection from "../components/BottomSection";
+
 import {useNavigate} from "react-router-dom";
 import useReveal from "../../common/hooks/useReveal"
+import {useAuth} from "../../auth/context/AuthContext";
+
 const MainPage=()=>{
   const navigate =useNavigate();
-  
+  const {isLoggedIn} = useAuth(); 
   return(
     <Container>
-    <Top>
-      <LeftSection />
-      <RightSection />
+    <Top $isLoggedIn={isLoggedIn}>
+      { !isLoggedIn && (<LeftSection />)}
+      { !isLoggedIn && (<RightSection /> )}
     </Top>
     <Bottom>
       <BottomSection />
-    </Bottom>
+    </Bottom >
+    {!isLoggedIn && (
     <Footer>
       <TextItem>지금 바로 피부 상태를 확인해보세요.</TextItem>
       <ButtonItem onClick={() => navigate("/login")}>피부 분석하기</ButtonItem>
     </Footer>
+    )}
     </Container>
   );
 };
@@ -101,8 +106,8 @@ const Top=styled.div`
   justify-content: flex-start;
   align-items: center;
   gap: 80px;
-  min-height: 50vh;
-  padding: 100px 80px 120px 80px;
+  min-height: ${({ $isLoggedIn }) => ($isLoggedIn ? "10vh" : "50vh")};
+  padding: ${({ $isLoggedIn }) => ($isLoggedIn ? "0" : "100px 80px 120px 80px")};
 `
 const Bottom=styled.div`
   display: flex;

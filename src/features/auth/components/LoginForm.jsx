@@ -7,8 +7,10 @@ function LoginForm({ onLogin, onKakaoLogin }) {
   const navigate = useNavigate();
 
   const validatePassword = (pw) => {
+
+    /*지금은 회원가입 페이지가 없어서 로그인에서 비번 양식 관리하고 있지만, 원래는 회원가입 할 때 관리해야 함. 즉 이 코드는 나중에 지워야 함!!!!!!! */
     const regExp =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&=])[A-Za-z\d@$!%*#?&=]{8,}$/;
     return regExp.test(pw);
   };
 
@@ -29,6 +31,8 @@ function LoginForm({ onLogin, onKakaoLogin }) {
       return;
     }
 
+
+    /* LoginPage handleLogin()으로 값 전달. */
     if (onLogin) {
       onLogin({ id, password });
     }
