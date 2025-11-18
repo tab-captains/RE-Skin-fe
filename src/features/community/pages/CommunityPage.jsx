@@ -5,7 +5,7 @@ const PostCard = () => {
   return (
     <div className="card">
       <div className="imagePlaceholder">
-        <span>Image Placeholder</span>
+        <span>Image 들어갈예정</span>
       </div>
       
       <div className="content">

@@ -99,7 +99,7 @@
 .likes {
   display: flex;
   align-items: center;
-  gap: 0.5rem; /* 8px */
+  gap: 0.5rem; 
 }
 
 .userIcon {
