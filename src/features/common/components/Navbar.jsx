@@ -83,6 +83,7 @@ const Navbar = ()=>{
         <Logo to = '/'>Re:Skin</Logo>
       </LeftGroup>
       <RightGroup>
+        <NavButton to = '/Infoboard'>게시판 정보</NavButton>
         <NavButton to = '/community'>커뮤니티</NavButton>
         <NavButton to ='/analysisOverview'>피부 분석</NavButton>
         <LoginButton to = '/login'>로그인 / 회원가입</LoginButton>

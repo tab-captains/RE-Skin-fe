@@ -7,6 +7,7 @@ import LoginPage from './features/auth/pages/LoginPage';
 import RegisterPage from './features/auth/pages/RegisterPage';
 import AnalysisOverviewPage from './features/analysis/pages/AnalysisOverviewPage';
 import CommunityPage from './features/community/pages/CommunityPage';
+import Infoboard from "./features/infoboard/pages/InfoboardPage";
 
 
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="login" element={<LoginPage />}/>
           <Route path="register" element={<RegisterPage />} />
           <Route path="community" element={<CommunityPage />}/>
+          <Route path="infoboard" element={<Infoboard />}/>
       </Route>
       </Routes>
     </Router>
