@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function LoginForm({ onLogin, onKakaoLogin }) {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const validatePassword = (pw) => {
     const regExp =
@@ -58,7 +60,7 @@ function LoginForm({ onLogin, onKakaoLogin }) {
           border: "1px solid #dcdcdc",
           fontSize: "16px",
           marginBottom: "15px",
-          boxSizing: "border-box", // 👈 수정된 부분
+          boxSizing: "border-box", 
         }}
       />
 
@@ -127,7 +129,9 @@ function LoginForm({ onLogin, onKakaoLogin }) {
           fontSize: "14px",
         }}
       >
-        <span style={{ cursor: "pointer", textDecoration: "underline" }}>
+        <span 
+        onClick={() => navigate("/register")}
+        style={{ cursor: "pointer", textDecoration: "underline" }}>
           회원가입
         </span>{" "}
         /{" "}
