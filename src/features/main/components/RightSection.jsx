@@ -1,14 +1,20 @@
 import styled from "styled-components";
 import colors from "../../common/colors";
 import skinTypeIcon from '../../../assets/images/skinTypeIcon.png';
+import { useAuth } from "../../auth/context/AuthContext";
 const RightSection = () =>{
+const { user, isLoggedIn } = useAuth();
 
   return (
       <Wrapper>
         <BoxSectionTop>
         <Icon src={skinTypeIcon} alt="../../../assets/images/skinTypeIcon.png"></Icon>
         <RecentAnalysis>
-          <p style={{fontSize: '10px', height: '11px', margin: '3px', color: "gray"}}>최근 분석</p>
+          <p style={{fontSize: '10px', height: '11px', margin: '3px', color: "gray"}}>
+             {isLoggedIn && user?.username 
+             ? `${user.username} 님의 최근 분석` 
+             : "최근 분석"}
+          </p>
           <p style={{fontSize: '17px', height: 'auto',margin: '3px', fontWeight: "bold" , color: colors.primary}}>민감성</p> 
         </RecentAnalysis> 
         </BoxSectionTop>
@@ -48,6 +54,11 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 7px;
+
+  cursor: pointer;
+  &:hover {
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  }
 `
 
 
