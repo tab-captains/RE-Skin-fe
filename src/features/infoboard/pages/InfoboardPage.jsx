@@ -108,7 +108,7 @@ const Infoboard = () => {
       ), 
       title: "제품은 많은데 순서를 모르겠어요",
       action: "올바른 스킨케어 순서 보기 >",
-      link: "/skinguide" 
+      link: "/infoboard/skinguide" 
     },
     {
       id: 2,

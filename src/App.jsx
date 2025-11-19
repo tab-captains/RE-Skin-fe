@@ -23,11 +23,12 @@ function App() {
           <Route path="login" element={<LoginPage />}/>
           <Route path="register" element={<RegisterPage />} />
           <Route path="community" element={<CommunityPage />}/>
-          <Route path="infoboard" element={<Infoboard />}/>
-          <Route path="skinguide" element={<Skinguide />}/>
-          <Route path="skin/guide" element={<Skinguide />}/>
+          <Route path="infoboard">
+            <Route index element={<Infoboard />}/>
+            <Route path="skinguide" element={<Skinguide />}/>
+          </Route>
       </Route>
-      </Routes>
+    </Routes>
     </Router>
   )
 }
