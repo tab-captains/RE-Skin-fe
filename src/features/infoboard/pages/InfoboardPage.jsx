@@ -119,7 +119,7 @@ const Infoboard = () => {
       ), 
       title: "앰플? 세럼? 뭐가 다른거죠?",
       action: "스킨케어 용어/제품 알아보기 >",
-      link: "/guide/dictionary"
+      link: "/infoboard/dictionary"
     },
     {
       id: 3,

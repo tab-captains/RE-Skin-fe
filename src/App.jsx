@@ -9,6 +9,7 @@ import AnalysisOverviewPage from './features/analysis/pages/AnalysisOverviewPage
 import CommunityPage from './features/community/pages/CommunityPage';
 import Infoboard from "./features/infoboard/pages/InfoboardPage";
 import Skinguide from "./features/infoboard/pages/Skinguide";
+import Dictionary from "./features/infoboard/pages/Dictionary";
 
 
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="infoboard">
             <Route index element={<Infoboard />}/>
             <Route path="skinguide" element={<Skinguide />}/>
+            <Route path="dictionary" element={<Dictionary />}/>
           </Route>
       </Route>
     </Routes>
