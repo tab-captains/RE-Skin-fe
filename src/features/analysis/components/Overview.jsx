@@ -33,15 +33,15 @@ const fadeUp = keyframes`
   }
 `;
 const scanAnimation = keyframes`
-  0% { top: -20%; }      /* Icon 위쪽 시작 */
-  50% { top: 15%; }    /* Icon 아래쪽 끝 */
-  100% { top: -20%; }    /* 다시 위쪽 */
+  0% { top: -20%; }    
+  50% { top: 15%; }   
+  100% { top: -20%; }   
 `;
 
 const ImageWrapper = styled.div`
-  position: relative;   /* Icon과 BarIcon의 기준 */
-  width: 300px;         /* 고정 크기 */
-  height: 300px;        /* 고정 크기 */
+  position: relative;  
+  width: 300px;      
+  height: 300px;       
 `;
 
 const Icon = styled.img`
@@ -52,7 +52,7 @@ const Icon = styled.img`
   z-index: 1;
   opacity: 0;
   animation: ${fadeUp} 0.7s forwards;
-  animation-delay: 2.0s; /* 텍스트 애니메이션 이후 등장 */
+  animation-delay: 2.0s; 
 `;
 
 const BarIcon = styled.img`
@@ -63,21 +63,13 @@ const BarIcon = styled.img`
   height: 100%;    
   object-fit: contain;
   z-index: 2;
-  
   opacity: 0;
-  /* fadeUp 애니메이션 */
   animation-name: ${fadeUp};
   animation-duration: 0.7s;
   animation-fill-mode: forwards;
-  animation-delay: 2s; /* 텍스트 후 등장 */
+  animation-delay: 2s; 
 
-  /* scanAnimation은 fadeUp 끝나고 시작 */
   animation: ${fadeUp} 1.2s forwards 2s, ${scanAnimation} 2.5s ease-in-out 2.9s 2;
-  /* 
-    2s: fadeUp 지연
-    2.7s: fadeUp 끝나고 scanAnimation 시작 (0.7초 후)
-    2회 반복
-  */
 `;
 
 
