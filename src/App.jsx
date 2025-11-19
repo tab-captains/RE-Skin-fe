@@ -10,7 +10,7 @@ import AnalysisOverviewPage from './features/analysis/pages/AnalysisOverviewPage
 import CommunityPage from './features/community/pages/CommunityPage';
 import Infoboard from "./features/infoboard/pages/InfoboardPage";
 import Skinguide from "./features/infoboard/pages/Skinguide";
-
+import ImageUploadPage from './features/analysis/pages/ImageUploadPage';
 
 
 function App() {
@@ -25,9 +25,10 @@ function App() {
             <Route path="register" element={<RegisterPage />} />
             <Route path="community" element={<CommunityPage />}/>
             <Route path="infoboard" element={<Infoboard />}/>
-          <Route path="skinguide" element={<Skinguide />}/>
-          <Route path="skin/guide" element={<Skinguide />}/>
-        </Route>
+            <Route path="skinguide" element={<Skinguide />}/>
+            <Route path="skin/guide" element={<Skinguide />}/>
+            <Route path="upload" element={<ImageUploadPage />}/>
+          </Route>
         </Routes>
       </Router>
     </AuthProvider>

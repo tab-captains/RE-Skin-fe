@@ -119,7 +119,7 @@ const TipWrapper =styled.div`
   border: 1px solid;
   border-color: gray;
   gap: 7px;
-
+  background-color: white;
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.5s ease-out;
@@ -187,7 +187,7 @@ const FeatureItem = styled.div`
   font-size: 0.8rem;
   font-weight: bold;
   color: ${colors.textAccent};
-  background-color: ${colors.box};
+  background-color: rgba(255, 255, 255, 0.3);
 `;
 
 const InfoBox = styled.div`

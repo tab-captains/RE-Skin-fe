@@ -53,8 +53,8 @@ const Wrapper = styled.div`
   border: 1px solid black;
   display: flex;
   flex-direction: column;
+  background-color: white;
   gap: 7px;
-
   cursor: pointer;
   &:hover {
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
