@@ -15,7 +15,7 @@ const MainPage=()=>{
     <Container>
     <Top $isLoggedIn={isLoggedIn}>
       { !isLoggedIn && (<LeftSection />)}
-      { !isLoggedIn && (<RightSection /> )}
+      { !isLoggedIn && (<RightSectionItem $isLoggedIn={isLoggedIn}><RightSection /></RightSectionItem> )}
     </Top>
     <Bottom>
       <BottomSection />
@@ -30,6 +30,7 @@ const MainPage=()=>{
   );
 };
 export default MainPage;
+
 
 const TextItem = ({ children }) => {
   const { ref, isRevealed } = useReveal({ threshold: [0.5, 0.4] });
@@ -51,6 +52,17 @@ const ButtonItem = ({ children, ...props }) => {
   );
 };
 
+const RightSectionItem = ({children, isLoggedIn}) => {
+  const {ref, isRevealed} = useReveal({threshold: [0.3, 0.6]});
+
+  const className = isLoggedIn ? "visible" : isRevealed ? "visible" : "";
+
+  return(
+    <RightWrapper ref={ref} className={className}>
+      {children}
+    </RightWrapper>
+  );
+};
 
 const Footer = styled.div`
   margin: 100px;
@@ -117,3 +129,13 @@ const Bottom=styled.div`
   min-height: 50vh;
   padding: 0 80px;
 `
+const RightWrapper = styled.div`
+  opacity: 0;
+  transform: translateY(30px); 
+  transition: all 3s ease-out;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
