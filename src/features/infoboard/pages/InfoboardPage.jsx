@@ -108,7 +108,7 @@ const Infoboard = () => {
       ), 
       title: "제품은 많은데 순서를 모르겠어요",
       action: "올바른 스킨케어 순서 보기 >",
-      link: "/infoboard/skinguide" 
+      link: "/skinguide" 
     },
     {
       id: 2,
@@ -119,7 +119,7 @@ const Infoboard = () => {
       ), 
       title: "앰플? 세럼? 뭐가 다른거죠?",
       action: "스킨케어 용어/제품 알아보기 >",
-      link: "/infoboard/skindictionary"
+      link: "/guide/dictionary"
     },
     {
       id: 3,
