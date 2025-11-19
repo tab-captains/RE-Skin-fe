@@ -11,7 +11,7 @@ const skincareSteps = [
 const SkinguideContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 100px 20px;
+  padding: 60px 20px;
   text-align: center;
 `;
 
@@ -27,31 +27,21 @@ const SkinguideHeader = styled.div`
     font-size: 16px;
     color: #666;
     line-height: 1.7;
-    margin-bottom: 70px;
+    margin-bottom: 90px;
   }
-`;
-
-const StepsRow = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 70px
-  margin-bottom: 20px;
-`;
-
-const StepSlot = styled.div`
-  width: 220px;
-  display: flex;
-  justify-content: center;
 `;
 
 const StepNumber = styled.span`
   padding: 10px 22px;
+  position: absolute;
+  top: -50px;
   border-radius: 999px;
   font-weight: 600;
   color: #fff;
   font-size: 15px;
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.18);
   background-color: ${({ index }) => (index === 0 ? '#b9bdc8' : '#1e2a55')};
+  z-index: 10;
 `;
 
 const CardsRow = styled.div`
@@ -71,6 +61,7 @@ const StepCardGroup = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 `;
 
 const StepContentCard = styled.div`
@@ -135,17 +126,10 @@ const Skinguide = () => {
         </p>
       </SkinguideHeader>
 
-      <StepsRow>
-        {skincareSteps.map((item, index) => (
-          <StepSlot key={index}>
-            <StepNumber index={index}>{item.step}</StepNumber>
-          </StepSlot>
-        ))}
-      </StepsRow>
-
       <CardsRow>
         {skincareSteps.map((item, index) => (
           <StepCardGroup key={index}>
+            <StepNumber index={index}>{item.step}</StepNumber>
             <StepContentCard>
               <ProductTitle>{item.title}</ProductTitle>
               <ProductEnglish>{item.english}</ProductEnglish>
