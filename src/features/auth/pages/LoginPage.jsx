@@ -21,12 +21,12 @@ const LoginPage = () => {
     login(res.data.accessToken);   // AuthContext의 login
     navigate("/");
     */
-
     const fakeToken ="123456";
     login({
       token: fakeToken,
-      username: id   
+      username: id
     });
+
     alert("로그인 성공!");
     navigate("/");
   } catch(err) {

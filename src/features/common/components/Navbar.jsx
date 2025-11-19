@@ -1,8 +1,40 @@
 import styled from "styled-components"
 /*npm install styled-component 명령어로 설치 후 사용. */
 import {Link} from "react-router-dom";
+import {useState} from "react";
 import {GiHamburgerMenu} from "react-icons/gi";
 import colors from "../../common/colors";
+import { FaUserCircle } from "react-icons/fa";
+import {useAuth} from '../../auth/context/AuthContext';
+
+const Navbar = ()=>{
+
+  const {isLoggedIn, user, logout} =useAuth();
+  return (
+    <Nav>
+      <LeftGroup> 
+        <Menu />
+        <Logo to = '/'>Re:Skin</Logo>
+      </LeftGroup>
+      <RightGroup>
+        <NavButton to = '/Infoboard'>게시판 정보</NavButton>
+        <NavButton to = '/community'>커뮤니티</NavButton>
+        <NavButton to ='/analysisOverview'>피부 분석</NavButton>
+
+        {isLoggedIn && user ? (
+          <ProfileInfo>
+            <span>{user.username}님</span>
+            <FaUserCircle onClick={logout} style={{ cursor: "pointer" }} />
+          </ProfileInfo>
+        ) : (
+          <LoginButton to="/login">로그인 / 회원가입</LoginButton>
+        )}
+      </RightGroup>
+    </Nav>
+  )
+};
+
+export default Navbar;
 
 const Nav = styled.nav`
   display: flex;
@@ -40,7 +72,7 @@ transition: background-color 0.2s ease;
 
 &:hover {
   text-shadow: 0 2px 4px ${colors.profile};
-  transform: translateY(-2px); // 살짝 올라오는 효과
+  transform: translateY(-2px); 
 
 }
 `
@@ -72,24 +104,15 @@ const LoginButton =styled(Link)`
     background-color: white;
   }
 `
+const ProfileInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  font-size: 0.9em;
+  font-weight: bold;
 
-
-const Navbar = ()=>{
-  
-  return (
-    <Nav>
-      <LeftGroup> 
-        <Menu />
-        <Logo to = '/'>Re:Skin</Logo>
-      </LeftGroup>
-      <RightGroup>
-        <NavButton to = '/Infoboard'>게시판 정보</NavButton>
-        <NavButton to = '/community'>커뮤니티</NavButton>
-        <NavButton to ='/analysisOverview'>피부 분석</NavButton>
-        <LoginButton to = '/login'>로그인 / 회원가입</LoginButton>
-      </RightGroup>
-    </Nav>
-  )
-};
-
-export default Navbar;
+  & svg {
+    font-size: 1.5em;
+  }
+`
