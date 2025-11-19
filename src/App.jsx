@@ -15,8 +15,7 @@ import Skinguide from "./features/infoboard/pages/Skinguide";
 
 function App() {
   return (
-<<<<<<< HEAD
-    <AuthProvider>
+<AuthProvider>
       <Router>
         <Routes>
           <Route path="/" element={<RootLayout />}>
@@ -25,26 +24,13 @@ function App() {
             <Route path="login" element={<LoginPage />}/>
             <Route path="register" element={<RegisterPage />} />
             <Route path="community" element={<CommunityPage />}/>
+            <Route path="infoboard" element={<Infoboard />}/>
+          <Route path="skinguide" element={<Skinguide />}/>
+          <Route path="skin/guide" element={<Skinguide />}/>
         </Route>
         </Routes>
       </Router>
     </AuthProvider>
-=======
-    <Router>
-      <Routes>
-        <Route path="/" element={<RootLayout />}>
-          <Route index element={< MainPage/>} />
-          <Route path="analysisOverview" element={<AnalysisOverviewPage />}/>
-          <Route path="login" element={<LoginPage />}/>
-          <Route path="register" element={<RegisterPage />} />
-          <Route path="community" element={<CommunityPage />}/>
-          <Route path="infoboard" element={<Infoboard />}/>
-          <Route path="skinguide" element={<Skinguide />}/>
-          <Route path="skin/guide" element={<Skinguide />}/>
-      </Route>
-      </Routes>
-    </Router>
->>>>>>> main
   )
 }
 
