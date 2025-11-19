@@ -5,4 +5,4 @@ const AnalysisResultPagePage=()=>{
     </h1>
   );
 };
-export default MainPage;
+export default AnalysisResultPagePage;
