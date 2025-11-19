@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const InfoContainer = styled.div`
-  /* .info-container */
   max-width: 800px;
   margin: 0 auto;
   padding: 60px 20px;
@@ -12,11 +11,9 @@ const InfoContainer = styled.div`
 `;
 
 const InfoHeader = styled.div`
-  /* .info-header */
   margin-bottom: 50px;
 
   h1 {
-    /* .info-header h1 */
     font-size: 32px;
     font-weight: 700;
     color: #1a1a1a;
@@ -24,7 +21,6 @@ const InfoHeader = styled.div`
   }
 
   p {
-    /* .info-header p */
     font-size: 16px;
     color: #666b7a;
     line-height: 1.5;
@@ -32,7 +28,6 @@ const InfoHeader = styled.div`
 `;
 
 const InfoCardList = styled.div`
-  /* .info-card-list */
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -42,7 +37,7 @@ const InfoCard = styled.div`
   /* .info-card */
   display: flex;
   align-items: center;
-  background-color: #eff1f5; /* 기존 CSS 색상 */
+  background-color: #eff1f5; 
   padding: 30px;
   border-radius: 16px;
   text-decoration: none; 
@@ -51,15 +46,13 @@ const InfoCard = styled.div`
   cursor: pointer;
 
   &:hover {
-    /* .info-card:hover */
     transform: translateY(-3px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    background-color: #e8ebf0; /* 기존 CSS hover 색상 */
+    background-color: #e8ebf0; 
   }
 `;
 
 const IconBox = styled.div`
-  /* .icon-box */
   background-color: white;
   width: 60px;
   height: 60px;
@@ -72,7 +65,6 @@ const IconBox = styled.div`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 
   svg {
-    /* .icon-box svg */
     width: 30px;
     height: 30px;
     color: #333;
@@ -80,13 +72,11 @@ const IconBox = styled.div`
 `;
 
 const CardContent = styled.div`
-  /* .card-content */
   text-align: left;
   flex: 1;
 `;
 
 const CardTitle = styled.h3`
-  /* .card-title */
   font-size: 18px;
   font-weight: 700;
   color: #1a1a1a;
@@ -108,7 +98,7 @@ const Infoboard = () => {
       ), 
       title: "제품은 많은데 순서를 모르겠어요",
       action: "올바른 스킨케어 순서 보기 >",
-      link: "/skinguide" 
+      link: "/infoboard/skinguide" 
     },
     {
       id: 2,
@@ -119,7 +109,7 @@ const Infoboard = () => {
       ), 
       title: "앰플? 세럼? 뭐가 다른거죠?",
       action: "스킨케어 용어/제품 알아보기 >",
-      link: "/guide/dictionary"
+      link: "/infoboard/skindictionary"
     },
     {
       id: 3,
