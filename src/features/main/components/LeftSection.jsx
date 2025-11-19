@@ -7,7 +7,7 @@ const LeftSection =()=>{
   return(
           <Wrapper>
         <Title>당신의 피부, <br></br>지금 어떤 상태인가요?</Title>
-        <Description>Skin Type Analyzer로 AI가 분석한 당신의 피부 타입과 맞춤 관리 팁을 확인하세요.
+        <Description><b>Re:Skin</b>으로 AI가 분석한 당신의 피부 타입과 맞춤 관리 팁을 확인하세요.
            분석한 기록은 자동으로 저장되어 추적 관리가 가능합니다.</Description>
         <AnalyzeButton onClick={() => navigate("/login")}>피부 분석하기 -&gt;</AnalyzeButton>
       </Wrapper>
