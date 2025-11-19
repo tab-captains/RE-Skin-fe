@@ -15,7 +15,7 @@ import Skinguide from "./features/infoboard/pages/Skinguide";
 
 function App() {
   return (
-<AuthProvider>
+  <AuthProvider>
       <Router>
         <Routes>
           <Route path="/" element={<RootLayout />}>
@@ -31,6 +31,7 @@ function App() {
         </Routes>
       </Router>
     </AuthProvider>
+
   )
 }
 
