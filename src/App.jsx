@@ -9,7 +9,8 @@ import AnalysisOverviewPage from './features/analysis/pages/AnalysisOverviewPage
 import CommunityPage from './features/community/pages/CommunityPage';
 import Infoboard from "./features/infoboard/pages/InfoboardPage";
 import Skinguide from "./features/infoboard/pages/Skinguide";
-import Dictionary from "./features/infoboard/pages/Dictionary";
+import Skindictionary from "./features/infoboard/pages/Skindictionary";
+
 
 
 
@@ -24,13 +25,14 @@ function App() {
           <Route path="login" element={<LoginPage />}/>
           <Route path="register" element={<RegisterPage />} />
           <Route path="community" element={<CommunityPage />}/>
+          
           <Route path="infoboard">
             <Route index element={<Infoboard />}/>
             <Route path="skinguide" element={<Skinguide />}/>
-            <Route path="dictionary" element={<Dictionary />}/>
+            <Route path="skindictionary" element={<Skindictionary />}/>
           </Route>
-      </Route>
-    </Routes>
+        </Route>
+      </Routes>
     </Router>
   )
 }
