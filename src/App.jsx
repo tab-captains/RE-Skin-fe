@@ -13,6 +13,7 @@ import Infoboard from "./features/infoboard/pages/InfoboardPage";
 import Skinguide from "./features/infoboard/pages/Skinguide";
 import Skindictionary from "./features/infoboard/pages/Skindictionary";
 import ImageUploadPage from './features/analysis/pages/ImageUploadPage'; 
+import SkinReport from "./features/report/skinreport";
 function App() {
   return (
     <AuthProvider>
@@ -28,6 +29,7 @@ function App() {
             <Route path="skinguide" element={<Skinguide />}/> 
             <Route path="infoboard/skinguide" element={<Skinguide />} />
             <Route path="infoboard/skindictionary" element={<Skindictionary />} />
+            <Route path="skinreport" element={<SkinReport />}/>
           
           </Route>
         </Routes>
