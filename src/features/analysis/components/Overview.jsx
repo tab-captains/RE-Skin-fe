@@ -41,7 +41,8 @@ const scanAnimation = keyframes`
 const ImageWrapper = styled.div`
   position: relative;  
   width: 300px;      
-  height: 300px;       
+  height: 300px;   
+  justify-content: right; 
 `;
 
 const Icon = styled.img`

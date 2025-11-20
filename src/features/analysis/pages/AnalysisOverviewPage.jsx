@@ -2,7 +2,7 @@ import styled from "styled-components";
 import colors from "../../common/colors";
 import {useNavigate} from "react-router-dom";
 import Overview from "../components/Overview";
-import OverviewResult from "../components/OverviewResult";
+import OverviewMiddle from "../components/OverviewMiddle";
 
 const AnalysisOverviewPage=()=>{
   const navigate = useNavigate();
@@ -12,8 +12,11 @@ const AnalysisOverviewPage=()=>{
         <Overview />
       </Top>
       <Middle>
-        <OverviewResult />
+        <OverviewMiddle />
       </Middle>
+      <Bottom>
+        
+      </Bottom>
     </Container>
   );
 };
@@ -32,6 +35,12 @@ const Top=styled.div`
   padding: 160px 80px 120px 80px;
 `
 const Middle = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  gap: 80px;
+  padding: 0 80px 150px 80px;
+`
+const Bottom = styled.div`
   display: flex;
   justify-content: flex-start;
   gap: 80px;
