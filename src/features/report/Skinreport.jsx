@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FiDownload } from 'react-icons/fi';
+import DetailReport from './Detailreport';
 
 const skinRecords = [
   {
@@ -144,40 +145,65 @@ const DownloadLink = styled.a`
 `;
 
 const SkinReport = () => {
-  return (
-    <ReportContainer>
-      <ReportHeader>
-        <h1>Your Skin Records</h1>
-      </ReportHeader>
+    const [showDetail, setShowDetail] = useState(false);
+    const [selectedReport, setSelectedReport] = useState(null);
 
-      <TimelineWrapper>
-        <TimelineBar /> 
-        
-        {skinRecords.map((record, index) => (
-          <RecordItem key={index}>
-            <RecordPoint /> 
-            
-            <DateColumn>
-              <DateText>{record.date}</DateText>
-              <AgoText>{record.ago}</AgoText>
-            </DateColumn>
-            
-            <CardContent>
-              <Summary>
-                <span>👤 Report Summary</span>
-                {record.reportSummary}
-              </Summary>
-              
-              <DownloadLink href={record.downloadLink} download>
-                <FiDownload />
-                PDF Download
-              </DownloadLink>
-            </CardContent>
-          </RecordItem>
-        ))}
-      </TimelineWrapper>
-    </ReportContainer>
-  );
+    const handleDownloadClick = (record, e) => {
+        e.preventDefault();
+        setSelectedReport(record);
+        setShowDetail(true);
+    };
+
+    const handleCloseDetail = () => {
+        setShowDetail(false);
+        setSelectedReport(null);
+    };
+
+    return (
+        <>
+            {/* 상세 리포트가 표시되면 메인 타임라인은 숨깁니다 */}
+            <ReportContainer style={{ display: showDetail ? 'none' : 'block' }}> 
+                <ReportHeader>
+                    <h1>Your Skin Records</h1>
+                </ReportHeader>
+
+                <TimelineWrapper>
+                    <TimelineBar /> 
+                    
+                    {skinRecords.map((record, index) => (
+                        <RecordItem key={index}>
+                            <RecordPoint /> 
+                            
+                            <DateColumn>
+                                <DateText>{record.date}</DateText>
+                                <AgoText>{record.ago}</AgoText>
+                            </DateColumn>
+                            
+                            <CardContent>
+                                <Summary>
+                                    <span>👤 Report Summary</span>
+                                    {record.reportSummary}
+                                </Summary>
+                                
+                                <DownloadLink 
+                                    href={record.downloadLink}
+                                    onClick={(e) => handleDownloadClick(record, e)}>
+                                    <FiDownload />
+                                    PDF Download
+                                </DownloadLink>
+                            </CardContent>
+                        </RecordItem>
+                    ))}
+                </TimelineWrapper>
+            </ReportContainer>
+            {showDetail && selectedReport && (
+                <DetailReport 
+                    reportData={selectedReport} 
+                    onClose={handleCloseDetail} 
+                />
+            )}
+        </>
+    );
 };
 
 export default SkinReport;
