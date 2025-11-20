@@ -62,14 +62,15 @@ const RecordItem = styled.div`
   margin-bottom: 50px;
   position: relative; 
   text-align: left;
+  margin-left: 30px;
 `;
 
 const RecordPoint = styled.div`
   position: absolute;
-  left: -7px; 
-  top: 0;
-  width: 18px;
-  height: 18px;
+  left: -37px; 
+  top: 38px;
+  width: 15px;
+  height: 15px;
   background-color: #1e2a55;
   border-radius: 50%;
   z-index: 10;
@@ -79,8 +80,9 @@ const DateColumn = styled.div`
   position: absolute;
   left: -60px;
   width: 80px;
-  text-align: right;
+  text-align: center;
   transform: translateX(-100%);
+  top: 3px;
 `;
 
 const DateText = styled.h3`
