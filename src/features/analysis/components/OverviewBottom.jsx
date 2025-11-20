@@ -1,41 +1,34 @@
 import styled, { keyframes } from "styled-components";
 import colors from "../../common/colors";
-import SkinScoreBox from "./SkinScoreBox";
 import useReveal from "../../common/hooks/useReveal";
+import analysisPreview from '../../../assets/images/analysisPreview.png';
 
-const OverviewMiddle = () => {
+const OverviewBottom =()=>{
+
   const titleReveal = useReveal({ threshold: 0.2 });
   const descReveal = useReveal({ threshold: 0.2 });
-  const boxReveal = useReveal({ threshold: 0.2 });
 
-  return (
-    <Container>
-      <Wrapper>
+  return(
+       <Container>
         <AnimatedItem ref={titleReveal.ref} className={titleReveal.isRevealed ? "visible" : ""} delay="0s">
-          <Title>피부 고민에 따라 필요한 관리법은 모두 달라요.</Title>
+          <Icon src={analysisPreview} alt="../../../assets/images/analysisPreview.png"></Icon>
         </AnimatedItem>
-
-        <AnimatedItem ref={descReveal.ref} className={descReveal.isRevealed ? "visible" : ""} delay="0.2s">
+      <Wrapper>
+        <AnimatedItem ref={titleReveal.ref} className={titleReveal.isRevealed ? "visible" : ""} delay="0.4s">
+          <Title>AI가 어떻게 분석하나요?</Title>
+        </AnimatedItem>
+        <AnimatedItem ref={descReveal.ref} className={descReveal.isRevealed ? "visible" : ""} delay="0.6s">
           <Description>
-            모공, 주름, 여드름 등 고민별 핵심 포인트를 한눈에 보여드립니다.
+            이미지 기반 학습 모델이 얼굴의 여러 지점을 분석해 주요 피부 지표를 도출합니다.
           </Description>
         </AnimatedItem>
       </Wrapper>
 
-      <AnimatedItem ref={boxReveal.ref} className={boxReveal.isRevealed ? "visible" : ""} delay="0.4s">
-        <SkinScoreBox
-          data={[
-            { title: "여드름", scores: { acne: 70 } },
-            { title: "모공", scores: { pore: 80 } },
-            { title: "주름", scores: { wrinkle: 50 } },
-          ]}
-        />
-      </AnimatedItem>
     </Container>
-  );
-};
+  )
 
-export default OverviewMiddle;
+}
+export default OverviewBottom;
 
 const fadeUp = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -55,7 +48,7 @@ const AnimatedItem = styled.div`
 
 const Wrapper = styled.div`
   flex-direction: column;
-  text-align: left;
+  text-align: right;
   padding: 20px 20px 20px 0;
   max-width: 780px;
   gap: 20px;
@@ -94,3 +87,9 @@ const Container = styled.div`
     text-align: center;
   }
 `;
+
+const Icon = styled.img`
+  width: 400px;
+  height: 400px;
+  object-fit: contain;
+`
