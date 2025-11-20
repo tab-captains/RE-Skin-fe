@@ -1,6 +1,13 @@
 import styled from "styled-components";
 import colors from "../../common/colors";
 
+  const getMessageByScore = (value) => {
+    if (value >= 80) return "아주 건강한 상태예요!";
+    if (value >= 60) return "전반적으로 괜찮지만 약간의 관리가 필요해요.";
+    if (value >= 40) return "눈에 띄는 개선이 필요해 보여요.";
+    return "전문적인 관리가 필요한 단계예요.";
+  };
+
 const SkinScoreBox = ({ data }) => {
   return (
     <Container>
@@ -8,14 +15,16 @@ const SkinScoreBox = ({ data }) => {
         <Box key={idx}>
           <BoxTitle>{box.title}</BoxTitle>
           {Object.entries(box.scores).map(([key, value]) => (
+            <div key={key}>
             <ScoreRow key={key}>
-              <Label>{key.toUpperCase()}</Label>
+              <Score>{value}/100</Score>
               <GaugeWrapper>
                 <Gauge width={value} />
               </GaugeWrapper>
-              <Score>{value}</Score>
             </ScoreRow>
-          ))}
+            <Message>{getMessageByScore(value)}</Message>
+            </div>
+             ))}
         </Box>
       ))}
     </Container>
@@ -27,47 +36,42 @@ export default SkinScoreBox;
 
 const Container = styled.div`
   display: flex;
-  gap: 20px; 
-  justify-content: center;
+  gap: 20px;
+  justify-content: right;
   flex-wrap: wrap;
+  
 `;
 
 const Box = styled.div`
-  width: 400px;
-  height: 50px;
-  padding: 20px;
+  width: 350px;
+  padding: 10px 15px;
   border-radius: 12px;
   background-color: #f5f7fa;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 7px;
 `;
 
 const BoxTitle = styled.div`
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: ${colors.primary};
   text-align: left;
 `;
 
 const ScoreRow = styled.div`
   display: flex;
-  align-items: left;
-  gap: 10px;
-`;
-
-const Label = styled.div`
-  width: 70px;
-  font-weight: 600;
-  color: ${colors.primary};
+  align-items: center; 
+  gap: 5px;
+  padding: 4px 0;   
 `;
 
 const GaugeWrapper = styled.div`
   flex: 1;
-  height: 12px;
+  height: 8px;       
   background-color: #e0e0e0;
-  border-radius: 6px;
+  border-radius: 4px;
   overflow: hidden;
 `;
 
@@ -75,13 +79,22 @@ const Gauge = styled.div`
   width: ${({ width }) => width}%;
   height: 100%;
   background-color: ${colors.primary};
-  border-radius: 6px;
+  border-radius: 4px;
   transition: width 0.5s ease;
 `;
 
 const Score = styled.div`
-  width: 30px;
+  min-width: 32px;     
   text-align: right;
-  font-weight: 500;
+  font-weight: bold;
+  font-size: 10px;
   color: ${colors.primary};
+`;
+
+
+const Message = styled.div`
+  font-size: 0.75rem;
+  color: ${colors.primary};
+  margin-top: 4px;
+  text-align: left;
 `;
