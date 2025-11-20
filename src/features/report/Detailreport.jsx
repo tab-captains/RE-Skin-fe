@@ -2,9 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FiDownload } from 'react-icons/fi';
 
-// **********************************************
-// 상세 리포트 관련 Styled Components
-// **********************************************
+
 const DetailContainer = styled.div`
     position: fixed;
     top: 0;
@@ -53,31 +51,37 @@ const ProgressSection = styled.div`
     justify-content: space-between;
     gap: 20px;
     max-width: 1000px;
-    margin: 0 auto 40px;
+    margin: 0 auto 20px; 
+    flex-wrap: wrap; 
 `;
 
 const Card = styled.div`
     background: #fff;
     border-radius: 12px;
-    padding: 20px;
+    padding: 25px; 
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     flex: 1;
-    min-height: 200px;
+    min-height: 180px; 
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
     h3 {
         font-size: 18px;
         color: #1e2a55;
-        margin-bottom: 15px;
+        margin-bottom: 20px; 
         font-weight: 600;
     }
 `;
 
 const ScoreBox = styled.div`
     background-color: #e0e5ee;
-    padding: 15px;
+    padding: 15px 25px; 
     border-radius: 8px;
     margin-top: 10px;
+    display: inline-block; 
 
     p {
         font-size: 28px;
@@ -88,11 +92,14 @@ const ScoreBox = styled.div`
     span {
         font-size: 14px;
         color: #666;
+        display: block;
+        margin-top: 5px;
     }
 `;
 
 const GraphPlaceholder = styled.div`
-    height: 150px;
+    height: 130px; 
+    width: 100%;
     background-color: #f7f9fc;
     border: 1px dashed #ccc;
     display: flex;
@@ -100,6 +107,7 @@ const GraphPlaceholder = styled.div`
     justify-content: center;
     color: #9aa0a8;
     margin-top: 10px;
+    font-size: 12px;
 `;
 
 const BeforeAfterSection = styled.div`
@@ -207,6 +215,7 @@ const DownloadLink = styled.a`
     }
 `;
 
+
 const DetailDownload = styled(DownloadLink)`
     position: absolute;
     right: 30px;
@@ -215,11 +224,7 @@ const DetailDownload = styled(DownloadLink)`
 `;
 
 
-// **********************************************
-// 상세 리포트 메인 컴포넌트
-// **********************************************
 const DetailReport = ({ reportData, onClose }) => {
-    // 상세 리포트의 더미 데이터 (실제 데이터는 reportData를 사용해야 함)
     const detailData = {
         score: 85,
         metrics: '85점 (▲10점), 수분감: 70% (▲5점), 여드름: 64% (▼7점)',
@@ -235,7 +240,6 @@ const DetailReport = ({ reportData, onClose }) => {
                 <CloseButton onClick={onClose}>&times;</CloseButton>
             </DetailHeader>
 
-            {/* 1. Your Skin progress (개선추이 피그마) */}
             <ProgressSection>
                 <Card>
                     <h3>Your Skin progress</h3>
@@ -253,14 +257,14 @@ const DetailReport = ({ reportData, onClose }) => {
             <ProgressSection>
                 <Card style={{ flex: 'none', width: '100%' }}> 
                     <h3>Your Target points</h3>
-                    <p style={{fontSize: '14px', color: '#666', marginTop: '10px'}}>Now your skin: {reportData.reportSummary.split(',')[0]}</p>
-                    <p style={{fontSize: '14px', color: '#666', marginTop: '5px'}}>Our target point: {reportData.reportSummary.split(': ')[1]}</p>
+                    <p style={{fontSize: '14px', color: '#666', marginTop: '10px', lineHeight: '1.6'}}>Now your skin: {reportData.reportSummary.split(',')[0]}</p>
+                    <p style={{fontSize: '14px', color: '#666', marginTop: '5px', lineHeight: '1.6'}}>Our target point: {reportData.reportSummary.split(': ')[1]}</p>
                 </Card>
             </ProgressSection>
-
-            {/* 2. SkinReportPage - History Time (Before/After 피그마) */}
             <BeforeAfterSection>
-                <h3>SkinReportPage - History Time</h3>
+                <h3 style={{ marginBottom: '30px', textAlign: 'left', fontSize: '24px', fontWeight: '700', color: '#1e2a55' }}>
+                    SkinReportPage - History Time
+                </h3>
                 <ImageWrapper>
                     <div>
                         <h4>Before</h4>
