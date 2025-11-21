@@ -3,6 +3,8 @@ import styled from "styled-components"
 import {Link} from "react-router-dom";
 import {GiHamburgerMenu} from "react-icons/gi";
 import colors from "../../common/colors";
+import { FaUserCircle } from "react-icons/fa";
+import { useAuth } from "../../auth/context/AuthContext";
 
 const Nav = styled.nav`
   display: flex;
@@ -40,7 +42,7 @@ transition: background-color 0.2s ease;
 
 &:hover {
   text-shadow: 0 2px 4px ${colors.profile};
-  transform: translateY(-2px); // 살짝 올라오는 효과
+  transform: translateY(-2px); 
 
 }
 `
@@ -72,10 +74,17 @@ const LoginButton =styled(Link)`
     background-color: white;
   }
 `
-
+const UserBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: white;
+  font-size: 0.9em;
+  cursor: pointer;
+`;
 
 const Navbar = ()=>{
-  
+    const { isLoggedIn, user } = useAuth();
   return (
     <Nav>
       <LeftGroup> 
@@ -87,7 +96,14 @@ const Navbar = ()=>{
         <NavButton to = '/infoboard'>게시판 정보</NavButton>
         <NavButton to = '/community'>커뮤니티</NavButton>
         <NavButton to ='/analysisOverview'>피부 분석</NavButton>
-        <LoginButton to = '/login'>로그인 / 회원가입</LoginButton>
+        {!isLoggedIn ? (
+          <LoginButton to="/login">로그인 / 회원가입</LoginButton>
+        ) : (
+          <UserBox>
+            <FaUserCircle size={20} />
+            <span>{user?.username ? `${user.username}님` : "User님"}</span>
+          </UserBox>
+        )}
       </RightGroup>
     </Nav>
   )
