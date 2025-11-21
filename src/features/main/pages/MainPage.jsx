@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import colors from "../../common/colors"
+import colors from "../../common/colors";
 import LeftSection from "../components/LeftSection";
 import RightSection from "../components/RightSection";
 import BottomSection from "../components/BottomSection";
@@ -23,7 +23,7 @@ const MainPage=()=>{
     {!isLoggedIn && (
     <Footer>
       <TextItem>지금 바로 피부 상태를 확인해보세요.</TextItem>
-      <ButtonItem onClick={() => navigate("/login")}>피부 분석하기</ButtonItem>
+      <ButtonItem onClick={() => navigate("/login")}>로그인 하기</ButtonItem>
     </Footer>
     )}
     </Container>

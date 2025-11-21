@@ -48,7 +48,7 @@ const AnalysisOverviewPage=()=>{
           className={buttonReveal.isRevealed ? "visible" : ""}
           delay="0.4s"
         >
-          <Button onClick={() => navigate("/")}>진단하러 가기</Button>
+          <Button onClick={() => navigate("/upload")}>진단하러 가기</Button>
         </AnimatedItem>
       </Footer>
     </Container>
