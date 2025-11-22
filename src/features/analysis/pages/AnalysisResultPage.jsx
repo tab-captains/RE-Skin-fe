@@ -1,14 +1,19 @@
 import styled from "styled-components"
 import colors from "../../common/colors";
 import { useAuth } from "../../auth/context/AuthContext";
-import { skinAnalysis } from "../../../shared/api/skinAnalysis";
+import {useState, useEffect} from "react";
 import ResultTop from "../components/ResultTop";
 import SkinScoreGrid from "../components/SkinScoreGrid";
+import { skinAnalysis } from "../../../shared/api/skinAnalysis";
+
 
 const AnalysisResultPage=()=>{
+
   const {user} =useAuth();
   const result = skinAnalysis;
+
   return(
+    <>
     <Container>
       <Header>
         <p style = {{marginTop: "20px"}}>오늘의 피부 상태</p>
@@ -19,6 +24,7 @@ const AnalysisResultPage=()=>{
       <ResultTop />
       <SkinScoreGrid />
     </Container>
+    </>
   );
 };
 export default AnalysisResultPage; 

@@ -35,7 +35,7 @@ const ImageUploadPage = () => {
   const removeFile = (slotKey) => setSlots((s) => ({ ...s, [slotKey]: null }));
 
   const allUploaded = slots.front && slots.left && slots.right;
-  const handleStartAnalysis = () => { if (allUploaded) navigate("/result"); };
+  const handleStartAnalysis = () => { if (allUploaded) navigate("/analysis"); };
 
   return (
     <PageWrapper>
