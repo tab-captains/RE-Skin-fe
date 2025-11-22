@@ -15,6 +15,9 @@ import Skindictionary from "./features/infoboard/pages/Skindictionary";
 import ImageUploadPage from './features/analysis/pages/ImageUploadPage'; 
 import SkinReport from "./features/report/skinreport";
 import Analysis from "./features/analysis/pages/AnalysisPage";
+import RoutineSelect from "./features/routine/pages/RoutineSelectPage";
+import Morning from "./features/routine/pages/MorningRoutinePage";
+import Night from "./features/routine/pages/NightRoutinePage";
 function App() {
   return (
     <AuthProvider>
@@ -33,6 +36,9 @@ function App() {
             <Route path="skinreport" element={<SkinReport />}/>
             <Route path="upload" element={<ImageUploadPage />} />
             <Route path="analysis" element={<Analysis />} />
+            <Route path="routineSelect" element={<RoutineSelect/>}/>
+            <Route path="morning" element={<Morning/>}/>
+            <Route path="night" element={<Night/>}/>
             
           
           </Route>

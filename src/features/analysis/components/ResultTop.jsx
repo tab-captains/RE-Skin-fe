@@ -3,9 +3,11 @@ import colors from "../../common/colors";
 
 /*api */
 import { skinAnalysis } from "../../../shared/api/skinAnalysis";
+import {useNavigate} from "react-router-dom";
 
 const ResultTop = ()=>{
 const result = skinAnalysis;
+const navigate = useNavigate();
  return (
   <Container>
     <Wrapper>
@@ -17,7 +19,7 @@ const result = skinAnalysis;
       <p>오늘의 리포트 요약</p>
       <Description>{result.dailySummary}</Description>
       <ButtonWrapper>
-        <Button>맞춤 세안 루틴 보러가기</Button>
+        <Button onClick={()=> navigate('/routineSelect')}>맞춤 세안 루틴 보러가기</Button>
         <Button>리포트 저장하기</Button>
       </ButtonWrapper>
     </Wrapper>
