@@ -47,17 +47,20 @@ const { user, isLoggedIn } = useAuth();
 
 const Wrapper = styled.div`
   width: 360px;
-  height: 170px;
-  border-radius: 10px;
   padding: 15px;
-  border: 1px solid black;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
-  background-color: white;
   gap: 7px;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  transition: 0.2s ease;
   &:hover {
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   }
 `
 
@@ -80,7 +83,9 @@ const BoxSectionTop=styled.div`
   justify-content: flex-start;
   gap: 5px;              
   padding-bottom: 10px;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid rgba(54, 54, 54, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 `
 const BoxSectionBot=styled.div`
   display:flex;
@@ -93,9 +98,12 @@ const BoxSectionBot=styled.div`
 const Detail = styled.div `
   width: 65px;
   height: 35px;
-  border-radius: 7px;
+  border-radius: 8px;
   padding: 5px;
-  border: 1px solid gray;
+  border: 1px solid rgba(54, 54, 54, 0.5);
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   justify-content: center;
   flex-direction: column;
