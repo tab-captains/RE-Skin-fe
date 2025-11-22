@@ -104,16 +104,32 @@ const SlotLabel = styled.div`
 font-weight:600;
 `;
 const DropZone = styled.div`
-width:100%;
-height:220px;
-border-radius:10px;
-border:2px dashed ${({$highlighted})=>$highlighted?"#4d9fff":"#ddd"};
-display:flex;
-justify-content:center;
-align-items:center;
-background:#fff;
-cursor:pointer;
-position:relative;
+  width: 100%;
+  height: 220px;
+  border-radius: 10px;
+  border: 2px dashed ${({ $highlighted }) => ($highlighted ? "#4d9fff" : "#ccc")};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+
+  background: 
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.7) 0%,
+      rgba(240, 240, 240, 0.4) 40%,
+      rgba(230, 230, 230, 0.2) 100%
+    ),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.08) 0px,
+      rgba(255, 255, 255, 0.08) 2px,
+      rgba(0, 0, 0, 0.03) 3px,
+      rgba(0, 0, 0, 0.03) 4px
+    );
+  
+  backdrop-filter: blur(1px);
 `;
 
 const Placeholder = styled.div`
