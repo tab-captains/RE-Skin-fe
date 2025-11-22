@@ -27,7 +27,7 @@ const result = skinAnalysis;
 export default ResultTop;
 
 const Container =styled.div`
-  margin-top: 50px;
+  margin-top: 10px;
   display: flex;
   gap: 30px;
   justify-content: space-between;
@@ -70,7 +70,7 @@ const ButtonWrapper = styled.div`
 const Button=styled.button`
   border: none;
   border-radius: 20px;
-  padding: 10px 30px;
+  padding: 10px 25px;
   background-color: ${colors.primary}DD; 
   color: white;
   backdrop-filter: blur(3px);  

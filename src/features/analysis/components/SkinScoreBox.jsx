@@ -46,11 +46,14 @@ const Box = styled.div`
   width: 350px;
   padding: 10px 15px;
   border-radius: 12px;
-  background-color: #f5f7fa;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
   gap: 7px;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
 `;
 
 const BoxTitle = styled.div`

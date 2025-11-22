@@ -3,6 +3,7 @@ import colors from "../../common/colors";
 import { useAuth } from "../../auth/context/AuthContext";
 import { skinAnalysis } from "../../../shared/api/skinAnalysis";
 import ResultTop from "../components/ResultTop";
+import SkinScoreGrid from "../components/SkinScoreGrid";
 
 const AnalysisResultPage=()=>{
   const {user} =useAuth();
@@ -16,6 +17,7 @@ const AnalysisResultPage=()=>{
         <h2>{result.score}/100</h2>
       </Header>
       <ResultTop />
+      <SkinScoreGrid />
     </Container>
   );
 };
@@ -35,4 +37,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 25px;
+  gap: 30px;
+  margin-bottom: 100px;
 `

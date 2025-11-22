@@ -1,4 +1,4 @@
-// ImageUploadPage.jsx (드롭존 안에 이미지 미리보기) 수정
+
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import colors from "../../common/colors"
@@ -74,7 +74,6 @@ export default ImageUploadPage;
 const PageWrapper = styled.div`
 min-height:100vh;
 padding:40px;
-background:#f5f7fa;
 display:flex;
 flex-direction:column;
 align-items:center;
