@@ -2,7 +2,7 @@ import styled, { keyframes } from "styled-components";
 import colors from "../../common/colors";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../auth/context/AuthContext";
-import AnalysisResultPage from "./AnalysisResultPage"; // 반드시 임포트
+import AnalysisResultPage from "./AnalysisResultPage"; 
 
 const AnalysisPage = () => {
   const { user } = useAuth();
