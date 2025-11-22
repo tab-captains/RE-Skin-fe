@@ -1,7 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FiDownload } from 'react-icons/fi';
-
 
 const DetailContainer = styled.div`
     position: fixed;
@@ -61,7 +59,7 @@ const Card = styled.div`
     padding: 25px; 
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     flex: 1;
-    min-height: 180px; 
+    min-height: 140px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -193,36 +191,6 @@ const CommentBox = styled.div`
     }
 `;
 
-const DownloadLink = styled.a`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: #3d4a70;
-    font-size: 12px;
-    cursor: pointer;
-    margin-left: 30px;
-    flex-shrink: 0;
-
-    svg {
-        font-size: 20px;
-        margin-bottom: 5px;
-    }
-
-    &:hover {
-        color: #1e2a55;
-    }
-`;
-
-
-const DetailDownload = styled(DownloadLink)`
-    position: absolute;
-    right: 30px;
-    bottom: 30px;
-    margin: 0;
-`;
-
 
 const DetailReport = ({ reportData, onClose }) => {
     const detailData = {
@@ -254,17 +222,47 @@ const DetailReport = ({ reportData, onClose }) => {
                 </Card>
             </ProgressSection>
             
-            <ProgressSection>
-                <Card style={{ flex: 'none', width: '100%' }}> 
-                    <h3>Your Target points</h3>
-                    <p style={{fontSize: '14px', color: '#666', marginTop: '10px', lineHeight: '1.6'}}>Now your skin: {reportData.reportSummary.split(',')[0]}</p>
-                    <p style={{fontSize: '14px', color: '#666', marginTop: '5px', lineHeight: '1.6'}}>Our target point: {reportData.reportSummary.split(': ')[1]}</p>
+            <ProgressSection style={{ marginBottom: '40px' }}>
+                <Card 
+                    style={{ 
+                        flex: 'none', 
+                        width: '96%', 
+                        alignItems: 'flex-start',
+                        minHeight: '100px', 
+                        justifyContent: 'flex-start',
+                        padding: '20px',
+                    }}>
+                    <h3 style={{marginBottom: '15px'}}>Your Target points</h3>
+                    <p style={{
+                        fontSize: '16px', 
+                        color: '#1e2a55', 
+                        marginTop: '0px', 
+                        lineHeight: '1.6', 
+                        textAlign: 'left',
+                        paddingLeft: '10px' 
+                    }}>Now your skin: {reportData.reportSummary.split(',')[0]}</p>
+                    <p style={{
+                        fontSize: '16px', 
+                        color: '#1e2a55', 
+                        marginTop: '5px', 
+                        lineHeight: '1.6', 
+                        textAlign: 'left',
+                        paddingLeft: '10px'
+                    }}>Our target point: {reportData.reportSummary.split(': ')[1]}</p>
                 </Card>
             </ProgressSection>
-            <BeforeAfterSection>
-                <h3 style={{ marginBottom: '30px', textAlign: 'left', fontSize: '24px', fontWeight: '700', color: '#1e2a55' }}>
+
+            <BeforeAfterSection style={{ marginTop: '0px' }}>
+                <h3 style={{ 
+                    marginBottom: '25px', 
+                    textAlign: 'left', 
+                    fontSize: '25px',
+                    fontWeight: '680', 
+                    color: '#1e2a55' 
+                }}>
                     SkinReportPage - History Time
                 </h3>
+                
                 <ImageWrapper>
                     <div>
                         <h4>Before</h4>
@@ -284,11 +282,6 @@ const DetailReport = ({ reportData, onClose }) => {
                     </CommentBox>
                 </ScoreCommentRow>
             </BeforeAfterSection>
-
-            <DetailDownload href="#" download>
-                <FiDownload />
-                PDF Download
-            </DetailDownload>
         </DetailContainer>
     );
 };
