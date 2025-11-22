@@ -1,147 +1,153 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FiDownload } from 'react-icons/fi';
-import DetailReport from './Detailreport';
+import DetailReport from './Detailreport'; 
 
 const skinRecords = [
-  {
-    date: '9-17',
-    ago: '(1 month ago)',
-    reportSummary: 'T존 유분 과다, 홍조 개선 필요. 추천 성분: 나이아신아마이드, 센텔라',
-    downloadLink: '#',
-  },
-  {
-    date: '10-31',
-    ago: '(1 week ago)',
-    reportSummary: '수분 부족형 지성 유지. 유분/피지 개선 효과 확인. 추천 성분: 살리실산, 비타민 C',
-    downloadLink: '#',
-  },
-  {
-    date: '11-6',
-    ago: '(To day)',
-    reportSummary: '민감성 완화 확인. 보습력 개선 필요. 추천 성분: 세라마이드, 히알루론산',
-    downloadLink: '#',
-  },
+    {
+        date: '9-17',
+        ago: '(1 month ago)',
+        reportSummary: 'T존 유분 과다, 홍조 개선 필요. 추천 성분: 나이아신아마이드, 센텔라',
+        downloadLink: '#',
+    },
+    {
+        date: '10-31',
+        ago: '(1 week ago)',
+        reportSummary: '수분 부족형 지성 유지. 유분/피지 개선 효과 확인. 추천 성분: 살리실산, 비타민 C',
+        downloadLink: '#',
+    },
+    {
+        date: '11-6',
+        ago: '(To day)',
+        reportSummary: '민감성 완화 확인. 보습력 개선 필요. 추천 성분: 세라마이드, 히알루론산',
+        downloadLink: '#',
+    },
 ];
 
 const ReportContainer = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 60px 20px 100px;
-  text-align: center;
-  font-family: 'Pretendard', sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px 100px;
+    text-align: center;
+    font-family: 'Pretendard', sans-serif;
 `;
 
 const ReportHeader = styled.div`
-  margin-bottom: 70px;
-  
-  h1 {
-    font-size: 38px;
-    font-weight: 700;
-    color: #1e2a55;
-    margin-bottom: 12px;
-  }
+    margin-bottom: 70px;
+    
+    h1 {
+        font-size: 38px;
+        font-weight: 700;
+        color: #1e2a55;
+        margin-bottom: 12px;
+    }
 `;
 
 const TimelineWrapper = styled.div`
-  position: relative;
-  max-width: 800px;
-  margin: 0 auto;
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
 `;
 
 const TimelineBar = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background-color: #e0e5ee;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: #e0e5ee;
 `;
 
 const RecordItem = styled.div`
-  display: flex;
-  margin-bottom: 50px;
-  position: relative; 
-  text-align: left;
-  margin-left: 30px;
+    display: flex;
+    margin-bottom: 50px;
+    position: relative; 
+    text-align: left;
+    margin-left: 30px;
 `;
 
 const RecordPoint = styled.div`
-  position: absolute;
-  left: -37px; 
-  top: 38px;
-  width: 15px;
-  height: 15px;
-  background-color: #1e2a55;
-  border-radius: 50%;
-  z-index: 10;
+    position: absolute;
+    left: -37px; 
+    top: 38px;
+    width: 15px;
+    height: 15px;
+    background-color: #1e2a55;
+    border-radius: 50%;
+    z-index: 10;
 `;
 
 const DateColumn = styled.div`
-  position: absolute;
-  left: -60px;
-  width: 80px;
-  text-align: center;
-  transform: translateX(-100%);
-  top: 3px;
+    position: absolute;
+    left: -60px;
+    width: 80px;
+    text-align: center;
+    transform: translateX(-100%);
+    top: 3px;
 `;
 
 const DateText = styled.h3`
-  font-size: 16px;
-  font-weight: 700;
-  color: #1e2a55;
-  margin-bottom: 2px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e2a55;
+    margin-bottom: 2px;
 `;
 
 const AgoText = styled.p`
-  font-size: 12px;
-  color: #9aa0a8;
+    font-size: 12px;
+    color: #9aa0a8;
 `;
 
 const CardContent = styled.div`
-  flex: 1;
-  background-color: #f7f9fc;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    flex: 1;
+    background-color: #f7f9fc;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 `;
 
 const Summary = styled.div`
-  font-size: 14px;
-  color: #333;
-  line-height: 1.6;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.6;
 
-  span {
-    font-weight: 700;
-    display: block;
-    margin-bottom: 5px;
-    color: #1e2a55;
-  }
+    span {
+        font-weight: 700;
+        display: block;
+        margin-bottom: 5px;
+        color: #1e2a55;
+    }
 `;
 
 const DownloadLink = styled.a`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  color: #3d4a70;
-  font-size: 12px;
-  cursor: pointer;
-  margin-left: 30px;
-  flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #3d4a70;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 30px;
+    flex-shrink: 0;
+    padding: 5px 10px;
+    border: 1px solid #dcdfe4;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: all 0.2s;
 
-  svg {
-    font-size: 20px;
-    margin-bottom: 5px;
-  }
+    svg {
+        display: none; 
+    }
 
-  &:hover {
-    color: #1e2a55;
-  }
+    &:hover {
+        color: #1e2a55;
+        background-color: #e0e5ee;
+        border-color: #aeb8c4;
+    }
 `;
 
 const SkinReport = () => {
@@ -161,7 +167,6 @@ const SkinReport = () => {
 
     return (
         <>
-            {/* 상세 리포트가 표시되면 메인 타임라인은 숨깁니다 */}
             <ReportContainer style={{ display: showDetail ? 'none' : 'block' }}> 
                 <ReportHeader>
                     <h1>Your Skin Records</h1>
@@ -188,8 +193,7 @@ const SkinReport = () => {
                                 <DownloadLink 
                                     href={record.downloadLink}
                                     onClick={(e) => handleDownloadClick(record, e)}>
-                                    <FiDownload />
-                                    PDF Download
+                                    Report Detail
                                 </DownloadLink>
                             </CardContent>
                         </RecordItem>
