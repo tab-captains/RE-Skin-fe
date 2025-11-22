@@ -35,7 +35,6 @@ const Background = styled.div`
     );
   z-index: -1;
   
-  /* 블러 처리된 물결 그라데이션 */
   &::before {
     content: '';
     position: absolute;
@@ -54,7 +53,6 @@ const Background = styled.div`
     transform: rotate(-2deg);
   }
   
-  /* 추가 레이어로 깊이감 */
   &::after {
     content: '';
     position: absolute;

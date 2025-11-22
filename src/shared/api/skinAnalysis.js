@@ -1,4 +1,5 @@
 export const skinAnalysis = {
+  
   "userId": 1,
   "skinType": "지성",
   "skinTypeDescription": "피지 분비가 활발해 번들거림이 나타날 수 있는 타입입니다.",
