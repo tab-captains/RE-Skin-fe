@@ -1,4 +1,4 @@
-// ImageUploadPage.jsx (드롭존 안에 이미지 미리보기) 수정
+
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import colors from "../../common/colors"
@@ -35,7 +35,7 @@ const ImageUploadPage = () => {
   const removeFile = (slotKey) => setSlots((s) => ({ ...s, [slotKey]: null }));
 
   const allUploaded = slots.front && slots.left && slots.right;
-  const handleStartAnalysis = () => { if (allUploaded) navigate("/result"); };
+  const handleStartAnalysis = () => { if (allUploaded) navigate("/analysis"); };
 
   return (
     <PageWrapper>
@@ -47,8 +47,11 @@ const ImageUploadPage = () => {
           <Slot key={key}>
             <SlotLabel>{label}</SlotLabel>
 
-            <DropZone highlighted={dragActive[key]}
-              onDrop={onDrop(key)} onDragOver={onDragOver(key)} onDragEnter={onDragOver(key)} onDragLeave={onDragLeave(key)}
+            <DropZone $highlighted={dragActive[key]? true : undefined}
+              onDrop={onDrop(key)}
+              onDragOver={onDragOver(key)}
+              onDragEnter={onDragOver(key)}
+              onDragLeave={onDragLeave(key)}
               onClick={()=>document.getElementById(`file-${key}`).click()}
             >
               {slots[key] ? <PreviewImg src={URL.createObjectURL(slots[key])} alt={label}/> : <Placeholder>클릭 또는 드래그</Placeholder>}
@@ -56,7 +59,7 @@ const ImageUploadPage = () => {
 
             <HiddenInput id={`file-${key}`} type="file" accept="image/*" onChange={onSelect(key)} />
 
-            {slots[key] && <ButtonsRow><SmallButton onClick={()=>removeFile(key)} secondary>삭제</SmallButton><FileName>{slots[key].name}</FileName></ButtonsRow>}
+            {slots[key] && <ButtonsRow><SmallButton onClick={()=>removeFile(key)} $secondary>삭제</SmallButton><FileName>{slots[key].name}</FileName></ButtonsRow>}
           </Slot>
         ))}
       </SlotsWrapper>
@@ -71,7 +74,6 @@ export default ImageUploadPage;
 const PageWrapper = styled.div`
 min-height:100vh;
 padding:40px;
-background:#f5f7fa;
 display:flex;
 flex-direction:column;
 align-items:center;
@@ -105,7 +107,7 @@ const DropZone = styled.div`
 width:100%;
 height:220px;
 border-radius:10px;
-border:2px dashed ${({highlighted})=>highlighted?"#4d9fff":"#ddd"};
+border:2px dashed ${({$highlighted})=>$highlighted?"#4d9fff":"#ddd"};
 display:flex;
 justify-content:center;
 align-items:center;
@@ -143,8 +145,8 @@ padding:6px 10px;
 border-radius:6px;
 border:none;
 cursor:pointer;
-background:${({secondary})=>secondary?"#eee":"#111"};
-color:${({secondary})=>secondary?"#111":"#fff"};
+background:${({$secondary})=>$secondary?"#eee":"#111"};
+color:${({$secondary})=>$secondary?"#111":"#fff"};
 font-size:13px;
 `;
 

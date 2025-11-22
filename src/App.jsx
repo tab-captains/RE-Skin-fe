@@ -14,7 +14,7 @@ import Skinguide from "./features/infoboard/pages/Skinguide";
 import Skindictionary from "./features/infoboard/pages/Skindictionary";
 import ImageUploadPage from './features/analysis/pages/ImageUploadPage'; 
 import SkinReport from "./features/report/skinreport";
-import AnalysisResult from "./features/analysis/pages/AnalysisResultPage";
+import Analysis from "./features/analysis/pages/AnalysisPage";
 function App() {
   return (
     <AuthProvider>
@@ -32,7 +32,7 @@ function App() {
             <Route path="infoboard/skindictionary" element={<Skindictionary />} />
             <Route path="skinreport" element={<SkinReport />}/>
             <Route path="upload" element={<ImageUploadPage />} />
-            <Route path="result" element={<AnalysisResult />} />
+            <Route path="analysis" element={<Analysis />} />
             
           
           </Route>
