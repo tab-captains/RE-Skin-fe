@@ -1,6 +1,6 @@
 import styled from "styled-components"
 /*npm install styled-component 명령어로 설치 후 사용. */
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {GiHamburgerMenu} from "react-icons/gi";
 import colors from "../../common/colors";
 import { FaUserCircle } from "react-icons/fa";
@@ -81,10 +81,20 @@ const UserBox = styled.div`
   color: white;
   font-size: 0.9em;
   cursor: pointer;
+
+  transition: all 0.2s ease;
+  &:hover {
+  color: ${colors.textAccent};
+  opacity0.9;
+  }
 `;
 
 const Navbar = ()=>{
     const { isLoggedIn, user } = useAuth();
+    const navigate = useNavigate();
+    const handleProfileClick = () => {
+      navigate('/profile');
+    }
   return (
     <Nav>
       <LeftGroup> 
@@ -99,7 +109,7 @@ const Navbar = ()=>{
         {!isLoggedIn ? (
           <LoginButton to="/login">로그인 / 회원가입</LoginButton>
         ) : (
-          <UserBox>
+          <UserBox onClick={handleProfileClick}>
             <FaUserCircle size={20} />
             <span>{user?.username ? `${user.username}님` : "User님"}</span>
           </UserBox>

@@ -6,6 +6,7 @@ import MainPage from './features/main/pages/MainPage';
 import RootLayout from './features/layout/RootLayout';
 import LoginPage from './features/auth/pages/LoginPage';
 import RegisterPage from './features/auth/pages/RegisterPage';
+import ProfilePage from './features/auth/pages/ProfilePage';
 import AnalysisOverviewPage from './features/analysis/pages/AnalysisOverviewPage';
 import CommunityPage from './features/community/pages/CommunityPage';
 import Infoboard from "./features/infoboard/pages/InfoboardPage";
@@ -24,6 +25,7 @@ function App() {
             <Route index element={<MainPage />} />
             <Route path="analysisOverview" element={<AnalysisOverviewPage />} />
             <Route path="login" element={<LoginPage />} />
+            <Route path="profile" element={<ProfilePage />} />
           <Route path="register" element={<RegisterPage />} />
             <Route path="community" element={<CommunityPage />}/>
             <Route path="infoboard" element={<Infoboard />}/>
