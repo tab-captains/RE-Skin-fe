@@ -14,6 +14,7 @@ export const login = async (id, password) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include', // HttpOnly 쿠키를 받기 위해 필요
       body: JSON.stringify({
         id,
         password,
@@ -57,6 +58,7 @@ export const register = async (userId, password, confirmPassword, nickname) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include', // HttpOnly 쿠키를 받기 위해 필요
       body: JSON.stringify(requestBody),
     });
 
@@ -83,6 +85,7 @@ export const kakaoLogin = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/api/auth/kakao`, {
       method: 'GET',
+      credentials: 'include', // HttpOnly 쿠키를 받기 위해 필요
     });
     const data = await response.json();
     
@@ -94,6 +97,42 @@ export const kakaoLogin = async () => {
   } catch (error) {
     console.error('Kakao login error:', error);
     alert('카카오 로그인에 실패했습니다.');
+  }
+};
+
+/**
+ * 로그아웃 API
+ * HttpOnly 쿠키에 저장된 refreshToken을 백엔드에서 처리
+ * 백엔드는 @RequestParam으로 받지만, 쿠키에서도 읽을 수 있도록 처리
+ * @returns {Promise<void>}
+ */
+export const logout = async () => {
+  try {
+    // refreshToken이 HttpOnly 쿠키에 있으므로 빈 쿼리 파라미터로 전송
+    // 백엔드가 쿠키에서 refreshToken을 읽어서 처리
+    const response = await fetch(`${API_BASE_URL}/api/auth/logout?refreshToken=`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // HttpOnly 쿠키를 전송하기 위해 필요
+    });
+
+    if (!response.ok) {
+      // 400 에러는 refreshToken이 없거나 유효하지 않을 때 발생할 수 있음
+      // 이 경우에도 프론트엔드 정리는 진행
+      const errorData = await response.json().catch(() => ({}));
+      console.warn('Logout API warning:', errorData.message || `로그아웃 API 응답: ${response.status}`);
+      // 에러를 throw하지 않고 그냥 진행 (프론트엔드 정리는 계속)
+      return;
+    }
+
+    return;
+  } catch (error) {
+    console.error('Logout error:', error);
+    // 에러가 발생해도 프론트엔드 정리는 진행
+    // throw하지 않고 그냥 return
+    return;
   }
 };
 
