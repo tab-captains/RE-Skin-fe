@@ -1,5 +1,5 @@
 // API Base URL
-const API_BASE_URL = 'https://reskin.online';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://reskin.online';
 
 /**
  * 로그인 API
@@ -72,6 +72,28 @@ export const register = async (userId, password, confirmPassword, nickname) => {
   } catch (error) {
     console.error('Register error:', error);
     throw error;
+  }
+};
+
+/**
+ * 카카오 소셜 로그인
+ * 백엔드에서 카카오 로그인 URL을 받아와 리다이렉트
+ */
+export const kakaoLogin = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/auth/kakao`, {
+      method: 'GET',
+    });
+    const data = await response.json();
+    
+    if (data.success && data.data) {
+      window.location.href = data.data;
+    } else {
+      throw new Error(data.message || '카카오 로그인 URL을 받아오지 못했습니다.');
+    }
+  } catch (error) {
+    console.error('Kakao login error:', error);
+    alert('카카오 로그인에 실패했습니다.');
   }
 };
 

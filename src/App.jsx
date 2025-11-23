@@ -6,6 +6,7 @@ import MainPage from './features/main/pages/MainPage';
 import RootLayout from './features/layout/RootLayout';
 import LoginPage from './features/auth/pages/LoginPage';
 import RegisterPage from './features/auth/pages/RegisterPage';
+import LoginSuccessPage from './features/auth/pages/KakaoCallbackPage';
 import AnalysisOverviewPage from './features/analysis/pages/AnalysisOverviewPage';
 import CommunityPage from './features/community/pages/CommunityPage';
 import Infoboard from "./features/infoboard/pages/InfoboardPage";
@@ -27,7 +28,8 @@ function App() {
             <Route index element={<MainPage />} />
             <Route path="analysisOverview" element={<AnalysisOverviewPage />} />
             <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
+            <Route path="register" element={<RegisterPage />} />
+            <Route path="login-success" element={<LoginSuccessPage />} />
             <Route path="community" element={<CommunityPage />}/>
             <Route path="infoboard" element={<Infoboard />}/>
             <Route path="skinguide" element={<Skinguide />}/> 
