@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import './RegisterForm.css'; 
+import { useNavigate } from 'react-router-dom';
+import './RegisterForm.css';
+import { register as registerAPI } from '../../../shared/api/auth';
 
 function RegisterForm() {
+  const navigate = useNavigate();
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -46,7 +49,7 @@ function RegisterForm() {
   }, [userId, password, confirmPassword, nickname, passwordError, confirmPasswordError]);
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!isFormValid) {
@@ -54,13 +57,13 @@ function RegisterForm() {
       return;
     }
 
-    console.log("--- 회원가입 시도 ---");
-    console.log("아이디:", userId);
-    console.log("비밀번호:", password);
-    console.log("닉네임:", nickname);
-    
-    alert('회원가입 성공! ');
-    
+    try {
+      await registerAPI(userId, password, confirmPassword, nickname);
+      alert('회원가입 성공! ');
+      navigate('/login');
+    } catch (error) {
+      alert(error.message || '회원가입에 실패했습니다.');
+    }
   };
 
   return (
