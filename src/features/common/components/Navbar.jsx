@@ -5,6 +5,7 @@ import {GiHamburgerMenu} from "react-icons/gi";
 import colors from "../../common/colors";
 import { FaUserCircle } from "react-icons/fa";
 import { useAuth } from "../../auth/context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Nav = styled.nav`
   display: flex;
@@ -80,11 +81,32 @@ const UserBox = styled.div`
   gap: 0.4rem;
   color: white;
   font-size: 0.9em;
+`;
+
+const LogoutButton = styled.button`
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 0.3rem 1rem;
+  font-size: 0.8em;
+  color: white;
+  background-color: transparent;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
 `;
 
 const Navbar = ()=>{
-    const { isLoggedIn, user } = useAuth();
+    const { isLoggedIn, user, logout } = useAuth();
+    const navigate = useNavigate();
+    
+    const handleLogout = () => {
+      logout();
+      navigate('/');
+    };
+    
   return (
     <Nav>
       <LeftGroup> 
@@ -99,10 +121,13 @@ const Navbar = ()=>{
         {!isLoggedIn ? (
           <LoginButton to="/login">로그인 / 회원가입</LoginButton>
         ) : (
-          <UserBox>
-            <FaUserCircle size={20} />
-            <span>{user?.username ? `${user.username}님` : "User님"}</span>
-          </UserBox>
+          <>
+            <UserBox>
+              <FaUserCircle size={20} />
+              <span>{user?.username ? `${user.username}님` : "User님"}</span>
+            </UserBox>
+            <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
+          </>
         )}
       </RightGroup>
     </Nav>
