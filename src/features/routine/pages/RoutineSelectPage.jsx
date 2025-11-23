@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled ,{keyframes} from "styled-components";
 import colors from "../../common/colors";
 import { IoSunny, IoMoon } from "react-icons/io5";
 import { useAuth } from "../../auth/context/AuthContext";
@@ -11,7 +11,7 @@ const RoutineSelectPage = () => {
 
   return (
     <Container>
-      <Title>
+      <Title $index={1}>
         <b>Re:Skin</b>이<br />
         {user ? user.username : "Guest"}님을 위한 루틴을 준비했어요!
       </Title>
@@ -21,6 +21,7 @@ const RoutineSelectPage = () => {
           onClick={() => setSelected("morning")}
           $active={selected === "morning"}
           $dimmed={selected && selected !== "morning"}
+          $index={2}
         >
           <IoSunny size={60} color="#f7b731" />
           <BoxTitle>아침 루틴</BoxTitle>
@@ -31,6 +32,7 @@ const RoutineSelectPage = () => {
           onClick={() => setSelected("night")}
           $active={selected === "night"}
           $dimmed={selected && selected !== "night"}
+          $index={2}
         >
           <IoMoon size={50} color="#8392dc" />
           <BoxTitle>저녁 루틴</BoxTitle>
@@ -38,7 +40,7 @@ const RoutineSelectPage = () => {
         </RoutineBox>
       </BoxWrapper>
 
-      {selected && <ConfirmBtn>루틴 보러가기</ConfirmBtn>}
+      {selected && <ConfirmBtn $index={1}>루틴 보러가기</ConfirmBtn>}
     </Container>
   );
 };
@@ -53,6 +55,17 @@ const Container = styled.div`
 `;
 
 const Title = styled.div`
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.6s ease forwards;
+  animation-delay: ${({ $index }) => $index * 0.2}s;
+
+  @keyframes fadeUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
   font-weight: 600;
   font-size: 22px;
   color: rgba(25,30,50,0.95);
@@ -68,6 +81,18 @@ const BoxWrapper = styled.div`
 `;
 
 const RoutineBox = styled.div`
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.6s ease forwards;
+  animation-delay: ${({ $index }) => $index * 0.3}s;
+
+  @keyframes fadeUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   display: flex;
   width: 320px;
   padding: 28px;
@@ -139,6 +164,17 @@ const BoxDesc = styled.div`
 `;
 
 const ConfirmBtn = styled.button`
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.6s ease forwards;
+  animation-delay: ${({ $index }) => $index * 0.3}s;
+
+  @keyframes fadeUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
   margin-top: 40px;
   padding: 12px 26px;
   border: none;
