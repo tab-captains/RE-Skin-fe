@@ -70,6 +70,7 @@ function RegisterForm() {
             email: email,
             dateOfBirth: dateOfBirth,
             gender: gender,
+            password: password,
         };
 
         login({ token: fakeToken, userData: userData });

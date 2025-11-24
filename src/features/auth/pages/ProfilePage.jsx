@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { FaUserCircle } from 'react-icons/fa';
-import { FiEdit2 } from 'react-icons/fi';
-import { useAuth } from '../../auth/context/AuthContext'; 
-import colors from '../../common/colors'; 
+import ChangePassword from '../components/ChangePassword';
+import { useAuth } from '../../auth/context/AuthContext';
+import colors from '../../common/colors';
+
+// react-icons
+import { FaUserCircle } from "react-icons/fa";
+import { FiEdit2 } from "react-icons/fi";
 
 const Container = styled.div`
     display: flex;
@@ -54,7 +57,6 @@ const InputDisplay = styled.div`
     flex: 1;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 8px 12px;
     border: 1px solid #dcdfe4;
     border-radius: 8px;
@@ -66,20 +68,12 @@ const InputDisplay = styled.div`
     justify-content: ${props => props.$isEditing ? 'flex-start' : 'space-between'};
     gap: 15px;
 
-    input {
+    input, select {
         border: none;
         background: none;
         outline: none;
         flex-grow: 1;
-        font-size: 15px
-    }
-    
-    select {
-        border: none;
-        background: none;
-        outline: none;
-        flex-grow: 1;
-        font-size: 15px
+        font-size: 15px;
     }
 `;
 
@@ -88,12 +82,10 @@ const EditButton = styled.button`
     border: none;
     color: ${colors.primary};
     cursor: pointer;
-    margin-left: 10px;
     display: flex;
     align-items: center;
     padding: 5px;
-    flex-shrink: 0;
-    
+
     &:hover {
         color: ${colors.textAccent};
     }
@@ -160,15 +152,23 @@ const ActionButton = styled.button`
     font-size: 1em;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s;
-    
+
     &:hover {
         background-color: ${props => props.$isSave ? colors.textAccent : '#666'};
     }
 `;
 
 const ProfilePage = () => {
-    const { user, updateUser } = useAuth();
+    const { user, updateUser, changePassword } = useAuth();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
+    const handlePasswordChange = async (currentPassword, newPassword) => {
+        await changePassword(currentPassword, newPassword);
+    };
+
     const [receiveNotifications, setReceiveNotifications] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
 
@@ -181,74 +181,66 @@ const ProfilePage = () => {
         setEditedDob(user?.dateOfBirth || "");
         setEditedGender(user?.gender || "male");
     }, [user]);
-    
+
     const userData = {
         nickname: user?.username || "Guest",
-        email: user?.email || "user@example.com", 
-        dob: user?.dateOfBirth || "정보 없음", 
-        gender: user?.gender === 'male' ? '남성' : user?.gender === 'female' ? '여성' : '기타', 
+        email: user?.email || "user@example.com",
+        dob: user?.dateOfBirth || "정보 없음",
+        gender: user?.gender === 'male' ? '남성' : user?.gender === 'female' ? '여성' : '기타',
         skinType: "민감성/수분부족형",
     };
 
     const handleSave = () => {
-        if (updateUser) {
-            updateUser({
-                username: editedNickname,
-                dateOfBirth: editedDob,
-                gender: editedGender,
-            });
-        }
+        updateUser({
+            username: editedNickname,
+            dateOfBirth: editedDob,
+            gender: editedGender,
+        });
         setIsEditing(false);
-    }
-
-    const handleActionClick = () => {
-        if (isEditing) {
-            handleSave();
-        } else {
-            setIsEditing(true);
-        }
     };
 
     return (
         <Container>
             <ContentBox>
                 <Header>Hello {userData.nickname}!</Header>
-                
+
                 <AvatarContainer>
                     <FaUserCircle size={80} color="#1e2a55" />
                 </AvatarContainer>
-            
+
+                {/* Nickname */}
                 <UserInputGroup>
                     <Label>Nickname</Label>
                     <InputDisplay $isEditing={isEditing}>
                         {isEditing ? (
-                            <input 
-                                type="text" 
+                            <input
                                 value={editedNickname}
                                 onChange={(e) => setEditedNickname(e.target.value)}
                             />
                         ) : (
                             <>
-                                {userData.nickname}
-                                <EditButton onClick={() => setIsEditing(true)}><FiEdit2 size={16} /></EditButton>
+                                <span>{userData.nickname}</span>
+                                <EditButton onClick={() => setIsEditing(true)}>
+                                    <FiEdit2 size={16} color={colors.primary} />
+                                </EditButton>
                             </>
                         )}
                     </InputDisplay>
                 </UserInputGroup>
-                
+
+                {/* Email */}
                 <UserInputGroup>
                     <Label>Email</Label>
-                    <InputDisplay>
-                        {userData.email}
-                    </InputDisplay>
+                    <InputDisplay>{userData.email}</InputDisplay>
                 </UserInputGroup>
 
+                {/* Date of Birth */}
                 <UserInputGroup>
                     <Label>Date of Birth</Label>
                     <InputDisplay $isEditing={isEditing}>
                         {isEditing ? (
-                            <input 
-                                type="date" 
+                            <input
+                                type="date"
                                 value={editedDob}
                                 onChange={(e) => setEditedDob(e.target.value)}
                             />
@@ -261,12 +253,13 @@ const ProfilePage = () => {
                     </InputDisplay>
                 </UserInputGroup>
 
+                {/* Gender */}
                 <UserInputGroup>
                     <Label>Gender</Label>
                     <InputDisplay $isEditing={isEditing}>
                         {isEditing ? (
-                            <select 
-                                value={editedGender} 
+                            <select
+                                value={editedGender}
                                 onChange={(e) => setEditedGender(e.target.value)}
                             >
                                 <option value="male">남자</option>
@@ -282,36 +275,46 @@ const ProfilePage = () => {
                     </InputDisplay>
                 </UserInputGroup>
 
+                {/* Skin Type */}
                 <UserInputGroup>
                     <Label>Skin Type</Label>
                     <InputDisplay>
                         {userData.skinType}
-                        <EditButton>Edit</EditButton>
                     </InputDisplay>
                 </UserInputGroup>
-                
+
+                {/* Notification toggle */}
                 <ToggleWrapper>
                     <Label>Receive notifications?</Label>
                     <ToggleSwitch>
-                        <input 
-                            type="checkbox" 
-                            checked={receiveNotifications} 
-                            onChange={() => setReceiveNotifications(!receiveNotifications)}
+                        <input
+                            type="checkbox"
+                            checked={receiveNotifications}
+                            onChange={() =>
+                                setReceiveNotifications(!receiveNotifications)
+                            }
                         />
                         <span />
                     </ToggleSwitch>
                 </ToggleWrapper>
-                
-                <ActionButton 
-                    $isSave={isEditing}
-                    onClick={handleActionClick}
-                >
+
+                {/* Buttons */}
+                <ActionButton $isSave={isEditing} onClick={isEditing ? handleSave : () => setIsEditing(true)}>
                     {isEditing ? '저장하기' : '프로필 수정'}
                 </ActionButton>
-                
-                {!isEditing && <ActionButton $isSave={false}>Change Password</ActionButton>}
-                
+
+                {!isEditing && (
+                    <ActionButton $isSave={false} onClick={openModal}>
+                        change PassWord
+                    </ActionButton>
+                )}
             </ContentBox>
+
+            <ChangePassword
+                isVisible={isModalOpen}
+                onClose={closeModal}
+                onPasswordChange={handlePasswordChange}
+            />
         </Container>
     );
 };

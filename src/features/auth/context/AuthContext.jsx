@@ -6,7 +6,7 @@ function getInitialUser() {
     const storedUser = localStorage.getItem("user_data");
     if (storedUser) {
         try {
-            return JSON.parse(storedUser);
+            return JSON.parse(storedUser) || { username: null, email: null, dateOfBirth: null, gender: null };
         } catch (e) {
             return { username: null, email: null, dateOfBirth: null, gender: null };
         }
@@ -48,8 +48,27 @@ export function AuthProvider({ children }) {
         setIsLoggedIn(false);
     };
 
+    const changePassword = (currentPassword, newPassword) => {
+    return new Promise((resolve, reject) => {
+
+        if (currentPassword !== user.password) {
+            reject(new Error("현재 비밀번호가 일치하지 않습니다."));
+            return;
+        }
+
+        const updatedUser = { ...user, password: newPassword };
+
+        localStorage.setItem("user_data", JSON.stringify(updatedUser));
+        setUser(updatedUser);
+
+        resolve("비밀번호가 성공적으로 변경되었습니다.");
+    });
+};
+
+
+
     return (
-        <AuthContext.Provider value={{ isLoggedIn, user, login, logout, updateUser}}>
+        <AuthContext.Provider value={{ isLoggedIn, user, login, logout, updateUser, changePassword}}>
             {children}
         </AuthContext.Provider>
     );
