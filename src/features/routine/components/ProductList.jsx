@@ -4,15 +4,8 @@ import { useAuth } from "../../auth/context/AuthContext";
 import useReveal from "../../common/hooks/useReveal";
 
 const ProductList = ({productData}) => {
-//api 연동시 삭제.
-    const productsList = productData || [
-      {img: "../../../assets/images/skinTypeIcon.png",title: "제품1",desc: "설명이 여기 들어갑니다.~"},
-      {img: "../../../assets/images/skinTypeIcon.png",title: "제품2",desc: "설명이 여기 들어갑니다.~"},
-      {img: "../../../assets/images/skinTypeIcon.png",title: "제품3",desc: "설명이 여기 들어갑니다.~"},
-      {img: "../../../assets/images/skinTypeIcon.png",title: "제품4",desc: "설명이 여기 들어갑니다.~"},
-      {img: "../../../assets/images/skinTypeIcon.png",title: "제품5",desc: "설명이 여기 들어갑니다.~"},
-      {img: "../../../assets/images/skinTypeIcon.png",title: "제품6",desc: "설명이 여기 들어갑니다.~"},
-    ];
+
+    const productsList = productData || [];
 
 const titleReveal = useReveal();
 const listReveals = productsList.map(()=>useReveal());

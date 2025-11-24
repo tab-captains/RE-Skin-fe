@@ -1,20 +1,17 @@
 import styled from "styled-components";
-import colors from "../../common/colors";
-import { useAuth } from "../../auth/context/AuthContext";
-import { IoArrowForward, IoSunny } from "react-icons/io5";
-import skinTypeIcon from  "../../../assets/images/skinTypeIcon.png"
 import Routine from "../components/Routine";
 import Recommended from "../components/Recommended";
 import ProductList from "../components/ProductList";
-const MorningRoutinePage = ({ routineData }) => {
-  const { user } = useAuth();
-  const keywords = ["지성", "입술 건조함", "주름"];
+import Footer from "../components/Footer";
+import { morningProducts, morningRoutine, morningSkinType} from "../../../shared/api/routines";
+const MorningRoutinePage = () => {
 
   return (
     <Container>
-      <Routine />
-      <Recommended />
-      <ProductList />
+      <Routine  routineData={morningRoutine} type="morning"/>
+      <Recommended recommendedData={morningSkinType}/>
+      <ProductList productData={morningProducts} />
+      <Footer target="/night" />
     </Container>
   );
 };

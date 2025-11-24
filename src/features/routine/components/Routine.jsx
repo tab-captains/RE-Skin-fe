@@ -1,38 +1,25 @@
 import styled, {keyframes} from "styled-components";
 import colors from "../../common/colors";
 import { useAuth } from "../../auth/context/AuthContext";
-import { IoArrowForward, IoSunny } from "react-icons/io5";
+import { IoArrowForward, IoSunny, IoMoon} from "react-icons/io5";
 import useReveal from "../../common/hooks/useReveal";
-const Routine = ({ routineData }) => {
+const Routine = ({ routineData, type }) => {
 
     //api 연결 시 삭제.
   const keywords = ["지성", "입술 건조함", "주름"];
-  const routineSteps = routineData || [
-    {
-      img: "../../../assets/images/skinTypeIcon.png",
-      title: "클렌징",
-      desc: "가벼운 세안으로 피부 노폐물 제거"
-    },
-    {
-      img: "../../../assets/images/skinTypeIcon.png",
-      title: "토너",
-      desc: "수분 공급 및 피부 진정"
-    },
-    {
-      img: "../../../assets/images/skinTypeIcon.png",
-      title: "크림",
-      desc: "보습과 피부 장벽 강화"
-    }
-  ];
+  const routineSteps = routineData || [];
 
   const { user } = useAuth();
-  const titleReveal = useReveal();
-  const stepReveals = routineSteps.map(() => useReveal());
 
   return (
     <>
       <TitleWrapper>
-        <IoSunny size={100} color="#f7b731" />
+          {type === "morning" ? (
+          <IoSunny size={100} color="#f7b731" />
+        ) : (
+          <IoMoon size={80} color="#4b7bec" />
+        )}
+
         <Title>{user ? user.username : "Guest"}님의 피부 고민 키워드는</Title>
         <Keywords>
           {keywords.map((k, idx) => (
