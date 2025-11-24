@@ -13,7 +13,9 @@ const buttonReveal = useReveal();
       <Button
        ref={buttonReveal.ref}
        $show={buttonReveal.isRevealed}
-       onClick={()=>{navigate(target)}}>
+       onClick={()=>{navigate(target)
+        window.scrollTo(0, 0);
+       }}>
       {target === "/night" ? "저녁":"아침"} 루틴 보러가기</Button>
       </Wrapper>
 
