@@ -2,6 +2,7 @@ import AuthLayout from "../components/AuthLayout";
 import LoginForm from "../components/LoginForm";
 import {useAuth} from "../context/AuthContext";
 import {useNavigate} from "react-router-dom";
+import { kakaoLogin } from "../../../shared/api/auth";
 
 const LoginPage = () => {
   const {login} =useAuth();
@@ -35,8 +36,8 @@ const LoginPage = () => {
 
   };
 
-  const handleKakaoLogin = () => {
-    alert("카카오 로그인!");
+  const handleKakaoLogin = async () => {
+    await kakaoLogin();
   };
 
   return (

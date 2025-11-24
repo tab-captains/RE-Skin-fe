@@ -5,6 +5,7 @@ import {GiHamburgerMenu} from "react-icons/gi";
 import colors from "../../common/colors";
 import { FaUserCircle } from "react-icons/fa";
 import { useAuth } from "../../auth/context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Nav = styled.nav`
   display: flex;
@@ -80,6 +81,15 @@ const UserBox = styled.div`
   gap: 0.4rem;
   color: white;
   font-size: 0.9em;
+`;
+
+const LogoutButton = styled.button`
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 0.3rem 1rem;
+  font-size: 0.8em;
+  color: white;
+  background-color: transparent;
   cursor: pointer;
 
   transition: all 0.2s ease;

@@ -97,29 +97,12 @@ const BoardWrapperAnim = styled.div`
   justify-content: flex-start;
   cursor: pointer;
 
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.1);
 
-  &.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  &:hover {
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  }
-`;
-
-const TipWrapper =styled.div`
-  width: 630px;
-  height: 170px;
-  border-radius: 10px;
-  padding: 15px;
-  border: 1px solid;
-  border-color: gray;
-  gap: 7px;
-  background-color: white;
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.5s ease-out;
@@ -127,6 +110,39 @@ const TipWrapper =styled.div`
   &.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+  &:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  }
+`;
+
+
+
+const TipWrapper =styled.div`
+  width: 630px;
+  height: 170px;
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease-out;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+    &:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
   }
 ` 
 const LeftWrapper = styled.div`
@@ -147,6 +163,7 @@ const BoardWrapper = styled.div`
   gap: 20px;
   margin-top: 0;
   align-items: center;
+  
 `;
 
 const ExtraButton = styled.button`
@@ -183,27 +200,37 @@ const FeatureItem = styled.div`
   flex: 1;
   height: 50px;
   padding: 15px;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 0.8rem;
   font-weight: bold;
   color: ${colors.textAccent};
-  background-color: rgba(255, 255, 255, 0.3);
+  
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.1);
 `;
 
 const InfoBox = styled.div`
   width: 350px;
   height: 65px;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 20px;
   text-align: center;
   font-size: 0.95rem;
   font-weight: bold;
   color: ${colors.textAccent};
-  background-color: ${colors.box};
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  background-color: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.1);
 
   opacity: 0;
   transform: translateY(20px);

@@ -61,12 +61,16 @@ const Wrapper = styled.div`
   width: 600px;
   height: 170px;
   padding: 20px 30px;
-  border-radius: 10px;
-  border: 1px solid ${colors.weather};
-  background-color:${colors.weather};
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   gap: 15px;
+
+  background-color: ${colors.weather}; 
+  backdrop-filter: blur(12px);     
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3); 
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2); 
 `;
 
 const TopSection =styled.div`
