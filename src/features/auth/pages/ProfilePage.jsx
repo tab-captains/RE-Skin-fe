@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FaUserCircle } from 'react-icons/fa';
 import { FiEdit2 } from 'react-icons/fi';
@@ -63,8 +63,24 @@ const InputDisplay = styled.div`
     font-size: 15px;
     margin-left: 10px;
     min-width: 180px;
-    justify-content: flex-start;
+    justify-content: ${props => props.$isEditing ? 'flex-start' : 'space-between'};
     gap: 15px;
+
+    input {
+        border: none;
+        background: none;
+        outline: none;
+        flex-grow: 1;
+        font-size: 15px
+    }
+    
+    select {
+        border: none;
+        background: none;
+        outline: none;
+        flex-grow: 1;
+        font-size: 15px
+    }
 `;
 
 const EditButton = styled.button`
@@ -133,11 +149,11 @@ const ToggleSwitch = styled.label`
     }
 `;
 
-const ChangePasswordButton = styled.button`
+const ActionButton = styled.button`
     width: 100%;
     padding: 12px;
     margin-top: 40px;
-    background-color: ${colors.primary};
+    background-color: ${props => props.$isSave ? colors.primary : '#888'};
     color: white;
     border: none;
     border-radius: 8px;
@@ -147,20 +163,50 @@ const ChangePasswordButton = styled.button`
     transition: background-color 0.2s;
     
     &:hover {
-        background-color: ${colors.textAccent};
+        background-color: ${props => props.$isSave ? colors.textAccent : '#666'};
     }
 `;
 
 const ProfilePage = () => {
+    const { user, updateUser } = useAuth();
     const [receiveNotifications, setReceiveNotifications] = useState(true);
-    const { user } = useAuth(); 
+    const [isEditing, setIsEditing] = useState(false);
+
+    const [editedNickname, setEditedNickname] = useState(user?.username || "");
+    const [editedDob, setEditedDob] = useState(user?.dateOfBirth || "");
+    const [editedGender, setEditedGender] = useState(user?.gender || "male");
+
+    useEffect(() => {
+        setEditedNickname(user?.username || "");
+        setEditedDob(user?.dateOfBirth || "");
+        setEditedGender(user?.gender || "male");
+    }, [user]);
     
     const userData = {
         nickname: user?.username || "Guest",
         email: user?.email || "user@example.com", 
-        dob: user?.dateOfBirth || "정보 없음", // ⭐️ 수정 완료: dateOfBirth 참조
+        dob: user?.dateOfBirth || "정보 없음", 
         gender: user?.gender === 'male' ? '남성' : user?.gender === 'female' ? '여성' : '기타', 
         skinType: "민감성/수분부족형",
+    };
+
+    const handleSave = () => {
+        if (updateUser) {
+            updateUser({
+                username: editedNickname,
+                dateOfBirth: editedDob,
+                gender: editedGender,
+            });
+        }
+        setIsEditing(false);
+    }
+
+    const handleActionClick = () => {
+        if (isEditing) {
+            handleSave();
+        } else {
+            setIsEditing(true);
+        }
     };
 
     return (
@@ -171,12 +217,22 @@ const ProfilePage = () => {
                 <AvatarContainer>
                     <FaUserCircle size={80} color="#1e2a55" />
                 </AvatarContainer>
-                
+            
                 <UserInputGroup>
                     <Label>Nickname</Label>
-                    <InputDisplay>
-                        {userData.nickname}
-                        <EditButton><FiEdit2 size={16} /></EditButton>
+                    <InputDisplay $isEditing={isEditing}>
+                        {isEditing ? (
+                            <input 
+                                type="text" 
+                                value={editedNickname}
+                                onChange={(e) => setEditedNickname(e.target.value)}
+                            />
+                        ) : (
+                            <>
+                                {userData.nickname}
+                                <EditButton onClick={() => setIsEditing(true)}><FiEdit2 size={16} /></EditButton>
+                            </>
+                        )}
                     </InputDisplay>
                 </UserInputGroup>
                 
@@ -189,16 +245,40 @@ const ProfilePage = () => {
 
                 <UserInputGroup>
                     <Label>Date of Birth</Label>
-                    <InputDisplay>
-                        {userData.dob}
-                        <EditButton>Edit</EditButton>
+                    <InputDisplay $isEditing={isEditing}>
+                        {isEditing ? (
+                            <input 
+                                type="date" 
+                                value={editedDob}
+                                onChange={(e) => setEditedDob(e.target.value)}
+                            />
+                        ) : (
+                            <>
+                                <span>{userData.dob}</span>
+                                <EditButton onClick={() => setIsEditing(true)}>Edit</EditButton>
+                            </>
+                        )}
                     </InputDisplay>
                 </UserInputGroup>
 
                 <UserInputGroup>
                     <Label>Gender</Label>
-                    <InputDisplay>
-                        {userData.gender}
+                    <InputDisplay $isEditing={isEditing}>
+                        {isEditing ? (
+                            <select 
+                                value={editedGender} 
+                                onChange={(e) => setEditedGender(e.target.value)}
+                            >
+                                <option value="male">남자</option>
+                                <option value="female">여자</option>
+                                <option value="other">기타</option>
+                            </select>
+                        ) : (
+                            <>
+                                <span>{userData.gender}</span>
+                                <EditButton onClick={() => setIsEditing(true)}>Edit</EditButton>
+                            </>
+                        )}
                     </InputDisplay>
                 </UserInputGroup>
 
@@ -221,7 +301,15 @@ const ProfilePage = () => {
                         <span />
                     </ToggleSwitch>
                 </ToggleWrapper>
-                <ChangePasswordButton>Change Password</ChangePasswordButton>
+                
+                <ActionButton 
+                    $isSave={isEditing}
+                    onClick={handleActionClick}
+                >
+                    {isEditing ? '저장하기' : '프로필 수정'}
+                </ActionButton>
+                
+                {!isEditing && <ActionButton $isSave={false}>Change Password</ActionButton>}
                 
             </ContentBox>
         </Container>
