@@ -5,7 +5,6 @@ import {GiHamburgerMenu} from "react-icons/gi";
 import colors from "../../common/colors";
 import { FaUserCircle } from "react-icons/fa";
 import { useAuth } from "../../auth/context/AuthContext";
-import { useNavigate } from "react-router-dom";
 
 const Nav = styled.nav`
   display: flex;
