@@ -1,49 +1,32 @@
 import styled from "styled-components";
 import colors from "../../common/colors";
 import { useAuth } from "../../auth/context/AuthContext";
+import useReveal from "../../common/hooks/useReveal";
 
 const ProductList = ({productData}) => {
-
+//api 연동시 삭제.
     const productsList = productData || [
-    {
-      img: "../../../assets/images/skinTypeIcon.png",
-      title: "제품1",
-      desc: "설명이 여기 들어갑니다.~"
-    },
-    {
-      img: "../../../assets/images/skinTypeIcon.png",
-      title: "제품2",
-      desc: "설명이 여기 들어갑니다.~"
-    },
-    {
-      img: "../../../assets/images/skinTypeIcon.png",
-      title: "제품3",
-      desc: "설명이 여기 들어갑니다.~"
-    },
-    {
-      img: "../../../assets/images/skinTypeIcon.png",
-      title: "제품4",
-      desc: "설명이 여기 들어갑니다.~"
-    },
-    {
-      img: "../../../assets/images/skinTypeIcon.png",
-      title: "제품5",
-      desc: "설명이 여기 들어갑니다.~"
-    },
-    {
-      img: "../../../assets/images/skinTypeIcon.png",
-      title: "제품6",
-      desc: "설명이 여기 들어갑니다.~"
-    },
+      {img: "../../../assets/images/skinTypeIcon.png",title: "제품1",desc: "설명이 여기 들어갑니다.~"},
+      {img: "../../../assets/images/skinTypeIcon.png",title: "제품2",desc: "설명이 여기 들어갑니다.~"},
+      {img: "../../../assets/images/skinTypeIcon.png",title: "제품3",desc: "설명이 여기 들어갑니다.~"},
+      {img: "../../../assets/images/skinTypeIcon.png",title: "제품4",desc: "설명이 여기 들어갑니다.~"},
+      {img: "../../../assets/images/skinTypeIcon.png",title: "제품5",desc: "설명이 여기 들어갑니다.~"},
+      {img: "../../../assets/images/skinTypeIcon.png",title: "제품6",desc: "설명이 여기 들어갑니다.~"},
+    ];
 
-  ];
+const titleReveal = useReveal();
+const listReveals = productsList.map(()=>useReveal());
+
   return(
     <ComponentWrapper>
-      <Title>추천 제품 리스트</Title>
+      <Title ref={titleReveal.ref} $show={titleReveal.isRevealed}>추천 제품 리스트</Title>
       <Container>
       {productsList.map((list, idx) => (
-        <ListWrapper key={idx}>
-          <List>
+        <ListWrapper
+          key={idx}>
+          <List 
+          ref={listReveals[idx].ref}
+          $show={listReveals[idx].isRevealed}>
             <ListImg src={list.img} alt={list.title}></ListImg>
             <Wrapper>
               <ListTitle>{list.title}</ListTitle>
@@ -60,13 +43,11 @@ const ProductList = ({productData}) => {
 export default ProductList;
 
 //애니메이션 처리.
-const fadeUpStyle = `
+const fadeUp = `
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.7s ease;
 `;
-
-
 
 
 
@@ -88,6 +69,15 @@ text-align: center;
 font-weight: bold;
 font-size: 25px;
 color: rgba(25, 30, 50, 0.95);
+
+${fadeUp}
+
+${({$show})=>
+  $show && `
+    opacity: 1;
+    transform : translateY(0);
+  `
+}
 `
 const ListWrapper= styled.div`
   display: flex;
@@ -103,6 +93,15 @@ const List = styled.div`
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   display: flex;
   flex-direction: row;
+
+  ${fadeUp}
+
+${({$show})=>
+  $show && `
+    opacity: 1;
+    transform : translateY(0);
+  `
+}
 `
 const ListImg= styled.img`
   width: 200px;
@@ -125,3 +124,4 @@ const ListTitle = styled.div`
 const ListDes= styled.div`
 font-size: 13px;
 `
+

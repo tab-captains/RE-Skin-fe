@@ -1,18 +1,20 @@
 import styled from "styled-components";
 import colors from "../../common/colors";
 import { useAuth } from "../../auth/context/AuthContext";
+import useReveal from "../../common/hooks/useReveal";
 const Recommended = () => {
   const { user } = useAuth();
   const keywords = ["지성", "입술 건조함", "주름"];
-
+  const { ref: titleRef, isRevealed: titleShow } = useReveal();
+  const { ref: boxRef, isRevealed: boxShow } = useReveal();
   return (
         <Container>
-          <RecommendedTitleWrapper>
+          <RecommendedTitleWrapper ref={titleRef} $show={titleShow}>
           <Keyword>{keywords[0]}</Keyword>
           <RecommendedTitle>타입의 {user ? user.username : " Guest"}님께 이런 제품을 추천해요!</RecommendedTitle>
           </RecommendedTitleWrapper>
 
-          <RecommendedBox>
+          <RecommendedBox ref={boxRef} $show={boxShow}>
             <BoxTitle>{keywords[0]} 피부 타입 분석</BoxTitle>
             <BoxTypeText>----api 연결해야 함.----</BoxTypeText>
             <BoxDes><br />케어 방향만 올바르게 잡으면 맑고 균형 잡힌 피부로 돌아옵니다.<br></br>자 이제 {user? user.username: "Guest"}님께 딱 맞는 제품들을 소개해드릴게요!</BoxDes>
@@ -24,7 +26,7 @@ const Recommended = () => {
 export default Recommended;
 
 //애니메이션 처리.
-const fadeUpStyle = `
+const fadeUp = `
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.7s ease;
@@ -70,6 +72,14 @@ const RecommendedBox =styled.div`
   display: flex;
   flex-direction: column;
   align-items: left;
+
+  ${fadeUp};
+  ${({ $show }) =>
+    $show &&
+    `
+    opacity: 1;
+    transform: translateY(0);
+  `}
 `
 const Container = styled.div`
 
@@ -79,6 +89,14 @@ const RecommendedTitleWrapper =styled.div`
   flex-direction: row;
   justify-content: left;
   text-align: left;
+
+  ${fadeUp};
+  ${({ $show }) =>
+    $show &&
+    `
+    opacity: 1;
+    transform: translateY(0);
+  `}
 `
 const BoxTitle = styled.div`
   text-align: left;
