@@ -28,21 +28,15 @@ export default SkinScoreGrid;
 
 
 
-
-
-
-
-
-
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  justify-content: space-between;
+  justify-content: center;
 `;
 
 const Box = styled.div`
-  width: 560px;
+  width: 530px;
   padding: 10px 15px;
   border-radius: 12px;
   display: flex;
