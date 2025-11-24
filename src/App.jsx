@@ -14,7 +14,7 @@ import Infoboard from "./features/infoboard/pages/InfoboardPage";
 import Skinguide from "./features/infoboard/pages/Skinguide";
 import Skindictionary from "./features/infoboard/pages/Skindictionary";
 import ImageUploadPage from './features/analysis/pages/ImageUploadPage'; 
-import SkinReport from "./features/report/Skinreport";
+import SkinReport from "./features/report/skinreport";
 import Analysis from "./features/analysis/pages/AnalysisPage";
 import RoutineSelect from "./features/routine/pages/RoutineSelectPage";
 import Morning from "./features/routine/pages/MorningRoutinePage";
