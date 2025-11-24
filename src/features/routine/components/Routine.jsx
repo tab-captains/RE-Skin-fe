@@ -1,12 +1,11 @@
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 import colors from "../../common/colors";
 import { useAuth } from "../../auth/context/AuthContext";
 import { IoArrowForward, IoSunny } from "react-icons/io5";
-
+import useReveal from "../../common/hooks/useReveal";
 const Routine = ({ routineData }) => {
-  const { user } = useAuth();
 
-  //api 연결 시 삭제.
+    //api 연결 시 삭제.
   const keywords = ["지성", "입술 건조함", "주름"];
   const routineSteps = routineData || [
     {
@@ -26,6 +25,10 @@ const Routine = ({ routineData }) => {
     }
   ];
 
+  const { user } = useAuth();
+  const titleReveal = useReveal();
+  const stepReveals = routineSteps.map(() => useReveal());
+
   return (
     <>
       <TitleWrapper>
@@ -39,31 +42,43 @@ const Routine = ({ routineData }) => {
       </TitleWrapper>
 
       <RoutineWrapper>
-
         <Wrapper>
         {routineSteps.map((step, idx) => (
-          <StepWrapper key={idx}>
-            <StepBox>
+          <StepWrapper key={idx} >
+            <StepBox $delay={`${(idx+1) * 300}ms`}>
               <ProductImg src={step.img} alt={step.title} />
               {/* StepTitle은 api 연결 시 삭제.*/}
               <StepTitle>{step.title}</StepTitle>
               <StepDesc>{step.desc}</StepDesc>
             </StepBox>
             {idx < routineSteps.length - 1 && (
-              <Arrow>
+              <Arrow $delay={`${idx * 300}ms`}>
                 <IoArrowForward size={30} color={colors.primary} />
               </Arrow>
             )}
           </StepWrapper>
         ))}
         </Wrapper>
+        <BottomText>피부 상태에 맞춰 자동으로 구성된 최적 루틴이에요.</BottomText>
       </RoutineWrapper>
     </>
   );
 };
 
 export default Routine;
+//애니메이션 처리.
+const fadeUp = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
+//styled-components
 const Container = styled.div`
   padding: 30px 20px 60px;
 `;
@@ -71,6 +86,9 @@ const Container = styled.div`
 const TitleWrapper = styled.div`
   margin-bottom: 40px;
   text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: ${fadeUp} 0.7s ease forwards;
 `;
 
 const Title = styled.div`
@@ -110,6 +128,7 @@ const RoutineWrapper = styled.div`
   align-items: center;
   gap: 20px; 
   flex-wrap: wrap;
+  margin-bottom: 150px;
 `;
 
 const StepWrapper = styled.div`
@@ -119,7 +138,7 @@ const StepWrapper = styled.div`
 const Wrapper =styled.div`
   display: flex;
   flex-direction: row;
-  margin-bottom: 150px;
+  margin-bottom: 20px;
 `
 const StepBox = styled.div`
   width: 240px;
@@ -131,6 +150,11 @@ const StepBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  opacity: 0;
+  transform: translateY(20px);
+  animation: ${fadeUp} 2s ease forwards;
+  animation-delay: ${({ $delay }) => $delay || "0ms"};
 `;
 
 const ProductImg = styled.img`
@@ -156,5 +180,17 @@ const Arrow = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-left: 15px;
+  padding: 15px;
+
+  opacity: 0;
+  transform: translateY(20px);
+  animation: ${fadeUp} 0.7s ease forwards;
+  animation-delay: ${({ $delay }) => $delay || "0ms"}
 `;
+
+const BottomText = styled.div`
+  font-weight: 700;
+  font-size: 15px;
+  color: rgba(25, 30, 50, 0.95);
+  margin-bottom: 20px;
+`

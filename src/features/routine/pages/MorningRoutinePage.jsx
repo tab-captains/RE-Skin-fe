@@ -5,6 +5,7 @@ import { IoArrowForward, IoSunny } from "react-icons/io5";
 import skinTypeIcon from  "../../../assets/images/skinTypeIcon.png"
 import Routine from "../components/Routine";
 import Recommended from "../components/Recommended";
+import ProductList from "../components/ProductList";
 const MorningRoutinePage = ({ routineData }) => {
   const { user } = useAuth();
   const keywords = ["지성", "입술 건조함", "주름"];
@@ -13,6 +14,7 @@ const MorningRoutinePage = ({ routineData }) => {
     <Container>
       <Routine />
       <Recommended />
+      <ProductList />
     </Container>
   );
 };
