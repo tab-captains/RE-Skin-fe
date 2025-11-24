@@ -32,7 +32,7 @@ const Container =styled.div`
   margin-top: 10px;
   display: flex;
   gap: 30px;
-  justify-content: space-between;
+  justify-content: center;
 `
 const Wrapper= styled.div`
   width: 700px;
@@ -70,9 +70,10 @@ const ButtonWrapper = styled.div`
   margin-top: auto;
 `;
 const Button=styled.button`
+  white-space: nowrap;
   border: none;
   border-radius: 20px;
-  padding: 10px 25px;
+  padding: 10px 20px;
   background-color: ${colors.primary}DD; 
   color: white;
   backdrop-filter: blur(3px);  

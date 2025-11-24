@@ -110,7 +110,7 @@ const AnalyzeButton=styled.button`
 const Container = styled.div`
   display: flex;
   flex-direction: column; 
-  gap: 50px;            
+  gap: 50px;
 `;
 
 const Top=styled.div`
@@ -119,7 +119,7 @@ const Top=styled.div`
   align-items: center;
   gap: 80px;
   min-height: ${({ $isLoggedIn }) => ($isLoggedIn ? "0" : "50vh")};
-  padding: ${({ $isLoggedIn }) => ($isLoggedIn ? "0" : "100px 80px 120px 80px")};
+  padding: ${({ $isLoggedIn }) => ($isLoggedIn ? "0" : "100px 60px 120px 60px")};
 `
 const Bottom=styled.div`
   display: flex;
@@ -127,7 +127,7 @@ const Bottom=styled.div`
   align-items: center;
   gap: 80px;
   min-height: 50vh;
-  padding: 0 80px;
+  padding: 50px;
 `
 const RightWrapper = styled.div`
   opacity: 0;

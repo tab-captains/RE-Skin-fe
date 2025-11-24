@@ -94,7 +94,7 @@ const BoardWrapperAnim = styled.div`
   padding: 15px 20px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content:center;
   cursor: pointer;
 
   background-color: rgba(255, 255, 255, 0.15);
@@ -150,12 +150,14 @@ const LeftWrapper = styled.div`
   flex-direction: column; 
   gap: 17px;            
 `;
+
 const Container =styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   width: 100%;
   padding: 30px 0 100px 0;
+  gap: 40px;   /* 🔥 추가 */
 `
 const BoardWrapper = styled.div`
   display: flex;

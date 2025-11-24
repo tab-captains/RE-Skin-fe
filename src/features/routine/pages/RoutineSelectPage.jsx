@@ -3,11 +3,18 @@ import colors from "../../common/colors";
 import { IoSunny, IoMoon } from "react-icons/io5";
 import { useAuth } from "../../auth/context/AuthContext";
 import { useState } from "react";
+import {useNavigate} from "react-router-dom";
 
 const RoutineSelectPage = () => {
   const { user } = useAuth();
   const [selected, setSelected] = useState(null);
+  const navigate= useNavigate();
 
+  const handleConfirm = () => {
+    if (selected) {
+      navigate(`/${selected}`);
+    }
+  };
 
   return (
     <Container>
@@ -40,7 +47,7 @@ const RoutineSelectPage = () => {
         </RoutineBox>
       </BoxWrapper>
 
-      {selected && <ConfirmBtn $index={1}>루틴 보러가기</ConfirmBtn>}
+      {selected && <ConfirmBtn $index={1} onClick={handleConfirm}>루틴 보러가기</ConfirmBtn>}
     </Container>
   );
 };

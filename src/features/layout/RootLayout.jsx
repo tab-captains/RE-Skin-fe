@@ -13,7 +13,11 @@ const FixedNav = styled.div`
   border-bottom:0;
 `;
 const MainContent =styled.div`
-padding-top: 45px;
+  padding-top: 80px;     
+  padding-left: 20px;    
+  padding-right: 20px;
+  max-width: 1200px;      
+  margin: 0 auto;    
 `
 const LayoutContainer = styled.div`
   position: relative;
@@ -55,6 +59,7 @@ z-index: -1;
 } ;
 
 `
+
 
 const RootLayout = ()=>{
 
