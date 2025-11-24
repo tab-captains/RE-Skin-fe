@@ -1,41 +1,77 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { logout as logoutAPI } from "../../../shared/api/auth";
+import { createContext, useContext, useState } from "react";
 
-/*전역 로그인 상태 관리용. */
 const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
-
-  const login = ({token, username}) => {
-    localStorage.setItem("accessToken", token);
-    setUser({ username }); 
-    setIsLoggedIn(true);
-  };
-
-  const logout = async () => {
-    // 프론트엔드 정리 먼저 진행
-    localStorage.removeItem("accessToken");
-    setUser(null);
-    setIsLoggedIn(false);
-    
-    // 백엔드 로그아웃 API 호출 (HttpOnly 쿠키의 refreshToken 처리)
-    // 에러가 발생해도 이미 프론트엔드 정리는 완료되었으므로 무시
-    try {
-      await logoutAPI();
-    } catch (error) {
-      // 로그아웃 API 에러는 무시 (이미 프론트엔드 정리 완료)
-      console.warn('Logout API 호출 중 에러 발생 (무시됨):', error);
+function getInitialUser() {
+    const storedUser = localStorage.getItem("user_data");
+    if (storedUser) {
+        try {
+            return JSON.parse(storedUser) || { username: null, email: null, dateOfBirth: null, gender: null };
+        } catch (e) {
+            return { username: null, email: null, dateOfBirth: null, gender: null };
+        }
     }
-  };
+    return {
+        username: null,
+        email: null,
+        dateOfBirth: null,
+        gender: null,
+    };
+}
+
+export function AuthProvider({ children }) {
+    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("accessToken"));
+    const [user, setUser] = useState(getInitialUser);
+
+    const updateUser = (newUserData) => {
+        const updatedUser = { ...user, ...newUserData };
+        localStorage.setItem("user_data", JSON.stringify(updatedUser)); 
+        setUser(updatedUser); 
+    };
+
+    const login = ({token, userData}) => {
+        localStorage.setItem("accessToken", token);
+        localStorage.setItem("user_data", JSON.stringify(userData)); 
+        setUser(userData); 
+        setIsLoggedIn(true);
+    };
+
+    const logout = () => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("user_data");
+        setUser({
+            username: null,
+            email: null,
+            dateOfBirth: null,
+            gender: null,
+        });
+        setIsLoggedIn(false);
+    };
+
+    const changePassword = (currentPassword, newPassword) => {
+    return new Promise((resolve, reject) => {
+
+        if (currentPassword !== user.password) {
+            reject(new Error("현재 비밀번호가 일치하지 않습니다."));
+            return;
+        }
+
+        const updatedUser = { ...user, password: newPassword };
+
+        localStorage.setItem("user_data", JSON.stringify(updatedUser));
+        setUser(updatedUser);
+
+        resolve("비밀번호가 성공적으로 변경되었습니다.");
+    });
+};
 
 
-  return (
-    <AuthContext.Provider value={{ isLoggedIn, user, login, logout}}>
-      {children}
-    </AuthContext.Provider>
-  );
+
+    return (
+        <AuthContext.Provider value={{ isLoggedIn, user, login, logout, updateUser, changePassword}}>
+            {children}
+        </AuthContext.Provider>
+    );
 }
 
 export const useAuth = () => useContext(AuthContext);

@@ -1,6 +1,6 @@
 import styled from "styled-components"
 /*npm install styled-component 명령어로 설치 후 사용. */
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {GiHamburgerMenu} from "react-icons/gi";
 import colors from "../../common/colors";
 import { FaUserCircle } from "react-icons/fa";
@@ -91,22 +91,20 @@ const LogoutButton = styled.button`
   color: white;
   background-color: transparent;
   cursor: pointer;
-  transition: background-color 0.2s ease;
 
+  transition: all 0.2s ease;
   &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+  color: ${colors.textAccent};
+  opacity0.9;
   }
 `;
 
 const Navbar = ()=>{
-    const { isLoggedIn, user, logout } = useAuth();
+    const { isLoggedIn, user } = useAuth();
     const navigate = useNavigate();
-    
-    const handleLogout = () => {
-      logout();
-      navigate('/');
-    };
-    
+    const handleProfileClick = () => {
+      navigate('/profile');
+    }
   return (
     <Nav>
       <LeftGroup> 
@@ -121,13 +119,10 @@ const Navbar = ()=>{
         {!isLoggedIn ? (
           <LoginButton to="/login">로그인 / 회원가입</LoginButton>
         ) : (
-          <>
-            <UserBox>
-              <FaUserCircle size={20} />
-              <span>{user?.username ? `${user.username}님` : "User님"}</span>
-            </UserBox>
-            <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
-          </>
+          <UserBox onClick={handleProfileClick}>
+            <FaUserCircle size={20} />
+            <span>{user?.username ? `${user.username}님` : "User님"}</span>
+          </UserBox>
         )}
       </RightGroup>
     </Nav>
