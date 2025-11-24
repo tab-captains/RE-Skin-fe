@@ -50,7 +50,6 @@ export function AuthProvider({ children }) {
 
     const changePassword = (currentPassword, newPassword) => {
     return new Promise((resolve, reject) => {
-
         if (currentPassword !== user.password) {
             reject(new Error("현재 비밀번호가 일치하지 않습니다."));
             return;

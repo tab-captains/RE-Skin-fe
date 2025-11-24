@@ -1,86 +1,83 @@
-import styled from "styled-components"
-/*npm install styled-component 명령어로 설치 후 사용. */
-import {Link, useNavigate} from "react-router-dom";
-import {GiHamburgerMenu} from "react-icons/gi";
+import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
+import { GiHamburgerMenu } from "react-icons/gi";
 import colors from "../../common/colors";
 import { FaUserCircle } from "react-icons/fa";
 import { useAuth } from "../../auth/context/AuthContext";
-import { useNavigate } from "react-router-dom";
 
 const Nav = styled.nav`
   display: flex;
   align-items: center;
-  background-color:${colors.primary};
+  background-color: ${colors.primary};
   width: 100%;
   height: 45px;
   padding: 0 1rem;
-`
+`;
 
 const LeftGroup = styled.div`
-  display:flex;
-  align-items:center;
-  gap:1rem;
-`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
 const RightGroup = styled.div`
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
   margin-left: auto;
   gap: 1rem;
   padding: 0 2em 0 0;
-`
+`;
+
 const Menu = styled(GiHamburgerMenu)`
   font-weight: bold;
   font-size: 1.3em;
   color: ${colors.logo};
-  text-decoration: none;
-`
+`;
+
 const Logo = styled(Link)`
-font-weight: bold;
-font-size: 1.3em;
-color: ${colors.logo};
-text-decoration: none;
-transition: background-color 0.2s ease;
-
-&:hover {
-  text-shadow: 0 2px 4px ${colors.profile};
-  transform: translateY(-2px); 
-
-}
-`
+  font-weight: bold;
+  font-size: 1.3em;
+  color: ${colors.logo};
+  text-decoration: none;
+`;
 
 const NavButton = styled(Link)`
   font-size: 0.8em;
   color: white;
   text-decoration: none;
-  transition: background-color 0.2s ease;
 
   &:hover {
-    color:${colors.primary};
     color: gray;
   }
-`
+`;
 
-const LoginButton =styled(Link)`
-  border:1px solid white;
+const LoginButton = styled(Link)`
+  border: 1px solid white;
   border-radius: 5px;
   padding: 0.3rem 1.3rem;
   font-size: 0.8em;
   color: white;
   background-color: ${colors.primary};
   text-decoration: none;
-  transition: background-color 0.2s ease;
 
   &:hover {
-    color:${colors.primary};
+    color: ${colors.primary};
     background-color: white;
   }
-`
+`;
+
 const UserBox = styled.div`
   display: flex;
   align-items: center;
   gap: 0.4rem;
   color: white;
   font-size: 0.9em;
+  cursor: pointer;
+
+  &:hover {
+    color: ${colors.logo};
+    transform: translateY(-1px);
+  }
 `;
 
 const LogoutButton = styled.button`
@@ -91,42 +88,56 @@ const LogoutButton = styled.button`
   color: white;
   background-color: transparent;
   cursor: pointer;
-
   transition: all 0.2s ease;
+
   &:hover {
-  color: ${colors.textAccent};
-  opacity0.9;
+    background-color: rgba(255,255,255,0.2);
+    transform: translateY(-2px); 
   }
 `;
 
-const Navbar = ()=>{
-    const { isLoggedIn, user } = useAuth();
-    const navigate = useNavigate();
-    const handleProfileClick = () => {
-      navigate('/profile');
-    }
+
+const Navbar = () => {
+  const { isLoggedIn, user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  }
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
+
   return (
     <Nav>
-      <LeftGroup> 
+      <LeftGroup>
         <Menu />
-        <Logo to = '/'>Re:Skin</Logo>
+        <Logo to="/">Re:Skin</Logo>
       </LeftGroup>
+
       <RightGroup>
-        <NavButton to = '/skinreport'>스킨 리포트</NavButton>
-        <NavButton to = '/infoboard'>게시판 정보</NavButton>
-        <NavButton to = '/community'>커뮤니티</NavButton>
-        <NavButton to ='/analysisOverview'>피부 분석</NavButton>
+        <NavButton to="/skinreport">스킨 리포트</NavButton>
+        <NavButton to="/infoboard">게시판 정보</NavButton>
+        <NavButton to="/community">커뮤니티</NavButton>
+        <NavButton to="/analysisOverview">피부 분석</NavButton>
+
         {!isLoggedIn ? (
           <LoginButton to="/login">로그인 / 회원가입</LoginButton>
         ) : (
-          <UserBox onClick={handleProfileClick}>
-            <FaUserCircle size={20} />
-            <span>{user?.username ? `${user.username}님` : "User님"}</span>
-          </UserBox>
+          <>
+            <UserBox onClick={handleProfileClick}>
+              <FaUserCircle size={20} />
+              <span>{user?.username ? `${user.username}님` : "User님"}</span>
+            </UserBox>
+
+            <LogoutButton onClick={logout}>로그아웃</LogoutButton>
+          </>
         )}
       </RightGroup>
     </Nav>
-  )
+  );
 };
 
 export default Navbar;
