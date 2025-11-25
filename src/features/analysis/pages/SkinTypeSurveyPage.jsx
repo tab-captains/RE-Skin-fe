@@ -200,6 +200,13 @@ const AnswerButton = styled.button`
   font-weight: ${({ $selected }) => ($selected ? '600' : '500')};
   cursor: pointer;
   transition: all 0.3s ease;
+
+  &:hover {
+    border-color: ${({ $selected}) => ($selected ? colors.primary: 'rgba(0,0,0,0.1)')};
+    background-color: ${({ $selected }) => ($selected ? colors.primary : colors.box)};
+    transform: translateY(-1px);
+    box-shadow: ${({ $selected }) => ($selected ? '0 4px 12px rgba(31, 48, 88, 0.25)' : '0 2px 8px rgba(31, 48, 88, 0.15)')};
+  }
 `;
 
 const SubmitWrapper = styled.div`
@@ -216,18 +223,21 @@ const SubmitWrapper = styled.div`
 `;
 
 const SubmitButton = styled.button`
-  padding: 15px 47px;
+  margin-top: 20px;
+  padding: 14px 47px;
   border-radius: 30px;
   background: ${colors.primary};
   color: white;
   border: none;
   cursor: pointer;
-  font-size: 1.2rem;
-  box-shadow: 0 4px 16px rgba(31, 48, 88, 0.3);
+  font-size: 1rem;
+ box-shadow: 0 6px 16px ${colors.primary}50;
   transition: 0.3s ease;
 
   &:hover {
-    background: ${colors.textAccent};
+    background: ${colors.primary}EE;
     transform: translateY(-2px);
   }
 `;
+
+
