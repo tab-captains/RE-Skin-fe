@@ -11,7 +11,15 @@ const Overview=()=>{
       <Wrapper>
         <Title>사진을 업로드하고 피부 상태를 <br></br>진단하세요.</Title>
         <Description>AI 기반의 섬세한 분석으로 모공, 여드름, 주름 등 피부 핵심 지표를 제공합니다. </Description>
-        <AnalyzeButton onClick={() => navigate("/upload")}>사진 업로드하기</AnalyzeButton>
+        <AnalyzeButton onClick={() => {
+          // 설문 결과 확인 후 upload로 이동
+          const surveyResult = localStorage.getItem('skinTypeSurvey');
+          if (surveyResult) {
+            navigate("/upload");
+          } else {
+            navigate("/skin-survey");
+          }
+        }}>사진 업로드하기</AnalyzeButton>
       </Wrapper>
       <ImageWrapper>
       <Icon src={analysisOverview} alt="../../../assets/images/analysisOverview.png"></Icon>
