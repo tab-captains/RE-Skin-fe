@@ -5,13 +5,12 @@ import { useNavigate } from 'react-router-dom';
 
 const questions = [
   '세안 후 아무것도 바르지 않으면 건조하다',
-  '일정 시간이 지나면, 얼굴, 특히 코와 이마가 번들거리며 기름진 편이다',
-  '얼굴에 유분감이 있는 편이다',
   '평소에 속건조나 각질 때문에 피부가 푸석하게 느껴질 때가 있다',
+  '얼굴에 유분감이 있는 편이다',
+  '일정 시간이 지나면, 얼굴, 특히 코와 이마가 번들거리며 기름진 편이다',
   '특별히 덥지 않아도 홍조가 자주 올라오거나, 얼굴이 쉽게 빨개진다',
   '순한 제품이 아니면 얼굴에 쉽게 트러블이 난다(피부가 예민하다)',
 ];
-
 const SkinTypeSurveyPage = () => {
   const navigate = useNavigate();
   const [answers, setAnswers] = useState({});
