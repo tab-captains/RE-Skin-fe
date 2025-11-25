@@ -117,6 +117,7 @@ const Navbar = ()=>{
         <Logo to = '/'>Re:Skin</Logo>
       </LeftGroup>
       <RightGroup>
+        <NavButton to = '/skin-survey'>피부설문</NavButton>
         <NavButton to = '/skinreport'>스킨 리포트</NavButton>
         <NavButton to = '/infoboard'>게시판 정보</NavButton>
         <NavButton to = '/community'>커뮤니티</NavButton>

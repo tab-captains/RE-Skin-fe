@@ -48,7 +48,20 @@ const AnalysisOverviewPage=()=>{
           className={buttonReveal.isRevealed ? "visible" : ""}
           delay="0.4s"
         >
-          <Button onClick={() => navigate("/upload")}>진단하러 가기</Button>
+          <ButtonGroup>
+            <SurveyButton onClick={() => navigate("/skin-survey")}>
+              피부 설문조사하러 가기
+            </SurveyButton>
+            <Button onClick={() => {
+              // 설문 결과 확인 후 upload로 이동
+              const surveyResult = localStorage.getItem('skinTypeSurvey');
+              if (surveyResult) {
+                navigate("/upload");
+              } else {
+                navigate("/skin-survey");
+              }
+            }}>진단하러 가기</Button>
+          </ButtonGroup>
         </AnimatedItem>
       </Footer>
     </Container>
@@ -114,6 +127,31 @@ const Description = styled.div`
   font-size: 0.9rem;
 `;
 
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const SurveyButton = styled.button`
+  border: 2px solid ${colors.primary};
+  border-radius: 30px;
+  width: 220px;
+  padding: 12px;
+  text-align: center;
+  font-size: 1.2em;
+  color: ${colors.primary};
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: ${colors.primary};
+    color: white;
+  }
+`;
+
 const Button = styled.button`
   border: none;
   border-radius: 30px;
@@ -124,4 +162,9 @@ const Button = styled.button`
   color: white;
   background-color: ${colors.primary};
   cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: ${colors.textAccent};
+  }
 `;
