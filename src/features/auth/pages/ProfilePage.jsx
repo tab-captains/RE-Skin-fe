@@ -205,7 +205,7 @@ const ProfilePage = () => {
 
                 <ActionButton 
                     $isSave={isEditing} 
-                    onClick={handleActionCli}
+                    onClick={handleActionClick}
                     disabled={loading || (isEditing && !editedNickname.trim())} 
                 >
                     {loading ? '저장 중...' : isEditing ? '저장하기' : '프로필 수정'}
