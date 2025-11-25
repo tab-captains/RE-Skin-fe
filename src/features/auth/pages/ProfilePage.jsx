@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ChangePassword from '../components/ChangePassword';
@@ -7,30 +8,20 @@ import colors from '../../common/colors';
 // react-icons
 import { FaUserCircle } from "react-icons/fa";
 import { FiEdit2 } from "react-icons/fi";
+=======
+import React from 'react';
+import styled from 'styled-components';
+>>>>>>> parent of 0acc317 (feat:백에서 요청한 사항으로 회원가입 페이지 수정 및 프로필페이지 연결 기능 기본 UI 완료)
 
 const Container = styled.div`
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 80px 20px;
-    background-color: #f0f3f8; 
-    min-height: 100vh;
-`;
-
-const ContentBox = styled.div`
-    background: #fff;
-    padding: 40px 60px;
-    border-radius: 15px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-    max-width: 450px;
-    width: 100%;
-    text-align: center;
-`;
-
-const Header = styled.h2`
-    font-size: 32px;
-    font-weight: 700;
+    height: 80vh; 
+    font-size: 24px;
+    font-weight: bold;
     color: #1e2a55;
+<<<<<<< HEAD
     margin-bottom: 40px;
 `;
 
@@ -315,6 +306,15 @@ const ProfilePage = () => {
                 onClose={closeModal}
                 onPasswordChange={handlePasswordChange}
             />
+=======
+    background-color: #f0f3f8;
+`;
+
+const ProfilePage = () => {
+    return (
+        <Container>
+            이곳은 회원정보 페이지 입니다.
+>>>>>>> parent of 0acc317 (feat:백에서 요청한 사항으로 회원가입 페이지 수정 및 프로필페이지 연결 기능 기본 UI 완료)
         </Container>
     );
 };

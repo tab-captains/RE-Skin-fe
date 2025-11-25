@@ -14,7 +14,7 @@ import Infoboard from "./features/infoboard/pages/InfoboardPage";
 import Skinguide from "./features/infoboard/pages/Skinguide";
 import Skindictionary from "./features/infoboard/pages/Skindictionary";
 import ImageUploadPage from './features/analysis/pages/ImageUploadPage'; 
-import SkinReport from "./features/report/Skinreport";
+import Skinreport from "./features/report/skinreport";
 import Analysis from "./features/analysis/pages/AnalysisPage";
 import RoutineSelect from "./features/routine/pages/RoutineSelectPage";
 import Morning from "./features/routine/pages/MorningRoutinePage";
@@ -35,7 +35,7 @@ function App() {
             <Route path="skinguide" element={<Skinguide />}/> 
             <Route path="infoboard/skinguide" element={<Skinguide />} />
             <Route path="infoboard/skindictionary" element={<Skindictionary />} />
-            <Route path="skinreport" element={<SkinReport />}/>
+            <Route path="skinreport" element={<Skinreport />} />
             <Route path="upload" element={<ImageUploadPage />} />
             <Route path="analysis" element={<Analysis />} />
             <Route path="routineSelect" element={<RoutineSelect/>}/>
