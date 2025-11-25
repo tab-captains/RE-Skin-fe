@@ -1,19 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import colors from '../../common/colors';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from "../../auth/context/AuthContext";
+import useReveal from "../../common/hooks/useReveal";
 
 const questions = [
-  '세안 후 아무것도 바르지 않으면 건조하다',
+  '세안 후 아무 것도 바르지 않으면 건조하다',
   '평소에 속건조나 각질 때문에 피부가 푸석하게 느껴질 때가 있다',
   '얼굴에 유분감이 있는 편이다',
-  '일정 시간이 지나면, 얼굴, 특히 코와 이마가 번들거리며 기름진 편이다',
+  '일정 시간이 지나면 얼굴, 특히 코와 이마가 번들거리며 기름진 편이다',
   '특별히 덥지 않아도 홍조가 자주 올라오거나, 얼굴이 쉽게 빨개진다',
   '순한 제품이 아니면 얼굴에 쉽게 트러블이 난다(피부가 예민하다)',
 ];
+
 const SkinTypeSurveyPage = () => {
   const navigate = useNavigate();
   const [answers, setAnswers] = useState({});
+  const { user } = useAuth();
 
   const handleAnswer = (questionIndex, answer) => {
     setAnswers((prev) => ({
@@ -26,51 +30,58 @@ const SkinTypeSurveyPage = () => {
 
   const handleSubmit = () => {
     if (allAnswered) {
-      // 설문 결과를 localStorage에 저장 (나중에 사용할 수 있도록)
       localStorage.setItem('skinTypeSurvey', JSON.stringify(answers));
       navigate('/upload');
     }
   };
 
+  const { ref: topRef, isRevealed: topReveal } = useReveal();
+
   return (
     <PageWrapper>
-      <Title>피부 타입 설문</Title>
-      <Description>
-        정확한 피부 분석을 위해 몇 가지 질문에 답변해주세요.
-      </Description>
+      <TopSection ref={topRef} $revealed={topReveal}>
+        <Title>피부 타입 진단 테스트</Title>
+        <Description>
+          정확한 피부 분석을 위해 먼저 <b>{user ? user.username : "Guest"}</b>님의 피부 타입을 확인할게요!<br />
+          선택된 답변을 기반으로 피부 타입이 결정됩니다.
+        </Description>
+      </TopSection>
 
       <QuestionsContainer>
-        {questions.map((question, index) => (
-          <QuestionCard key={index}>
-            <QuestionHeader>
-              <QuestionNumber>{index + 1}</QuestionNumber>
-              <QuestionText>{question}</QuestionText>
-            </QuestionHeader>
-            <AnswerButtons>
-              <AnswerButton
-                $selected={answers[index] === true}
-                onClick={() => handleAnswer(index, true)}
-              >
-                그렇다
-              </AnswerButton>
-              <AnswerButton
-                $selected={answers[index] === false}
-                onClick={() => handleAnswer(index, false)}
-              >
-                아니다
-              </AnswerButton>
-            </AnswerButtons>
-          </QuestionCard>
-        ))}
+        {questions.map((question, index) => {
+          const { ref, isRevealed } = useReveal();
+
+          return (
+            <QuestionCard ref={ref} key={index} $revealed={isRevealed}>
+              <QuestionHeader>
+                <QuestionNumber>{index + 1}</QuestionNumber>
+                <QuestionText>{question}</QuestionText>
+              </QuestionHeader>
+              <AnswerButtons>
+                <AnswerButton
+                  $selected={answers[index] === true}
+                  onClick={() => handleAnswer(index, true)}
+                >
+                  그렇다
+                </AnswerButton>
+
+                <AnswerButton
+                  $selected={answers[index] === false}
+                  onClick={() => handleAnswer(index, false)}
+                >
+                  아니다
+                </AnswerButton>
+              </AnswerButtons>
+            </QuestionCard>
+          );
+        })}
       </QuestionsContainer>
 
-      <SubmitButton
-        onClick={handleSubmit}
-        disabled={!allAnswered}
-        $disabled={!allAnswered}
-      >
-        AI 피부분석하기
-      </SubmitButton>
+      <SubmitWrapper $show={allAnswered}>
+        <SubmitButton onClick={handleSubmit}>
+          AI 피부분석하기
+        </SubmitButton>
+      </SubmitWrapper>
     </PageWrapper>
   );
 };
@@ -83,6 +94,19 @@ const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const TopSection = styled.div`
+  opacity: 0;
+  transform: translateY(30px);
+  transition: 1s ease;
+
+  ${({ $revealed }) =>
+    $revealed &&
+    `
+      opacity: 1;
+      transform: translateY(0);
+    `}
 `;
 
 const Title = styled.h1`
@@ -119,22 +143,26 @@ const QuestionCard = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: 1s ease;
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
-  }
+  ${({ $revealed }) =>
+    $revealed &&
+    `
+      opacity: 1;
+      transform: translateY(0);
+    `}
 `;
 
 const QuestionHeader = styled.div`
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: 10px;
 `;
 
 const QuestionNumber = styled.div`
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: bold;
   color: white;
   background: ${colors.primary};
@@ -145,21 +173,20 @@ const QuestionNumber = styled.div`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(31, 48, 88, 0.3);
 `;
 
 const QuestionText = styled.div`
-  font-size: 1.15rem;
+  font-size: 1rem;
   color: ${colors.primary};
   line-height: 1.7;
   flex: 1;
-  font-weight: 500;
+  font-weight: 700;
+  margin-top: 4px;
 `;
 
 const AnswerButtons = styled.div`
   display: flex;
   gap: 14px;
-  margin-top: 4px;
 `;
 
 const AnswerButton = styled.button`
@@ -173,41 +200,44 @@ const AnswerButton = styled.button`
   font-weight: ${({ $selected }) => ($selected ? '600' : '500')};
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: ${({ $selected }) => ($selected ? '0 4px 12px rgba(31, 48, 88, 0.25)' : 'none')};
 
   &:hover {
-    border-color: ${colors.primary};
+    border-color: ${({ $selected}) => ($selected ? colors.primary: 'rgba(0,0,0,0.1)')};
     background-color: ${({ $selected }) => ($selected ? colors.primary : colors.box)};
     transform: translateY(-1px);
     box-shadow: ${({ $selected }) => ($selected ? '0 4px 12px rgba(31, 48, 88, 0.25)' : '0 2px 8px rgba(31, 48, 88, 0.15)')};
   }
+`;
 
-  &:active {
-    transform: translateY(0);
-  }
+const SubmitWrapper = styled.div`
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 0.5s ease;
+
+  ${({ $show }) =>
+    $show &&
+    `
+      opacity: 1;
+      transform: translateY(0);
+    `}
 `;
 
 const SubmitButton = styled.button`
-  padding: 16px 48px;
+  margin-top: 20px;
+  padding: 14px 47px;
   border-radius: 30px;
-  background: ${({ $disabled }) => ($disabled ? '#ccc' : colors.primary)};
+  background: ${colors.primary};
   color: white;
   border: none;
-  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
-  font-size: 1.2rem;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  opacity: ${({ $disabled }) => ($disabled ? 0.6 : 1)};
-  box-shadow: ${({ $disabled }) => ($disabled ? 'none' : '0 4px 16px rgba(31, 48, 88, 0.3)')};
+  cursor: pointer;
+  font-size: 1rem;
+ box-shadow: 0 6px 16px ${colors.primary}50;
+  transition: 0.3s ease;
 
   &:hover {
-    background: ${({ $disabled }) => ($disabled ? '#ccc' : colors.textAccent)};
-    transform: ${({ $disabled }) => ($disabled ? 'none' : 'translateY(-2px)')};
-    box-shadow: ${({ $disabled }) => ($disabled ? 'none' : '0 6px 20px rgba(31, 48, 88, 0.4)')};
-  }
-
-  &:active {
-    transform: translateY(0);
+    background: ${colors.primary}EE;
+    transform: translateY(-2px);
   }
 `;
+
 
