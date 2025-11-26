@@ -10,7 +10,7 @@ import ProfilePage from './features/auth/pages/ProfilePage';
 import AnalysisOverviewPage from './features/analysis/pages/AnalysisOverviewPage';
 import CommunityPage from './features/community/pages/CommunityPage';
 import Infoboard from "./features/infoboard/pages/InfoboardPage";
-
+import LoginSuccess from "./features/auth/pages/KakaoCallbackPage";
 import Skinguide from "./features/infoboard/pages/Skinguide";
 import Skindictionary from "./features/infoboard/pages/Skindictionary";
 import ImageUploadPage from './features/analysis/pages/ImageUploadPage'; 
@@ -43,6 +43,7 @@ function App() {
             <Route path="routineSelect" element={<RoutineSelect/>}/>
             <Route path="morning" element={<Morning/>}/>
             <Route path="night" element={<Night/>}/>
+            <Route path="/login-success" element={ <LoginSuccess />}/>
             
           
           </Route>
