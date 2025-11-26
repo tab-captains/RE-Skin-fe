@@ -1,23 +1,34 @@
 import { createContext, useContext, useState } from "react";
-
+import {logout as logoutAPI} from "../../../shared/api/auth";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem("accessToken"));
+  const [user, setUser] = useState(() => {
+    const username = localStorage.getItem("username");
+    return username ? { username } : null;});
 
   const login = ({ token, username }) => {
     localStorage.setItem("accessToken", token);
+    localStorage.setItem("username", username);
     setUser({ username });
     setIsLoggedIn(true);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      // 서버 로그아웃 API 호출 (쿠키 초기화)
+      await logoutAPI();
+    } catch (error) {
+      console.warn("서버 로그아웃 실패", error);
+    } finally {
+      // 프론트 상태 초기화는 무조건 진행
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("username");
     setUser(null);
     setIsLoggedIn(false);
+    }
   };
-
   return (
     <AuthContext.Provider value={{ isLoggedIn, user, login, logout }}>
       {children}

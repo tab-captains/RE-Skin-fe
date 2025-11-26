@@ -11,6 +11,7 @@ import {useAuth} from "../../auth/context/AuthContext";
 const MainPage=()=>{
   const navigate =useNavigate();
   const {isLoggedIn} = useAuth(); 
+  console.log(isLoggedIn);
   return(
     <Container>
     <Top $isLoggedIn={isLoggedIn}>

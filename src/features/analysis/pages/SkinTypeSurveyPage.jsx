@@ -5,6 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../../auth/context/AuthContext";
 import useReveal from "../../common/hooks/useReveal";
 
+
+//api
+import { submitSurvey } from "../../../shared/api/survey";
+
 const questions = [
   '세안 후 아무 것도 바르지 않으면 건조하다',
   '평소에 속건조나 각질 때문에 피부가 푸석하게 느껴질 때가 있다',
@@ -16,7 +20,7 @@ const questions = [
 
 const SkinTypeSurveyPage = () => {
   const navigate = useNavigate();
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState({}); //answers 객체 설정.
   const { user } = useAuth();
 
   const handleAnswer = (questionIndex, answer) => {
@@ -28,12 +32,30 @@ const SkinTypeSurveyPage = () => {
 
   const allAnswered = Object.keys(answers).length === questions.length;
 
-  const handleSubmit = () => {
-    if (allAnswered) {
-      localStorage.setItem('skinTypeSurvey', JSON.stringify(answers));
-      navigate('/upload');
+
+//
+  const handleSubmit = async () => {
+    if(!allAnswered) return;
+
+    const surveyData ={};
+    Object.keys(answers).forEach((key)=>{
+      surveyData[`q${Number(key)+1}`] = answers[key]
+    });  //q${anwers의 key값+1}=answers의 value
+
+    console.log("Sending surveyData:", surveyData);
+    console.log("Token:", localStorage.getItem("token"));
+    try{
+      const response = await submitSurvey(surveyData);
+      console.log("설문 제출 성공: ",response);
+
+      navigate("/upload");
+    }catch(error){
+      console.error('설문 제출 실패:', error);
     }
   };
+//
+
+
 
   const { ref: topRef, isRevealed: topReveal } = useReveal();
 
@@ -60,14 +82,14 @@ const SkinTypeSurveyPage = () => {
               <AnswerButtons>
                 <AnswerButton
                   $selected={answers[index] === true}
-                  onClick={() => handleAnswer(index, true)}
+                  onClick={() => handleAnswer(index, true)}  //그렇다=true.
                 >
                   그렇다
                 </AnswerButton>
 
                 <AnswerButton
                   $selected={answers[index] === false}
-                  onClick={() => handleAnswer(index, false)}
+                  onClick={() => handleAnswer(index, false)} //아니다 = false.
                 >
                   아니다
                 </AnswerButton>

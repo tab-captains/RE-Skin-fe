@@ -2,11 +2,13 @@ import AuthLayout from "../components/AuthLayout";
 import LoginForm from "../components/LoginForm";
 import {useAuth} from "../context/AuthContext";
 import {useNavigate} from "react-router-dom";
-import { kakaoLogin } from "../../../shared/api/auth";
+import { login as loginAPI, kakaoLogin } from "../../../shared/api/auth";
 
 const LoginPage = () => {
   const {login} =useAuth();
   const navigate = useNavigate();
+
+
 
   const handleLogin = async ({ id, password }) => {
     try{
@@ -14,27 +16,23 @@ const LoginPage = () => {
     console.log("ID:", id);
     console.log("PW:", password);
 
-    /* fakeToken 설정.추후 로그인 API 요청 필요. */
+    const res = await loginAPI(id, password);
+    console.log("API 결과", res);
 
-    /* 추후 백 연결할 때 예시.
-    const res = await axios.post("/api/auth/login", { id, password });
-
-    login(res.data.accessToken);   // AuthContext의 login
-    navigate("/");
-    */
-    const fakeToken ="123456";
-    login({
-      token: fakeToken,
-      username: id
-    });
-
-    alert("로그인 성공!");
-    navigate("/");
-  } catch(err) {
-      alert("로그인 실패!");
+    //AuthContext에 로그인 상태 반영.
+    if (res.data?.accessToken){
+      login({
+        token: res.data.accessToken,
+        username: id,
+      });
     }
-
-  };
+    alert("로그인 성공!");
+    navigate('/');
+  } catch(error){
+    console.error("로그인 실패!");
+    alert("로그인 실패!");
+  }
+};
 
   const handleKakaoLogin = async () => {
     await kakaoLogin();
