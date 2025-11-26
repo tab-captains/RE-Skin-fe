@@ -10,7 +10,6 @@ function RegisterPage() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "#f8f8f8",
         padding: "20px",
       }}
     >

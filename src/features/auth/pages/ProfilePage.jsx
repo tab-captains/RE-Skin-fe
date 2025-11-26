@@ -11,7 +11,6 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     padding: 80px 20px;
-    background-color: #f0f3f8;
     min-height: 100vh;
 `;
 
