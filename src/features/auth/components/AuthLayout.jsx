@@ -5,11 +5,12 @@ function AuthLayout({ children }) {
     <div
       style={{
         width: "100%",
+        height: "100vh",
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#f5f5f5",
+        overflow: "auto",
       }}
     >
       <div
@@ -19,6 +20,7 @@ function AuthLayout({ children }) {
           padding: "30px 20px",
           borderRadius: "12px",
           boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+          margin: "20px 0",
         }}
       >
         {children}

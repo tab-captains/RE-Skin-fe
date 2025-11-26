@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 import {logout as logoutAPI} from "../../../shared/api/auth";
 const AuthContext = createContext();
 
+
 export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem("accessToken"));
   const [user, setUser] = useState(() => {
@@ -29,8 +30,25 @@ export function AuthProvider({ children }) {
     setIsLoggedIn(false);
     }
   };
+
+      const changePassword = (currentPassword, newPassword) => {
+        return new Promise((resolve, reject) => {
+
+            if (currentPassword !== user.password) {
+                reject(new Error("현재 비밀번호가 일치하지 않습니다."));
+                return;
+            }
+
+            const updatedUser = { ...user, password: newPassword };
+
+            localStorage.setItem("user_data", JSON.stringify(updatedUser));
+            setUser(updatedUser);
+
+            resolve("비밀번호가 성공적으로 변경되었습니다.");
+        });
+    };
   return (
-    <AuthContext.Provider value={{ isLoggedIn, user, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, user, login, logout, changePassword }}>
       {children}
     </AuthContext.Provider>
   );

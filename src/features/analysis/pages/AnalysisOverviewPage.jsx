@@ -50,7 +50,7 @@ const AnalysisOverviewPage=()=>{
         >
           <ButtonGroup>
             <SurveyButton onClick={() => navigate("/skin-survey")}>
-              피부 설문조사하러 가기
+              피부 타입 테스트하기
             </SurveyButton>
             <Button onClick={() => {
               // 설문 결과 확인 후 upload로 이동
@@ -138,7 +138,7 @@ const SurveyButton = styled.button`
   border: 2px solid ${colors.primary};
   border-radius: 30px;
   width: 220px;
-  padding: 12px;
+  padding: 11px 12px;
   text-align: center;
   font-size: 1.2em;
   color: ${colors.primary};

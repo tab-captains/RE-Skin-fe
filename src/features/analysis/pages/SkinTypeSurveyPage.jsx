@@ -10,7 +10,7 @@ import useReveal from "../../common/hooks/useReveal";
 import { submitSurvey } from "../../../shared/api/survey";
 
 const questions = [
-  '세안 후 아무 것도 바르지 않으면 건조하다',
+  '세안 후 아무것도 바르지 않으면 건조하다',
   '평소에 속건조나 각질 때문에 피부가 푸석하게 느껴질 때가 있다',
   '얼굴에 유분감이 있는 편이다',
   '일정 시간이 지나면 얼굴, 특히 코와 이마가 번들거리며 기름진 편이다',
@@ -64,6 +64,7 @@ const SkinTypeSurveyPage = () => {
       <TopSection ref={topRef} $revealed={topReveal}>
         <Title>피부 타입 진단 테스트</Title>
         <Description>
+          피부 타입 기록이 없어요.<br />
           정확한 피부 분석을 위해 먼저 <b>{user ? user.username : "Guest"}</b>님의 피부 타입을 확인할게요!<br />
           선택된 답변을 기반으로 피부 타입이 결정됩니다.
         </Description>
@@ -141,7 +142,7 @@ const Title = styled.h1`
 `;
 
 const Description = styled.p`
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: ${colors.primary};
   margin-bottom: 50px;
   text-align: center;

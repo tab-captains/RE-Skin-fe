@@ -1,8 +1,108 @@
 import React, { useState, useEffect } from 'react';
-import './RegisterForm.css';
+import styled from 'styled-components';
 import { useAuth } from "../../auth/context/AuthContext";
 import { register as registerAPI } from "../../../shared/api/auth";
 import {useNavigate} from "react-router-dom";
+
+
+const Container = styled.div`
+  background-color: #ffffff;
+  padding: 40px 50px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  text-align: left;
+  margin: 0 auto;
+`;
+
+const Title = styled.h1`
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #121212;
+`;
+
+const Subtitle = styled.p`
+  text-align: center;
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 30px;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+`;
+
+const InputGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Label = styled.label`
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+`;
+
+const Input = styled.input`
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+
+  &:focus {
+    outline: none;
+    border-color: #3a4b9b;
+    box-shadow: 0 0 0 2px rgba(58, 75, 155, 0.2);
+  }
+`;
+
+const Select = styled.select`
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+
+  &:focus {
+    outline: none;
+    border-color: #3a4b9b;
+    box-shadow: 0 0 0 2px rgba(58, 75, 155, 0.2);
+  }
+`;
+
+const ValidationMessage = styled.p`
+  font-size: 0.8rem;
+  color: #e63946;
+  margin-top: 5px;
+`;
+
+const RegisterButton = styled.button`
+  padding: 14px;
+  border: none;
+  border-radius: 4px;
+  background-color: #3a4b9b;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 10px;
+
+  &:hover {
+    background-color: #2c3a7c;
+  }
+
+  &:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+  }
+`;
+
 function RegisterForm() {
   const { login } = useAuth();
   const navigate= useNavigate();
@@ -10,10 +110,12 @@ function RegisterForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState('');
+  const [dob, setDob] = useState('');
+  const [gender, setGender] = useState('male');
 
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
-
   const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
@@ -40,6 +142,9 @@ function RegisterForm() {
       password &&
       confirmPassword &&
       nickname &&
+      email &&
+      dob &&
+      gender &&
       !passwordError &&
       !confirmPasswordError
     ) {
@@ -47,8 +152,11 @@ function RegisterForm() {
     } else {
       setIsFormValid(false);
     }
-  }, [userId, password, confirmPassword, nickname, passwordError, confirmPasswordError]);
-
+  }, [
+    userId, password, confirmPassword, nickname, email, dob, gender,
+    passwordError, confirmPasswordError
+  ]);
+}
 
 
 
@@ -68,7 +176,6 @@ console.log({
   try {
      // 회원가입 API 호출
       await registerAPI(userId, password, confirmPassword, nickname);
-
       // 회원가입 후 자동 로그인 없이 완료 메시지
       alert('회원가입 성공! 이제 로그인 해주세요.');
       navigate('/login'); // 로그인 페이지로 이동
@@ -78,68 +185,96 @@ console.log({
       console.log('data:', error.response?.data); // 서버 메시지 확인
       alert('회원가입 실패: ' + (error.response?.data?.message || error.message));
     }
-  };
 
   return (
-    <div className="register-form-container">
-      <h1 className="register-title">Welcome!</h1>
-      <p className="register-subtitle">
-        use skin type analyzer and check your skin information
-      </p>
+    <Container>
+      <Title>Welcome!</Title>
+      <Subtitle>use skin type analyzer and check your skin information</Subtitle>
 
-      <form className="register-form" onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
 
-        <div className="input-group">
-          <label htmlFor="userid">아이디</label>
-          <input
+        <InputGroup>
+          <Label htmlFor="userid">아이디</Label>
+          <Input
             type="text"
             id="userid"
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
           />
-        </div>
+        </InputGroup>
 
-        <div className="input-group">
-          <label htmlFor="password">비밀번호</label>
-          <input
+        <InputGroup>
+          <Label htmlFor="email">이메일</Label>
+          <Input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="example@gmail.com"
+          />
+        </InputGroup>
+
+        <InputGroup>
+          <Label htmlFor="password">비밀번호</Label>
+          <Input
             type="password"
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {passwordError && <p className="validation-error">{passwordError}</p>}
-        </div>
+          {passwordError && <ValidationMessage>{passwordError}</ValidationMessage>}
+        </InputGroup>
 
-        <div className="input-group">
-          <label htmlFor="confirm-password">비밀번호 재확인</label>
-          <input
+        <InputGroup>
+          <Label htmlFor="confirm-password">비밀번호 재확인</Label>
+          <Input
             type="password"
             id="confirm-password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
-          {confirmPasswordError && <p className="validation-error">{confirmPasswordError}</p>}
-        </div>
+          {confirmPasswordError && <ValidationMessage>{confirmPasswordError}</ValidationMessage>}
+        </InputGroup>
 
-        <div className="input-group">
-          <label htmlFor="nickname">닉네임</label>
-          <input
+        <InputGroup>
+          <Label htmlFor="nickname">닉네임</Label>
+          <Input
             type="text"
             id="nickname"
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
           />
-        </div>
+        </InputGroup>
 
-        <button
-          type="submit"
-          className="register-button"
-          disabled={!isFormValid}
-        >
+        <InputGroup>
+          <Label htmlFor="dob">생년월일</Label>
+          <Input
+            type="date"
+            id="dob"
+            value={dob}
+            onChange={(e) => setDob(e.target.value)}
+          />
+        </InputGroup>
+
+        <InputGroup>
+          <Label htmlFor="gender">성별</Label>
+          <Select
+            id="gender"
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+          >
+            <option value="male">남자</option>
+            <option value="female">여자</option>
+            <option value="other">기타</option>
+          </Select>
+        </InputGroup>
+
+        <RegisterButton type="submit" disabled={!isFormValid}>
           회원가입
-        </button>
-      </form>
-    </div>
+        </RegisterButton>
+
+      </Form>
+    </Container>
   );
 }
 

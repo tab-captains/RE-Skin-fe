@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-// 💡 useAuth 훅에서 user와 updateNickname 함수를 가져와야 합니다.
+import ChangePassword from '../components/ChangePassword';
 import { useAuth } from '../../auth/context/AuthContext';
 import colors from '../../common/colors';
 import { FaUserCircle } from "react-icons/fa";
 import { FiEdit2 } from "react-icons/fi";
-
-// --- Styled Components 정의 ---
 
 const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 80px 20px;
-    background-color: #f0f3f8; 
     min-height: 100vh;
 `;
 
@@ -82,16 +79,61 @@ const EditButton = styled.button`
     border: none;
     color: ${colors.primary};
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    padding: 5px;
 
     &:hover {
         color: ${colors.textAccent};
     }
 `;
 
-// 사용되지 않는 Toggle 컴포넌트는 제거하지 않고 유지합니다. (향후 사용 가능성)
+const ToggleWrapper = styled(UserInputGroup)`
+    margin-top: 30px;
+`;
+
+const ToggleSwitch = styled.label`
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+
+    input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    span {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 20px;
+    }
+
+    span:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 2px;
+        bottom: 2px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+    }
+
+    input:checked + span {
+        background-color: ${colors.primary};
+    }
+
+    input:checked + span:before {
+        transform: translateX(20px);
+    }
+`;
+
 const ActionButton = styled.button`
     width: 100%;
     padding: 12px;
@@ -103,84 +145,61 @@ const ActionButton = styled.button`
     font-size: 1em;
     font-weight: 600;
     cursor: pointer;
-    opacity: ${props => props.disabled ? 0.6 : 1}; // disabled 상태 시 투명도 조절
-    transition: background-color 0.2s;
 
     &:hover {
-        background-color: ${props => props.disabled ? '#888' : props.$isSave ? colors.textAccent : '#666'};
+        background-color: ${props => props.$isSave ? colors.textAccent : '#666'};
     }
 `;
 
-// --- ProfilePage 컴포넌트 ---
-
 const ProfilePage = () => {
-    // useAuth에서 사용자 데이터와 업데이트 함수를 가져옵니다.
-    const { user, updateNickname } = useAuth(); 
-    
-    const [isEditing, setIsEditing] = useState(false);
-    const [editedNickname, setEditedNickname] = useState(user?.username || "");
-    const [loading, setLoading] = useState(false); // 로딩 상태 추가
 
-    // user 정보가 변경될 때마다 editedNickname을 초기화합니다.
+    const { user, updateUser, changePassword } = useAuth();
+
+    const [isEditing, setIsEditing] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [editedNickname, setEditedNickname] = useState(user?.username || "");
+    const [editedDob, setEditedDob] = useState(user?.dateOfBirth || "");
+    const [editedGender, setEditedGender] = useState(user?.gender || "male");
+
+    const [receiveNotifications, setReceiveNotifications] = useState(true);
+
     useEffect(() => {
         setEditedNickname(user?.username || "");
+        setEditedDob(user?.dateOfBirth || "");
+        setEditedGender(user?.gender || "male");
     }, [user]);
 
-    // 닉네임 업데이트 처리 함수
-    const handleSave = async () => {
-        const trimmedNickname = editedNickname.trim();
-        
-        // 1. 유효성 검사 (닉네임 공백 체크)
-        if (!trimmedNickname) {
-            alert('닉네임은 공백일 수 없습니다.');
-            return;
-        }
-
-        // 2. 변경 사항이 없으면 저장하지 않고 모드만 닫습니다.
-        if (trimmedNickname === user?.username) {
-            setIsEditing(false);
-            return;
-        }
-
-        setLoading(true);
-        try {
-            // 3. useAuth를 통해 API 통신 함수 호출
-            await updateNickname(trimmedNickname); 
-            
-            setIsEditing(false);
-            alert('닉네임이 성공적으로 업데이트되었습니다.'); 
-        } catch (error) {
-            console.error("프로필 업데이트 실패:", error);
-            alert('닉네임 업데이트에 실패했습니다. 다시 시도해 주세요.'); 
-            setEditedNickname(user?.username || ""); // 에러 시 원래 값으로 복구
-        } finally {
-            setLoading(false);
-        }
+    const userData = {
+        nickname: user?.username || "Guest",
+        email: user?.email || "이메일 정보 없음",
+        dob: user?.dateOfBirth || "정보 없음",
+        gender:
+            user?.gender === 'male'
+                ? "남성"
+                : user?.gender === 'female'
+                ? "여성"
+                : "기타",
+        skinType: "민감성/수분부족형",
     };
 
-    const handleActionClick = () => {
-        if (isEditing) {
-            handleSave();
-        } else {
-            setIsEditing(true);
-        }
+    const handleSave = () => {
+        updateUser({
+            username: editedNickname,
+            dateOfBirth: editedDob,
+            gender: editedGender,
+        });
+        setIsEditing(false);
     };
 
     return (
         <Container>
             <ContentBox>
-                <Header>Hello {editedNickname || "Guest"}!</Header>
+                <Header>Hello {userData.nickname}!</Header>
 
                 <AvatarContainer>
                     <FaUserCircle size={80} color="#1e2a55" />
                 </AvatarContainer>
-
-                <UserInputGroup>
-                    <Label>Email</Label>
-                    <InputDisplay>
-                        <span>{user?.email || "이메일 정보 없음"}</span>
-                    </InputDisplay>
-                </UserInputGroup>
 
                 <UserInputGroup>
                     <Label>Nickname</Label>
@@ -189,28 +208,99 @@ const ProfilePage = () => {
                             <input
                                 value={editedNickname}
                                 onChange={(e) => setEditedNickname(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleSave()}
-                                disabled={loading}
                             />
                         ) : (
                             <>
-                                <span>{editedNickname}</span>
+                                <span>{userData.nickname}</span>
                                 <EditButton onClick={() => setIsEditing(true)}>
-                                    <FiEdit2 size={16} color={colors.primary} />
+                                    <FiEdit2 size={16} />
                                 </EditButton>
                             </>
                         )}
                     </InputDisplay>
                 </UserInputGroup>
 
-                <ActionButton 
-                    $isSave={isEditing} 
-                    onClick={handleActionCli}
-                    disabled={loading || (isEditing && !editedNickname.trim())} 
+                <UserInputGroup>
+                    <Label>Email</Label>
+                    <InputDisplay>
+                        {userData.email}
+                    </InputDisplay>
+                </UserInputGroup>
+
+                <UserInputGroup>
+                    <Label>Date of Birth</Label>
+                    <InputDisplay $isEditing={isEditing}>
+                        {isEditing ? (
+                            <input
+                                type="date"
+                                value={editedDob}
+                                onChange={(e) => setEditedDob(e.target.value)}
+                            />
+                        ) : (
+                            <>
+                                <span>{userData.dob}</span>
+                                <EditButton onClick={() => setIsEditing(true)}>Edit</EditButton>
+                            </>
+                        )}
+                    </InputDisplay>
+                </UserInputGroup>
+
+                <UserInputGroup>
+                    <Label>Gender</Label>
+                    <InputDisplay $isEditing={isEditing}>
+                        {isEditing ? (
+                            <select value={editedGender} onChange={(e) => setEditedGender(e.target.value)}>
+                                <option value="male">남자</option>
+                                <option value="female">여자</option>
+                                <option value="other">기타</option>
+                            </select>
+                        ) : (
+                            <>
+                                <span>{userData.gender}</span>
+                                <EditButton onClick={() => setIsEditing(true)}>Edit</EditButton>
+                            </>
+                        )}
+                    </InputDisplay>
+                </UserInputGroup>
+
+                <UserInputGroup>
+                    <Label>Skin Type</Label>
+                    <InputDisplay>
+                        {userData.skinType}
+                    </InputDisplay>
+                </UserInputGroup>
+
+                <ToggleWrapper>
+                    <Label>Receive notifications?</Label>
+                    <ToggleSwitch>
+                        <input
+                            type="checkbox"
+                            checked={receiveNotifications}
+                            onChange={() => setReceiveNotifications(!receiveNotifications)}
+                        />
+                        <span />
+                    </ToggleSwitch>
+                </ToggleWrapper>
+
+                <ActionButton
+                    $isSave={isEditing}
+                    onClick={isEditing ? handleSave : () => setIsEditing(true)}
                 >
-                    {loading ? '저장 중...' : isEditing ? '저장하기' : '프로필 수정'}
+                    {isEditing ? "저장하기" : "프로필 수정"}
                 </ActionButton>
+
+                {!isEditing && (
+                    <ActionButton onClick={() => setIsModalOpen(true)}>
+                        Change Password
+                    </ActionButton>
+                )}
             </ContentBox>
+
+            <ChangePassword
+                isVisible={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onPasswordChange={changePassword}
+            />
         </Container>
     );
 };

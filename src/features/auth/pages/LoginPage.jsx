@@ -5,16 +5,16 @@ import {useNavigate} from "react-router-dom";
 import { login as loginAPI, kakaoLogin } from "../../../shared/api/auth";
 
 const LoginPage = () => {
-  const {login} =useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
 
 
   const handleLogin = async ({ id, password }) => {
-    try{
-    console.log("로그인 클릭됨");
-    console.log("ID:", id);
-    console.log("PW:", password);
+    try {
+      console.log("로그인 클릭됨");
+      console.log("ID:", id);
+      console.log("PW:", password);
 
     const res = await loginAPI(id, password);
     console.log("API 결과", res);
@@ -33,7 +33,6 @@ const LoginPage = () => {
     alert("로그인 실패!");
   }
 };
-
   const handleKakaoLogin = async () => {
     await kakaoLogin();
   };
