@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAuth } from "../../auth/context/AuthContext";
+import { register as registerAPI } from "../../../shared/api/auth";
+import {useNavigate} from "react-router-dom";
+
 
 const Container = styled.div`
   background-color: #ffffff;
@@ -100,10 +103,9 @@ const RegisterButton = styled.button`
   }
 `;
 
-
 function RegisterForm() {
   const { login } = useAuth();
-
+  const navigate= useNavigate();
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -154,33 +156,35 @@ function RegisterForm() {
     userId, password, confirmPassword, nickname, email, dob, gender,
     passwordError, confirmPasswordError
   ]);
+}
 
-  const handleSubmit = (e) => {
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!isFormValid) {
       alert('입력 정보를 다시 확인해주세요.');
       return;
     }
-
-    const fakeToken = "token-" + Math.random().toString(36).substring(2, 10);
-
-    const userData = {
-      userId: userId,
-      username: nickname,
-      email: email,
-      password: password,
-      dateOfBirth: dob,
-      gender: gender,
-    };
-
-    login({
-      token: fakeToken,
-      userData: userData
-    });
-
-    alert('회원가입 성공! 자동 로그인 되었습니다.');
-  };
+console.log({
+  loginId: userId,
+  password,
+  passwordConfirm: confirmPassword,
+  nickname,
+});
+  try {
+     // 회원가입 API 호출
+      await registerAPI(userId, password, confirmPassword, nickname);
+      // 회원가입 후 자동 로그인 없이 완료 메시지
+      alert('회원가입 성공! 이제 로그인 해주세요.');
+      navigate('/login'); // 로그인 페이지로 이동
+    } catch (error) {
+      console.error('회원가입 실패:', error);
+      console.log('response:', error.response); // 서버 응답 확인
+      console.log('data:', error.response?.data); // 서버 메시지 확인
+      alert('회원가입 실패: ' + (error.response?.data?.message || error.message));
+    }
 
   return (
     <Container>

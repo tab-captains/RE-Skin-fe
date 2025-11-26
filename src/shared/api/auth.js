@@ -1,35 +1,20 @@
-// API Base URL
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://reskin.online';
-
+import instance from "./axiosInstance";
 /**
  * 로그인 API
  * @param {string} id - 사용자 아이디
  * @param {string} password - 비밀번호
  * @returns {Promise<{accessToken: string, user: object}>}
  */
-export const login = async (id, password) => {
+export const login = async (loginId, password) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include', // HttpOnly 쿠키를 받기 위해 필요
-      body: JSON.stringify({
-        id,
-        password,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `로그인 실패: ${response.status}`);
+    const response = await instance.post("/api/auth/login", { loginId, password });
+    // 로그인 성공 시 localStorage에 토큰 저장
+    if (response.data.accessToken) {
+      localStorage.setItem("token", response.data.accessToken);
     }
-
-    const data = await response.json();
-    return data;
+    return response.data;
   } catch (error) {
-    console.error('Login error:', error);
+    console.error("Login error:", error);
     throw error;
   }
 };
@@ -53,24 +38,8 @@ export const register = async (userId, password, confirmPassword, nickname) => {
     
     console.log('회원가입 요청 데이터:', requestBody);
     
-    const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include', // HttpOnly 쿠키를 받기 위해 필요
-      body: JSON.stringify(requestBody),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error('회원가입 에러 응답:', errorData);
-      console.error('응답 상태:', response.status, response.statusText);
-      throw new Error(errorData.message || errorData.error || `회원가입 실패: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
+    const response = await instance.post("/api/auth/signup", requestBody);
+    return response.data;
   } catch (error) {
     console.error('Register error:', error);
     throw error;
@@ -83,11 +52,8 @@ export const register = async (userId, password, confirmPassword, nickname) => {
  */
 export const kakaoLogin = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/auth/kakao`, {
-      method: 'GET',
-      credentials: 'include', // HttpOnly 쿠키를 받기 위해 필요
-    });
-    const data = await response.json();
+    const response = await instance.get("/api/auth/kakao");
+    const data = response.data;
     
     if (data.success && data.data) {
       window.location.href = data.data;
@@ -106,33 +72,18 @@ export const kakaoLogin = async () => {
  * 백엔드는 @RequestParam으로 받지만, 쿠키에서도 읽을 수 있도록 처리
  * @returns {Promise<void>}
  */
+
+
+//axios 로 변경하였음.
+
 export const logout = async () => {
   try {
-    // refreshToken이 HttpOnly 쿠키에 있으므로 빈 쿼리 파라미터로 전송
-    // 백엔드가 쿠키에서 refreshToken을 읽어서 처리
-    const response = await fetch(`${API_BASE_URL}/api/auth/logout?refreshToken=`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include', // HttpOnly 쿠키를 전송하기 위해 필요
-    });
-
-    if (!response.ok) {
-      // 400 에러는 refreshToken이 없거나 유효하지 않을 때 발생할 수 있음
-      // 이 경우에도 프론트엔드 정리는 진행
-      const errorData = await response.json().catch(() => ({}));
-      console.warn('Logout API warning:', errorData.message || `로그아웃 API 응답: ${response.status}`);
-      // 에러를 throw하지 않고 그냥 진행 (프론트엔드 정리는 계속)
-      return;
-    }
-
-    return;
+    const response = await instance.post("/api/auth/logout");
+    console.log("Logout response:", response.data); // 로그 확인용
+    localStorage.removeItem("token"); // 로컬 스토리지 정리
   } catch (error) {
-    console.error('Logout error:', error);
-    // 에러가 발생해도 프론트엔드 정리는 진행
-    // throw하지 않고 그냥 return
-    return;
+    console.error("Logout error:", error);
+    localStorage.removeItem("token"); // 에러가 나도 로컬 스토리지는 정리
   }
 };
 
