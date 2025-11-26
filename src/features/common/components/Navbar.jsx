@@ -120,7 +120,7 @@ const SidebarContainer = styled.div`
 `;
 
 const SidebarHeader = styled.div`
-    font-size: 0.9em;
+    font-size: 1.5em;
     color: #999;
     padding: 0 20px 10px;
     margin-bottom: 5px;
@@ -174,14 +174,14 @@ const Sidebar = ({ isOpen, toggleSidebar, user }) => {
             <SidebarContainer $isOpen={isOpen}>
                 
                 <SidebarHeader>
-                    <FaUserCircle size={15} style={{ marginRight: '5px', color: '#666' }} />
+                    <FaUserCircle size={26} style={{ marginRight: '14px', color: '#666' }} />
                     <span style={{ color: '#333', fontWeight: 'bold' }}>
                       {user?.username ? user.username : "Guest"}
                     </span>
                 </SidebarHeader>
 
                 <SidebarLink to="/" onClick={toggleSidebar}>
-                    <FaHome size={14} style={{ opacity: 0.7 }}/> Home
+                    <FaHome size={18} style={{ opacity: 0.8 }}/> Home
                 </SidebarLink>
 
                 <SidebarCategoryTitle>페이지</SidebarCategoryTitle>
