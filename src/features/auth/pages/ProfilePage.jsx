@@ -264,6 +264,13 @@ const ProfilePage = () => {
                     </InputDisplay>
                 </UserInputGroup>
 
+                <UserInputGroup>
+                    <Label>Skin Type</Label>
+                    <InputDisplay>
+                        {userData.skinType}
+                    </InputDisplay>
+                </UserInputGroup>
+
                 <ToggleWrapper>
                     <Label>Receive notifications?</Label>
                     <ToggleSwitch>
