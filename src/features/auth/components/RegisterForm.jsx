@@ -9,10 +9,12 @@ function RegisterForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState('');
+  const [dob, setDob] = useState('');
+  const [gender, setGender] = useState('male');
 
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
-
   const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
@@ -39,6 +41,9 @@ function RegisterForm() {
       password &&
       confirmPassword &&
       nickname &&
+      email &&
+      dob &&
+      gender &&
       !passwordError &&
       !confirmPasswordError
     ) {
@@ -46,7 +51,10 @@ function RegisterForm() {
     } else {
       setIsFormValid(false);
     }
-  }, [userId, password, confirmPassword, nickname, passwordError, confirmPasswordError]);
+  }, [
+    userId, password, confirmPassword, nickname, email, dob, gender,
+    passwordError, confirmPasswordError
+  ]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -58,9 +66,17 @@ function RegisterForm() {
 
     const fakeToken = "token-" + Math.random().toString(36).substring(2, 10);
 
+    const userData = {
+      username: nickname,
+      email: email,
+      password: password,
+      dateOfBirth: dob,
+      genter: gender,
+    };
+
     login({
       token: fakeToken,
-      username: nickname
+      userData: userData
     });
 
     alert('회원가입 성공! 자동 로그인 되었습니다.');
@@ -77,7 +93,7 @@ function RegisterForm() {
 
         <div className="input-group">
           <label htmlFor="userid">아이디</label>
-          <input
+          <input 
             type="text"
             id="userid"
             value={userId}
@@ -86,8 +102,19 @@ function RegisterForm() {
         </div>
 
         <div className="input-group">
+          <label htmlFor="email">이메일</label>
+          <input 
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="example@gmail.com"
+          />
+        </div>
+
+        <div className="input-group">
           <label htmlFor="password">비밀번호</label>
-          <input
+          <input 
             type="password"
             id="password"
             value={password}
@@ -95,10 +122,10 @@ function RegisterForm() {
           />
           {passwordError && <p className="validation-error">{passwordError}</p>}
         </div>
-
+        
         <div className="input-group">
           <label htmlFor="confirm-password">비밀번호 재확인</label>
-          <input
+          <input 
             type="password"
             id="confirm-password"
             value={confirmPassword}
@@ -109,12 +136,35 @@ function RegisterForm() {
 
         <div className="input-group">
           <label htmlFor="nickname">닉네임</label>
-          <input
+          <input 
             type="text"
             id="nickname"
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
           />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="dob">생년월일</label>
+          <input
+            type="date"
+            id="dob"
+            value={dob}
+            onChange={(e) => setDob(e.target.value)}
+          />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="gender">성별</label>
+          <select
+            id="gender"
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+          >
+            <option value="male">남자</option>
+            <option value="female">여자</option>
+            <option value="other">기타</option>
+          </select>
         </div>
 
         <button
@@ -124,6 +174,7 @@ function RegisterForm() {
         >
           회원가입
         </button>
+
       </form>
     </div>
   );
