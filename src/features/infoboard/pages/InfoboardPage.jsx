@@ -120,7 +120,7 @@ const Infoboard = () => {
       ), 
       title: "내 피부 타입, 정확히 모르겠어요",
       action: "내 피부 타입 진단하기(테스트) >",
-      link: "/analysis/test"
+      link: "/skin-survey"
     }
   ];
 
