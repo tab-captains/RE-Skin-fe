@@ -22,7 +22,8 @@ const LoginPage = () => {
     //AuthContext에 로그인 상태 반영.
     if (res.data?.accessToken){
       login({
-        token: res.data.accessToken,
+        accessToken: res.data.accessToken,
+        refreshToken: res.data.refreshToken,
         username: id,
       });
     }
