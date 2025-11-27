@@ -10,7 +10,7 @@ const instance = axios.create({
   },
 });
 
-// 요청 전 인터셉터
+// 요청 인터셉터
 instance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
@@ -33,28 +33,25 @@ instance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        // refresh 요청 (instance 사용 금지)
         const refreshResponse = await axios.post(
           `${API_BASE_URL}/auth/refresh`,
           {},
           { withCredentials: true }
         );
 
-        const newAccessToken = refreshResponse.data.accessToken;
+        const newAccessToken = refreshResponse.data.data.accessToken;
+        const newRefreshToken = refreshResponse.data.data.refreshToken;
 
-        localStorage.setItem("token", newAccessToken);
+        localStorage.setItem("accessToken", newAccessToken);
+        localStorage.setItem("refreshToken", newRefreshToken);
 
-        // instance 기본 헤더 갱신
         instance.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
-
-        // 실패한 요청 헤더도 갱신
-        originalRequest.headers = originalRequest.headers || {};
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
         return instance(originalRequest);
       } catch (refreshError) {
-        // refreshToken 만료 → 로그아웃 처리
-        localStorage.removeItem("token");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }

@@ -12,8 +12,10 @@ export function AuthProvider({ children }) {
     const username = localStorage.getItem("username");
     return username ? { username } : null;});
 
-  const login = ({ token, username }) => {
-    localStorage.setItem("accessToken", token);
+
+  const login = ({ accessToken, username, refreshToken}) => {
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
     localStorage.setItem("username", username);
     setUser({ username });
     setIsLoggedIn(true);

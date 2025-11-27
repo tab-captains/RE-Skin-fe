@@ -7,10 +7,15 @@ import instance from "./axiosInstance";
  */
 export const login = async (loginId, password) => {
   try {
-    const response = await instance.post("/api/auth/login", { loginId, password });
+    const response = await instance.post("/api/auth/login", { 
+        loginId,
+        password });
     // 로그인 성공 시 localStorage에 토큰 저장
-    if (response.data.accessToken) {
+    if (response.data?.accessToken) {
+      console.log("access", response.data.data.accessToken)
+      console.log("refresh", response.data.data.refreshToken);
       localStorage.setItem("accessToken", response.data.accessToken);
+      localStorage.setItem("refreshToken", response.data.refreshToken);
     }
     return response.data;
   } catch (error) {

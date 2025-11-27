@@ -45,9 +45,18 @@ const SkinTypeSurveyPage = () => {
     const accessToken= localStorage.getItem("accessToken");
     console.log("Sending surveyData:", surveyData);
     console.log("Token:", accessToken);
+
+
     try{
       const response = await submitSurvey(surveyData);
       console.log("설문 제출 성공: ",response);
+  
+    const skinType = response.data?.skinType;
+    console.log("skinType 확인:", skinType);
+    if (skinType) {
+      localStorage.setItem("skintyperesult", skinType);
+      console.log("LocalStorage에 저장됨:", localStorage.getItem("skintyperesult"));
+    }
 
       navigate("/upload");
     }catch(error){
