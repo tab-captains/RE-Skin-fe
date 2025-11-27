@@ -1,35 +1,31 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { kakaoCallback } from '../../../shared/api/auth';  
+import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const LoginSuccessPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
 
   useEffect(() => {
-    const handleKakaoLogin = async () => {
-      try {
-        // 백엔드에서 바로 JWT와 username 받음
-        const { accessToken, username } = await kakaoCallback();
+    const params = new URLSearchParams(location.search);
+    const token = params.get("token");
 
-        login({ token: accessToken, username });
-        navigate("/", { replace: true });
-      } catch (error) {
-        console.error("카카오 로그인 콜백 오류:", error);
-        navigate("/login");
-      }
-    };
+    if (!token) {
+      navigate("/login");
+      return;
+    }
 
-    handleKakaoLogin();
-  }, []);
+    login({ token });
+    navigate("/", { replace: true });
+  }, [location]);
 
   return (
     <div style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100vh'
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "100vh"
     }}>
       <p>카카오 로그인 처리 중...</p>
     </div>
