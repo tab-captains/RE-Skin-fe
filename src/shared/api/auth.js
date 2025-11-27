@@ -54,6 +54,7 @@ export const kakaoLogin = async () => {
   try {
     const response = await instance.get("/api/auth/kakao");
     const data = response.data;
+    console.log(response.data.data);
     
     if (data.success && data.data) {
       window.location.href = data.data;
@@ -66,30 +67,24 @@ export const kakaoLogin = async () => {
   }
 };
 
-/**
- * 카카오 로그인 콜백 요청
- * 백엔드가 카카오서버와 통신하여 accessToken + username을 반환
- */
-export const kakaoCallback = async (code) => {
+
+export const kakaoCallback = async () => {
   try {
-    const response = await instance.get(`/api/auth/kakao/callback?code=${code}`);
+    const response = await instance.get(`/api/auth/kakao/callback`);
+    console.log("카카오 콜백 응답:", response.data);
 
-    const { accessToken, username } = response.data;
+    const { accessToken, refreshToken, username } = response.data.data;
 
-    // 토큰 저장
-    if (accessToken) {
-      localStorage.setItem("accessToken", accessToken);
-    }
-    if (username) {
-      localStorage.setItem("username", username);
-    }
+    if (accessToken) localStorage.setItem("accessToken", accessToken);
+    if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
 
-    return response.data;
+    return response.data.data;
   } catch (error) {
     console.error("Kakao callback error:", error);
     throw error;
   }
 };
+
 
 /**
  * 로그아웃 API
