@@ -10,7 +10,7 @@ export const login = async (loginId, password) => {
     const response = await instance.post("/api/auth/login", { loginId, password });
     // 로그인 성공 시 localStorage에 토큰 저장
     if (response.data.accessToken) {
-      localStorage.setItem("token", response.data.accessToken);
+      localStorage.setItem("accessToken", response.data.accessToken);
     }
     return response.data;
   } catch (error) {
