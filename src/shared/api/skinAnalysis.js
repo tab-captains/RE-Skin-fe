@@ -1,3 +1,29 @@
+import instance from "./axiosInstance";
+
+/**
+ * 이미지 분석 요청
+ * @param {File} imageFile - 분석할 이미지 파일
+ * @returns {Promise<object>} - 서버에서 반환한 분석 결과
+ */
+export const analyzeImage = async (payload) => {
+  try {
+    const res = await instance.post("/api/analyze", payload, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    return res.data;
+  } catch (error) {
+    console.error("이미지 분석 실패:", error);
+    throw error;
+  }
+};
+
+
+
+
+
 export const skinAnalysis = {
   
   "userId": 1,

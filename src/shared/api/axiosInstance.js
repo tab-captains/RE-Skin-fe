@@ -13,8 +13,10 @@ const instance = axios.create({
 // 요청 전 인터셉터
 instance.interceptors.request.use(
   (config) => {
+    console.log("인터셉터 실행됨:", config.url);
     const token = localStorage.getItem("accessToken");
     if (token) {
+      console.log("토큰추가",token);
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;

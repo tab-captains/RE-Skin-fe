@@ -3,15 +3,17 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import colors from "../../common/colors"
 import { useNavigate } from "react-router-dom";
+import {analyzeImage} from "../../../shared/api/skinAnalysis";
+import axios from "axios";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const ImageUploadPage = () => {
   const navigate = useNavigate();
 
-  const [slots, setSlots] = useState({ front: null, left: null, right: null });
-  const [dragActive, setDragActive] = useState({ front: false, left: false, right: false });
-
+  const [slots, setSlots] = useState({ left: null,front: null,  right: null });
+  const [dragActive, setDragActive] = useState({ left: false,  front: false, right: false });
+  const [loading, setLoading] = useState(false);
   const validateFile = (file) => {
     if (!file.type.startsWith("image/")) { alert("이미지 파일만 업로드 가능합니다."); return false; }
     if (file.size > MAX_FILE_SIZE) { alert("파일 용량이 너무 큽니다. 5MB 이하로 올려주세요."); return false; }
@@ -34,8 +36,56 @@ const ImageUploadPage = () => {
   const onSelect = (slotKey) => (e) => { handleFile(slotKey, e.target.files[0]); e.target.value = ""; };
   const removeFile = (slotKey) => setSlots((s) => ({ ...s, [slotKey]: null }));
 
-  const allUploaded = slots.front && slots.left && slots.right;
-  const handleStartAnalysis = () => { if (allUploaded) navigate("/analysis"); };
+  const allUploaded =  slots.left && slots.front && slots.right;
+
+
+
+
+const toBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file); 
+    reader.onload = () => {
+      const result = reader.result;
+      const pureBase64 = result.split(",")[1]; 
+      resolve(pureBase64);
+    };
+    reader.onerror = reject;
+  });
+};
+
+
+
+  const handleStartAnalysis = async () => { 
+    if (!allUploaded) return;
+    setLoading(true);
+
+    try {
+      // 파일 -> Base64 문자열로 변환
+      const leftBase64 = await toBase64(slots.left);
+      const frontBase64 = await toBase64(slots.front);
+      const rightBase64 = await toBase64(slots.right);
+
+      const params = new URLSearchParams();
+      [leftBase64, frontBase64, rightBase64].forEach(img => params.append("files", img));
+
+
+      const response = await axios.post(`/api/analyze${params.toString()}`, null,{
+        header:{
+          "accept": "application/json"
+        }
+      })
+
+      console.log("분석 결과:", result);
+      localStorage.setItem("analysisResult", JSON.stringify(response.data));
+      navigate("/analysis");
+    } catch (error) {
+      console.error("이미지 분석 실패:", error);
+      alert("이미지 분석에 실패했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <PageWrapper>
@@ -70,6 +120,7 @@ const ImageUploadPage = () => {
 };
 
 export default ImageUploadPage;
+
 
 const PageWrapper = styled.div`
 min-height:100vh;
