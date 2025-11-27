@@ -73,18 +73,18 @@ export const kakaoLogin = async () => {
 export const kakaoCallback = async (code) => {
   try {
     const response = await instance.get(`/api/auth/kakao/callback?code=${code}`);
-
-    const { accessToken, username } = response.data;
+    console.log("카카오 콜백 응답:",response.data);
+    const { accessToken, refreshToken } = response.data.data;
 
     // 토큰 저장
     if (accessToken) {
       localStorage.setItem("accessToken", accessToken);
     }
-    if (username) {
-      localStorage.setItem("username", username);
+    if (refreshToken) {
+      localStorage.setItem("refreshToken", refreshToken);
     }
 
-    return response.data;
+    return response.data.data;
   } catch (error) {
     console.error("Kakao callback error:", error);
     throw error;
