@@ -4,7 +4,10 @@ const AuthContext = createContext();
 
 
 export function AuthProvider({ children }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem("accessToken"));
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+  const code = new URLSearchParams(window.location.search).get("code");
+  return !!localStorage.getItem("accessToken") || !!code;
+});
   const [user, setUser] = useState(() => {
     const username = localStorage.getItem("username");
     return username ? { username } : null;});
