@@ -67,6 +67,31 @@ export const kakaoLogin = async () => {
 };
 
 /**
+ * 카카오 로그인 콜백 요청
+ * 백엔드가 카카오서버와 통신하여 accessToken + username을 반환
+ */
+export const kakaoCallback = async (code) => {
+  try {
+    const response = await instance.get(`/api/auth/kakao/callback?code=${code}`);
+
+    const { accessToken, username } = response.data;
+
+    // 토큰 저장
+    if (accessToken) {
+      localStorage.setItem("accessToken", accessToken);
+    }
+    if (username) {
+      localStorage.setItem("username", username);
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error("Kakao callback error:", error);
+    throw error;
+  }
+};
+
+/**
  * 로그아웃 API
  * HttpOnly 쿠키에 저장된 refreshToken을 백엔드에서 처리
  * 백엔드는 @RequestParam으로 받지만, 쿠키에서도 읽을 수 있도록 처리

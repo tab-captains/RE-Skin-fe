@@ -42,8 +42,9 @@ const SkinTypeSurveyPage = () => {
       surveyData[`q${Number(key)+1}`] = answers[key]
     });  //q${anwers의 key값+1}=answers의 value
 
+    const accessToken= localStorage.getItem("accessToken");
     console.log("Sending surveyData:", surveyData);
-    console.log("Token:", localStorage.getItem("token"));
+    console.log("Token:", accessToken);
     try{
       const response = await submitSurvey(surveyData);
       console.log("설문 제출 성공: ",response);
