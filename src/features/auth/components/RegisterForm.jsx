@@ -112,7 +112,7 @@ function RegisterForm() {
     const [nickname, setNickname] = useState('');
     const [email, setEmail] = useState('');
     const [dob, setDob] = useState('');
-    const [gender, setGender] = useState('male');
+    const [gender, setGender] = useState('MALE');
 
     const [passwordError, setPasswordError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
@@ -170,10 +170,13 @@ function RegisterForm() {
     password,
     passwordConfirm: confirmPassword,
     nickname,
+    email,
+    dob,
+    gender
   });
   try {
      // 회원가입 API 호출
-      await registerAPI(userId, password, confirmPassword, nickname);
+      await registerAPI(userId, password, confirmPassword, nickname, email, dob, gender.toUpperCase());
       // 회원가입 후 자동 로그인 없이 완료 메시지
       alert('회원가입 성공! 이제 로그인 해주세요.');
       navigate('/login'); // 로그인 페이지로 이동
@@ -264,9 +267,8 @@ function RegisterForm() {
             value={gender}
             onChange={(e) => setGender(e.target.value)}
           >
-            <option value="male">남자</option>
-            <option value="female">여자</option>
-            <option value="other">기타</option>
+            <option value="MALE">남자</option>
+            <option value="FEMALE">여자</option>
           </Select>
         </InputGroup>
 
