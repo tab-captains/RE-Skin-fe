@@ -104,60 +104,58 @@ const RegisterButton = styled.button`
 `;
 
 function RegisterForm() {
-  const { login } = useAuth();
-  const navigate= useNavigate();
-  const [userId, setUserId] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [nickname, setNickname] = useState('');
-  const [email, setEmail] = useState('');
-  const [dob, setDob] = useState('');
-  const [gender, setGender] = useState('male');
+    const { login } = useAuth();
+    const navigate= useNavigate();
+    const [userId, setUserId] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [nickname, setNickname] = useState('');
+    const [email, setEmail] = useState('');
+    const [dob, setDob] = useState('');
+    const [gender, setGender] = useState('male');
 
-  const [passwordError, setPasswordError] = useState('');
-  const [confirmPasswordError, setConfirmPasswordError] = useState('');
-  const [isFormValid, setIsFormValid] = useState(false);
+    const [passwordError, setPasswordError] = useState('');
+    const [confirmPasswordError, setConfirmPasswordError] = useState('');
+    const [isFormValid, setIsFormValid] = useState(false);
 
-  useEffect(() => {
-    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+        useEffect(() => {
+          const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
 
-    if (password && !passwordRegex.test(password)) {
-      setPasswordError('*8자 이상, 영문, 숫자, 특수문자를 모두 포함해야 합니다.');
-    } else {
-      setPasswordError('');
-    }
-  }, [password]);
+          if (password && !passwordRegex.test(password)) {
+            setPasswordError('*8자 이상, 영문, 숫자, 특수문자를 모두 포함해야 합니다.');
+          } else {
+            setPasswordError('');
+          }
+        }, [password]);
 
-  useEffect(() => {
-    if (confirmPassword && password !== confirmPassword) {
-      setConfirmPasswordError('*비밀번호가 일치하지 않습니다.');
-    } else {
-      setConfirmPasswordError('');
-    }
-  }, [password, confirmPassword]);
+        useEffect(() => {
+          if (confirmPassword && password !== confirmPassword) {
+            setConfirmPasswordError('*비밀번호가 일치하지 않습니다.');
+          } else {
+            setConfirmPasswordError('');
+          }
+        }, [password, confirmPassword]);
 
-  useEffect(() => {
-    if (
-      userId &&
-      password &&
-      confirmPassword &&
-      nickname &&
-      email &&
-      dob &&
-      gender &&
-      !passwordError &&
-      !confirmPasswordError
-    ) {
-      setIsFormValid(true);
-    } else {
-      setIsFormValid(false);
-    }
-  }, [
-    userId, password, confirmPassword, nickname, email, dob, gender,
-    passwordError, confirmPasswordError
-  ]);
-}
-
+        useEffect(() => {
+            if (
+              userId &&
+              password &&
+              confirmPassword &&
+              nickname &&
+              email &&
+              dob &&
+              gender &&
+              !passwordError &&
+              !confirmPasswordError
+            ) {
+              setIsFormValid(true);
+            } else {
+              setIsFormValid(false);
+            }
+          }, [
+            userId, password, confirmPassword, nickname, email, dob, gender,
+            passwordError, confirmPasswordError
+          ]);
 
 
   const handleSubmit = async (e) => {
@@ -167,12 +165,12 @@ function RegisterForm() {
       alert('입력 정보를 다시 확인해주세요.');
       return;
     }
-console.log({
-  loginId: userId,
-  password,
-  passwordConfirm: confirmPassword,
-  nickname,
-});
+  console.log({
+    loginId: userId,
+    password,
+    passwordConfirm: confirmPassword,
+    nickname,
+  });
   try {
      // 회원가입 API 호출
       await registerAPI(userId, password, confirmPassword, nickname);
@@ -185,6 +183,9 @@ console.log({
       console.log('data:', error.response?.data); // 서버 메시지 확인
       alert('회원가입 실패: ' + (error.response?.data?.message || error.message));
     }
+  }
+  
+
 
   return (
     <Container>
