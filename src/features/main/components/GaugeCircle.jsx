@@ -1,13 +1,7 @@
 import styled from "styled-components";
 
-const GaugeCircle = ({ label, value, max }) => {
-  const percentage = (value / max) * 100;
-
-  let status = "";
-  if (percentage >= 70) status = "높음";
-  else if (percentage >= 40) status = "보통";
-  else status = "낮음";
-
+const GaugeCircle = ({ label, value, max, level }) => {
+const percentage = value && max ? (value / max) * 100 : 0;
   return (
     <Wrapper>
       <Label>{label}</Label>
@@ -28,7 +22,7 @@ const GaugeCircle = ({ label, value, max }) => {
           strokeWidth="7"
           fill="none"
           strokeDasharray={2 * Math.PI * 40}
-          strokeDashoffset={(1 - percentage / 100) * 2 * Math.PI * 40}
+          strokeDashoffset={(1 - percentage /100) * 2 * Math.PI * 40}
           strokeLinecap="round"
           transform="rotate(-90 45 45)"
         />
@@ -48,7 +42,7 @@ const GaugeCircle = ({ label, value, max }) => {
           fontSize="12"
           fill="white"
         >
-          {status}
+          {level}
         </text>
       </svg>
     </Wrapper>

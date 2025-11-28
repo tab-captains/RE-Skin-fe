@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import colors from "../../common/colors";
-import WeatherCard from "./WeatherCard";
+import WeatherContainer from "./WeatherContainer";
 import TipCard from "./TipCard";
 import BoardCard from './BoardCard';
 import RightSection from './RightSection';
@@ -16,7 +16,7 @@ const BottomSection = () => {
 
       <LeftWrapper $isLoggedIn={isLoggedIn}>
 
-      <WeatherCard />
+      <WeatherContainer />
       <TipCardItem>
       <p style={{margin: "0 0 15px 5px", fontWeight: "bold"}}>오늘의 뷰티 팁!</p>
       <TipCard   tips={[
