@@ -32,13 +32,16 @@ export const login = async (loginId, password) => {
  * @param {string} nickname - 닉네임
  * @returns {Promise<{message: string, user?: object}>}
  */
-export const register = async (userId, password, confirmPassword, nickname) => {
+export const register = async (userId, password, confirmPassword, nickname, email, birthdate, gender) => {
   try {
     const requestBody = {
       loginId: userId,
       password,
       passwordConfirm: confirmPassword,
+      email,
       nickname,
+      birthdate, // "2001-07-16" 형식
+      gender // "MALE" or "FEMALE" -> 
     };
     
     console.log('회원가입 요청 데이터:', requestBody);
