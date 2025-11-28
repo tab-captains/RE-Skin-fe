@@ -186,17 +186,20 @@ const Sidebar = ({ isOpen, toggleSidebar, user }) => {
 
                 <SidebarCategoryTitle>페이지</SidebarCategoryTitle>
                 
-                <SidebarLink to="/community" onClick={toggleSidebar}>
-                    <span style={{ marginLeft: '10px' }}>▪</span> 커뮤니티
-                </SidebarLink>
                 <SidebarLink to="/analysisOverview" onClick={toggleSidebar}>
                     <span style={{ marginLeft: '10px' }}>▪</span> AI 피부 분석
                 </SidebarLink>
-                <SidebarLink to="/skin-survey" onClick={{toggleSidebar}}>
-                    <span style={{ marginLeft: '10px'}}>▪</span> 피부 설문
-                </SidebarLink>
                 <SidebarLink to="/skinreport" onClick={toggleSidebar}>
                     <span style={{ marginLeft: '10px' }}>▪</span> 스킨 리포트
+                </SidebarLink>
+                <SidebarLink to="/routineSelect" onClick={toggleSidebar}>
+                    <span style={{ marginLeft: '10px' }}>▪</span> 맞춤 세안 루틴
+                </SidebarLink>
+                <SidebarLink to="/skin-survey" onClick={{toggleSidebar}}>
+                    <span style={{ marginLeft: '10px'}}>▪</span> 피부 타입 테스트
+                </SidebarLink>
+                <SidebarLink to="/community" onClick={toggleSidebar}>
+                    <span style={{ marginLeft: '10px' }}>▪</span> 커뮤니티
                 </SidebarLink>
                 <SidebarLink to="/infoboard" onClick={toggleSidebar}>
                     <span style={{ marginLeft: '10px' }}>▪</span> 게시판 정보
@@ -234,10 +237,8 @@ const Navbar = ()=>{
                     <Logo to = '/'>Re:Skin</Logo>
                 </LeftGroup>
                 <RightGroup>
-                    <NavButton to = '/skin-survey'>피부설문</NavButton>
-                    <NavButton to = '/skinreport'>스킨 리포트</NavButton>
-                    <NavButton to = '/infoboard'>게시판 정보</NavButton>
                     <NavButton to = '/community'>커뮤니티</NavButton>
+                    <NavButton to = '/skinreport'>스킨 리포트</NavButton>
                     <NavButton to ='/analysisOverview'>피부 분석</NavButton>
                     
                     {!isLoggedIn ? (

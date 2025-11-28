@@ -3,7 +3,7 @@ import WeatherCard from "./WeatherCard";
 import SelectLocation from "./SelectLocation";
 import instance from "../../../shared/api/axiosInstance";
 const weatherMock = {
-  city: "대한민국 서울특별시",
+  city: "지역 선택 전",
   temperature: 21,
   uvIndex: 6,
   fineDust: 45,
@@ -11,11 +11,11 @@ const weatherMock = {
   fineDustLevel:"보통",
   uvLevel:"낮음",
   humidityLevel:"높음",
-  message: "오늘은 미세먼지가 높으니 꼼꼼한 클렌징 잊지 마세요!"
+  message: "지역을 선택하면 정확한 날씨 정보를 확인할 수 있어요."
 };
 const WeatherContainer = () => {
   const [weather, setWeather] = useState(weatherMock);
-  const [location, setLocation] = useState({ sidoName: "서울특별시", regionName: "송파구" });
+  const [location, setLocation] = useState({ sidoName: "지역", regionName: "선택 전" });
   const [modalOpen, setModalOpen] = useState(false);
 
 const handleApplyLocation = async (loc) => {
