@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FaUserCircle, FaRegComment, FaHeart } from "react-icons/fa"; 
 import { useNavigate } from 'react-router-dom';
-import { useState } from "react";
 import { keyframes } from "styled-components";
+
+import { submitComment, deleteComment } from "../../../shared/api/comments";
 
 const heartPop = keyframes`
   0% { transform: scale(1); }
@@ -196,7 +197,7 @@ const DeleteBtn = styled.button`
     }
 `;
 
-const PostCard = ({ id }) => {   
+const PostCard = ({ id }) => {
     const navigate = useNavigate();
 
     const [likes, setLikes] = useState(0);
@@ -210,19 +211,34 @@ const PostCard = ({ id }) => {
     const handleLike = () => {
         setLiked(!liked);
         setLikes(prev => (liked ? prev - 1 : prev + 1));
-
         setAnimateHeart(true);
         setTimeout(() => setAnimateHeart(false), 300);
     };
 
-    const addComment = () => {
+    const addComment = async (e) => {
+        e.stopPropagation();
         if (!commentInput.trim()) return;
-        setComments([...comments, commentInput]);
-        setCommentInput("");
+
+        try {
+            const newComment = await submitComment(id, commentInput);
+            setComments([...comments, newComment]);  
+            setCommentInput("");
+        } catch (err) {
+            console.error("댓글 등록 실패:", err);
+            alert("댓글 등록 실패");
+        }
     };
 
-    const deleteComment = (index) => {
-        setComments(comments.filter((_, i) => i !== index));
+    const removeComment = async (commentId, e) => {
+        e.stopPropagation();
+
+        try {
+            await deleteComment(commentId);
+            setComments(comments.filter((c) => c.commentId !== commentId));
+        } catch (err) {
+            console.error("댓글 삭제 실패:", err);
+            alert("댓글 삭제 실패");
+        }
     };
 
     return (
@@ -236,11 +252,11 @@ const PostCard = ({ id }) => {
 
             <Footer>
                 <UserInfo
-                    style={{ cursor: "pointer" }}
                     onClick={(e) => {
-                        e.stopPropagation();          
+                        e.stopPropagation();
                         setShowCommentBox(!showCommentBox);
                     }}
+                    style={{ cursor: "pointer" }}
                 >
                     <UserIcon />
                     <span>댓글 {comments.length}</span>
@@ -248,11 +264,11 @@ const PostCard = ({ id }) => {
                 </UserInfo>
 
                 <Likes
-                    style={{ cursor: "pointer" }}
                     onClick={(e) => {
-                        e.stopPropagation();       
+                        e.stopPropagation();
                         handleLike();
                     }}
+                    style={{ cursor: "pointer" }}
                 >
                     <span>좋아요 {likes}</span>
                     <AnimatedHeart animate={animateHeart} color={liked ? "red" : "#EF4444"} />
@@ -260,21 +276,19 @@ const PostCard = ({ id }) => {
             </Footer>
 
             {showCommentBox && (
-                <CommentBox>
+                <CommentBox onClick={(e) => e.stopPropagation()}>
                     <textarea
-                        placeholder="댓글을 입력하세요..."
                         value={commentInput}
                         onChange={(e) => setCommentInput(e.target.value)}
+                        placeholder="댓글을 입력하세요..."
                     />
                     <button onClick={addComment}>등록</button>
 
                     <CommentList>
-                        {comments.map((c, idx) => (
-                            <CommentItem key={idx}>
-                                <span>{c}</span>
-                                <DeleteBtn onClick={() => deleteComment(idx)}>
-                                    삭제
-                                </DeleteBtn>
+                        {comments.map((c) => (
+                            <CommentItem key={c.commentId}>
+                                <span>{c.content}</span>
+                                <DeleteBtn onClick={(e) => removeComment(c.commentId, e)}>삭제</DeleteBtn>
                             </CommentItem>
                         ))}
                     </CommentList>
@@ -299,7 +313,7 @@ const CommunityPage = () => {
 
             <Grid>
                 {mockPosts.map(id => (
-                    <PostCard key={id} id={id} /> 
+                    <PostCard key={id} id={id} />
                 ))}
             </Grid>
         </PageContainer>
