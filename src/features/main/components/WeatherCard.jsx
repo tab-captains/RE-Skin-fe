@@ -7,12 +7,17 @@ const weatherMock = {
   city: "대한민국 서울특별시",
   temperature: 21,
   uvIndex: 6,
-  pm10: 45,
-  humidity: 65
+  fineDust: 45,
+  humidity: 65,
+  fineDustLevel:"보통",
+  uvLevel:"낮음",
+  humidityLevel:"높음",
+  message: "오늘은 미세먼지가 높으니 꼼꼼한 클렌징 잊지 마세요!"
 };
 
-const WeatherCard = ({weather=weatherMock}) => {
-
+const WeatherCard = ({weather, onChangeLocation, city, children}) => {
+ if (!weather) return <p>날씨 정보를 불러오는 중...</p>;
+ const w = weather || weatherMock;
   return(
     <>
     <Wrapper>
@@ -20,17 +25,20 @@ const WeatherCard = ({weather=weatherMock}) => {
         <TopSection>
           <TopTextWrapper>
             <Text>현재 기온</Text>
-            <Temp>{weather.temperature}°C</Temp>
-            <Text>{weather.city}</Text>
+            <Temp>{w.temperature}°C</Temp>
+              <LocationButton onClick={onChangeLocation}>
+            {city || w.city} ⏷
+            </LocationButton>
           </TopTextWrapper>
           <GaugesWrapper>
-            <GaugeCircle label="미세먼지" value={weather.pm10} max={150} />
-            <GaugeCircle label="UV 지수" value={weather.uvIndex} max={11} />
-            <GaugeCircle label="습도" value={weather.humidity} max={100} />
+            <GaugeCircle label="미세먼지" value={w.fineDust} max={150} level={w.fineDustLevel} />
+            <GaugeCircle label="UV 지수" value={w.uvIndex} max={11} level={w.uvLevel}/>
+            <GaugeCircle label="습도" value={w.humidity} max={100} level={w.humidityLevel}/>
           </GaugesWrapper>
         </TopSection>
 
-     <BottomText>오늘은 미세먼지가 높으니 꼼꼼한 클렌징 잊지 마세요!</BottomText>
+     <BottomText>{w.message}</BottomText>
+     {children}
      </WeatherCardItem>
     </Wrapper>
     </>
@@ -54,6 +62,19 @@ const Card = styled.div`
   &.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+`;
+
+
+const LocationButton = styled.button`
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
   }
 `;
 
