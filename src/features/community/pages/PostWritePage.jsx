@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { IoIosClose, IoIosSend } from 'react-icons/io'; 
 import colors from '../../common/colors'; 
 
+import { writePost } from "../../../shared/api/posts"; 
 
 const PageContainer = styled.div`
     width: 100%;
@@ -105,15 +106,23 @@ const PostWritePage = () => {
     const [postTitle, setPostTitle] = useState('');
     const [postContent, setPostContent] = useState('');
 
-    const handlePublish = () => {
-        if (!postTitle || !postContent) {
-            alert('제목과 내용을 모두 입력해주세요.');
-            return;
-        }
+    const handlePublish = async () => {
+    if (!postTitle || !postContent) {
+        alert('제목과 내용을 모두 입력해주세요.');
+        return;
+    }
 
-        alert('게시글이 등록되었습니다!');
-        navigate('/community'); 
-    };
+    try {
+        const res = await writePost(postTitle, postContent);  // ★ 서버에 게시글 전송
+        console.log("게시글 등록 응답:", res.data);
+
+        alert("게시글이 등록되었습니다!");
+        navigate('/community');
+    } catch (err) {
+        console.error("게시글 등록 실패:", err);
+        alert("게시글 등록 실패!");
+    }
+};
 
     const handleCancel = () => {
         if (window.confirm('작성 중인 내용을 저장하지 않고 나가시겠습니까?')) {
