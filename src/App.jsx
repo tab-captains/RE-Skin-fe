@@ -9,6 +9,8 @@ import RegisterPage from './features/auth/pages/RegisterPage';
 import ProfilePage from './features/auth/pages/ProfilePage';
 import AnalysisOverviewPage from './features/analysis/pages/AnalysisOverviewPage';
 import CommunityPage from './features/community/pages/CommunityPage';
+import PostWritePage from './features/community/pages/PostWritePage'; 
+import PostDetailPage from "./features/community/pages/PostdatailPage";
 import Infoboard from "./features/infoboard/pages/InfoboardPage";
 import KakaoCallbackPage from "./features/auth/pages/KakaoCallbackPage";
 import Skinguide from "./features/infoboard/pages/Skinguide";
@@ -32,6 +34,8 @@ function App() {
             <Route path="profile" element={<ProfilePage />} />
           <Route path="register" element={<RegisterPage />} />
             <Route path="community" element={<CommunityPage />}/>
+            <Route path="community/post/:postId" element={<PostDetailPage />} />
+            <Route path="write" element={<PostWritePage />}/>
             <Route path="infoboard" element={<Infoboard />}/>
             <Route path="skinguide" element={<Skinguide />}/> 
             <Route path="infoboard/skinguide" element={<Skinguide />} />
