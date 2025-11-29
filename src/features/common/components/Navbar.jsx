@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import styled, { css } from "styled-components";
 import { Link, useNavigate } from "react-router-dom"; 
 import { GiHamburgerMenu } from "react-icons/gi";
-import { FaUserCircle, FaHome, FaSearch } from "react-icons/fa";
-import { FaUsers, FaChartLine, FaClipboardList } from "react-icons/fa"; 
+import { FaUserCircle } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import colors from "../../common/colors";
 import { useAuth } from "../../auth/context/AuthContext"; 
-import {SIDEBAR_CATEGORIES} from "../data/sideBarCategories";
+import { SIDEBAR_CATEGORIES } from "../data/sideBarCategories";
+
 
 const Nav = styled.nav`
     display: flex;
@@ -101,9 +101,6 @@ const LogoutButton = styled.button`
     }
 `;
 
-
-
-//사이드바.
 const SidebarContainer = styled.div`
     position: fixed;
     top: 0;
@@ -161,18 +158,18 @@ const SidebarCategoryTitle = styled.h4`
     margin: 10px 0 0;
     text-transform: uppercase;
     font-weight: 600;
-    
 `;
+
 const CloseArrow = styled(IoIosArrowForward)`
   margin-left: auto; 
- transform: rotate(180deg);
+  transform: rotate(180deg);
   cursor: pointer;
   color: #aaa;
   transition: all 0.2s ease;
 
   &:hover {
     color: #333;
-    transform: translateX(-4px) rotate(180deg);;
+    transform: translateX(-4px) rotate(180deg);
   }
 `;
 
@@ -197,7 +194,6 @@ const SubCategoryWrapper = styled.div`
     `}
 `;
 
-
 const ToggleCategoryTitle = styled.div`
     display: flex;
     justify-content: space-between;
@@ -210,12 +206,10 @@ const ToggleCategoryTitle = styled.div`
     border-radius: 4px;
     margin: 2px 5px;
 
-    
     &:hover {
         background-color: #eee;
     }
 `;
-
 
 const SubCategoryLink = styled(Link)`
     display: block;
@@ -229,10 +223,10 @@ const SubCategoryLink = styled(Link)`
         color: #000;
     }
 `;
+
 const CategoryArrow = styled(IoIosArrowForward)`
   transition: transform 0.25s ease, color 0.2s ease;
   color: #aaa;
-
   transform: rotate(90deg);
 
   ${({ $isOpen }) =>
@@ -243,17 +237,17 @@ const CategoryArrow = styled(IoIosArrowForward)`
     `}
 `;
 
-
-//사이드바.
 const Sidebar = ({ isOpen, toggleSidebar, user }) => {
     const [openCategory, setOpenCategory] = useState(null);
+
     const handleToggle = (key) => {
         setOpenCategory(openCategory === key ? null : key);
     };
+
     return (
         <>
             <Overlay $isOpen={isOpen} onClick={toggleSidebar} />
-            <SidebarContainer $isOpen={isOpen} style={{marginBottom :"50px"}}>
+            <SidebarContainer $isOpen={isOpen} style={{ marginBottom: "50px" }}>
                 
                 <SidebarHeader>
                     <FaUserCircle size={26} style={{ marginRight: '14px', color: '#666' }} />
@@ -267,18 +261,16 @@ const Sidebar = ({ isOpen, toggleSidebar, user }) => {
                 <SidebarLink to="/analysisOverview" onClick={toggleSidebar}>AI 피부 분석</SidebarLink>
                 <SidebarLink to="/skinreport" onClick={toggleSidebar}>스킨 리포트</SidebarLink>
                 <SidebarLink to="/routineSelect" onClick={toggleSidebar}>맞춤 세안 루틴</SidebarLink>
-                <SidebarLink to="/skin-survey" onClick={{toggleSidebar}}>피부 타입 테스트</SidebarLink>
+                <SidebarLink to="/skin-survey" onClick={toggleSidebar}>피부 타입 테스트</SidebarLink>
                 <SidebarLink to="/community" onClick={toggleSidebar}>커뮤니티</SidebarLink>
                 <SidebarLink to="/infoboard" onClick={toggleSidebar}>게시판 정보</SidebarLink>
 
                 <SidebarCategoryTitle>제품 카테고리</SidebarCategoryTitle>
                 {SIDEBAR_CATEGORIES.map((category) => (
                     <div key={category.key}>
-                         {category.subCategories ? (
+                        {category.subCategories ? (
                             <>
-                                <ToggleCategoryTitle 
-                                    onClick={() => handleToggle(category.key)}
-                                >
+                                <ToggleCategoryTitle onClick={() => handleToggle(category.key)}>
                                     <span>{category.title}</span>
                                     <CategoryArrow
                                         size={16}
@@ -288,10 +280,10 @@ const Sidebar = ({ isOpen, toggleSidebar, user }) => {
 
                                 <SubCategoryWrapper $isOpen={openCategory === category.key}>
                                     {category.subCategories.map((sub) => (
-                                        <SubCategoryLink 
-                                            key={sub.type} 
-                                            to={`/products/${sub.type}`} 
-                                            onClick={toggleSidebar} 
+                                        <SubCategoryLink
+                                            key={sub.type}
+                                            to={`/product/${sub.type.toLowerCase()}`}
+                                            onClick={toggleSidebar}
                                         >
                                             {sub.name}
                                         </SubCategoryLink>
@@ -299,11 +291,11 @@ const Sidebar = ({ isOpen, toggleSidebar, user }) => {
                                 </SubCategoryWrapper>
                             </>
                         ) : (
-                            <SidebarLink 
-                                to={`/products/${category.type}`}
+                            <SidebarLink
+                                to={`/product/${category.type.toLowerCase()}`}
                                 onClick={toggleSidebar}
                                 style={{
-                                    fontWeight: 500, 
+                                    fontWeight: 500,
                                     fontSize: '0.9em',
                                 }}
                             >
@@ -317,10 +309,9 @@ const Sidebar = ({ isOpen, toggleSidebar, user }) => {
     );
 };
 
-const Navbar = ()=>{
+const Navbar = () => {
     const { isLoggedIn, user, logout } = useAuth(); 
     const navigate = useNavigate();
-
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
 
     const toggleSidebar = () => {
@@ -330,23 +321,23 @@ const Navbar = ()=>{
     const handleLogout = () => {
         logout(); 
         navigate('/'); 
-    }
+    };
     
     const handleProfileClick = () => {
         navigate('/profile');
-    }
+    };
     
     return ( 
         <>
             <Nav>
                 <LeftGroup> 
                     <Menu onClick={toggleSidebar} />
-                    <Logo to = '/'>Re:Skin</Logo>
+                    <Logo to='/'>Re:Skin</Logo>
                 </LeftGroup>
                 <RightGroup>
-                    <NavButton to = '/community'>커뮤니티</NavButton>
-                    <NavButton to = '/skinreport'>스킨 리포트</NavButton>
-                    <NavButton to ='/analysisOverview'>피부 분석</NavButton>
+                    <NavButton to='/community'>커뮤니티</NavButton>
+                    <NavButton to='/skinreport'>스킨 리포트</NavButton>
+                    <NavButton to='/analysisOverview'>피부 분석</NavButton>
                     
                     {!isLoggedIn ? (
                         <LoginButton to="/login">로그인 / 회원가입</LoginButton>
@@ -363,7 +354,7 @@ const Navbar = ()=>{
             </Nav>
             <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} user={user} />
         </>
-    )
+    );
 };
 
 export default Navbar;
