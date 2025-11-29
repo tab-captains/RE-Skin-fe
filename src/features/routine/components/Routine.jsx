@@ -1,8 +1,10 @@
+import {useState, useEffect} from "react";
 import styled, {keyframes} from "styled-components";
 import colors from "../../common/colors";
 import { useAuth } from "../../auth/context/AuthContext";
+import {Routinedetail} from "../../../shared/api/routines";
 import { IoArrowForward, IoSunny, IoMoon} from "react-icons/io5";
-import useReveal from "../../common/hooks/useReveal";
+
 const Routine = ({ routineData, type }) => {
 
     //api 연결 시 삭제.
