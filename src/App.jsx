@@ -22,6 +22,8 @@ import Analysis from "./features/analysis/pages/AnalysisPage";
 import RoutineSelect from "./features/routine/pages/RoutineSelectPage";
 import Morning from "./features/routine/pages/MorningRoutinePage";
 import Night from "./features/routine/pages/NightRoutinePage";
+import ProductCategoryPage from "./features/product/ProductCategoryPage";
+
 function App() {
   return (
     <AuthProvider>
@@ -47,7 +49,9 @@ function App() {
             <Route path="routineSelect" element={<RoutineSelect/>}/>
             <Route path="morning" element={<Morning/>}/>
             <Route path="night" element={<Night/>}/>
-            <Route path="/login-success" element={ <KakaoCallbackPage />}/>
+            <Route path="login-success" element={ <KakaoCallbackPage />}/>
+            <Route path="product/:category" element={<ProductCategoryPage />} />
+
             
           
           </Route>
