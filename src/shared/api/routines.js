@@ -1,4 +1,28 @@
-//아침 루틴 페이지용 데이터.
+import instance from "./axiosInstance";
+
+/**
+ * 특정 ID의 루틴 상세 정보를 조회하는 함수
+ * @param {number} routineId - 조회하려는 루틴의 ID
+ * @returns {Promise<Object>} 루틴 상세 정보 데이터
+ */
+
+
+export const RoutineDetail = async (routined) => {
+  if(!routined) {
+    throw new Error ("유호한 routineId가 제공되지 않았습니다.");
+  }
+
+  const endpoint = '/api/routines/${routineId}';
+  try {
+    const response = await instance.get(endpoint);
+
+    return response.data;
+  }catch(error){
+    console.error(`루틴 상세 조회 실패 (ID: ${routineId}):`, error);
+    throw error; 
+  }
+}
+
 
   export const morningRoutine =  [
     {
