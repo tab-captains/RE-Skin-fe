@@ -6,6 +6,10 @@ import colors from '../../common/colors';
 import { FaUserCircle } from "react-icons/fa";
 import { FiEdit2 } from "react-icons/fi";
 
+import { getMyInfo } from '../../../shared/api/users';
+
+/* ------------------------ Styled Components ------------------------ */
+
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -151,6 +155,8 @@ const ActionButton = styled.button`
     }
 `;
 
+/* ------------------------ Component Logic ------------------------ */
+
 const ProfilePage = () => {
 
     const { user, updateUser, changePassword } = useAuth();
@@ -164,25 +170,52 @@ const ProfilePage = () => {
 
     const [receiveNotifications, setReceiveNotifications] = useState(true);
 
+    /* ---- 서버에서 사용자 정보 불러오기 ---- */
+    useEffect(() => {
+        const loadProfile = async () => {
+            try {
+                const data = await getMyInfo();
+
+                updateUser({
+                    username: data.nickname,
+                    email: data.email,
+                    dateOfBirth: data.birthdate,
+                    gender: data.gender,
+                    skinType: data.skintype,
+                });
+
+            } catch (err) {
+                console.error("프로필 정보를 불러오지 못했습니다:", err);
+            }
+        };
+
+        loadProfile();
+    }, []);
+
+    /* ---- user 변경 시 input 값 업데이트 ---- */
     useEffect(() => {
         setEditedNickname(user?.username || "");
         setEditedDob(user?.dateOfBirth || "");
         setEditedGender(user?.gender || "male");
     }, [user]);
 
+    /* ---- 표시용 변환 ---- */
     const userData = {
         nickname: user?.username || "Guest",
         email: user?.email || "이메일 정보 없음",
-        dob: user?.dateOfBirth || "정보 없음",
+        dob: user?.dateOfBirth
+            ? new Date(user.dateOfBirth).toISOString().slice(0, 10)
+            : "정보 없음",
         gender:
             user?.gender === 'male'
                 ? "남성"
                 : user?.gender === 'female'
                 ? "여성"
                 : "기타",
-        skinType: "민감성/수분부족형",
+        skinType: user?.skinType || "정보 없음",
     };
 
+    /* ---- 저장하기 ---- */
     const handleSave = () => {
         updateUser({
             username: editedNickname,
@@ -201,6 +234,7 @@ const ProfilePage = () => {
                     <FaUserCircle size={80} color="#1e2a55" />
                 </AvatarContainer>
 
+                {/* Nickname */}
                 <UserInputGroup>
                     <Label>Nickname</Label>
                     <InputDisplay $isEditing={isEditing}>
@@ -220,6 +254,7 @@ const ProfilePage = () => {
                     </InputDisplay>
                 </UserInputGroup>
 
+                {/* Email */}
                 <UserInputGroup>
                     <Label>Email</Label>
                     <InputDisplay>
@@ -227,6 +262,7 @@ const ProfilePage = () => {
                     </InputDisplay>
                 </UserInputGroup>
 
+                {/* DOB */}
                 <UserInputGroup>
                     <Label>Date of Birth</Label>
                     <InputDisplay $isEditing={isEditing}>
@@ -245,6 +281,7 @@ const ProfilePage = () => {
                     </InputDisplay>
                 </UserInputGroup>
 
+                {/* Gender */}
                 <UserInputGroup>
                     <Label>Gender</Label>
                     <InputDisplay $isEditing={isEditing}>
@@ -263,6 +300,7 @@ const ProfilePage = () => {
                     </InputDisplay>
                 </UserInputGroup>
 
+                {/* Skin Type */}
                 <UserInputGroup>
                     <Label>Skin Type</Label>
                     <InputDisplay>
@@ -270,6 +308,7 @@ const ProfilePage = () => {
                     </InputDisplay>
                 </UserInputGroup>
 
+                {/* Toggle */}
                 <ToggleWrapper>
                     <Label>Receive notifications?</Label>
                     <ToggleSwitch>
@@ -282,6 +321,7 @@ const ProfilePage = () => {
                     </ToggleSwitch>
                 </ToggleWrapper>
 
+                {/* Save / Edit Button */}
                 <ActionButton
                     $isSave={isEditing}
                     onClick={isEditing ? handleSave : () => setIsEditing(true)}
@@ -289,6 +329,7 @@ const ProfilePage = () => {
                     {isEditing ? "저장하기" : "프로필 수정"}
                 </ActionButton>
 
+                {/* Change Password */}
                 {!isEditing && (
                     <ActionButton onClick={() => setIsModalOpen(true)}>
                         Change Password
