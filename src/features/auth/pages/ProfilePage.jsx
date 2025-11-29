@@ -8,7 +8,8 @@ import { FiEdit2 } from "react-icons/fi";
 
 import { getMyInfo } from '../../../shared/api/users';
 
-/* ------------------------ Styled Components ------------------------ */
+
+// ======================= Styled Components =======================
 
 const Container = styled.div`
     display: flex;
@@ -66,7 +67,7 @@ const InputDisplay = styled.div`
     font-size: 15px;
     margin-left: 10px;
     min-width: 180px;
-    justify-content: ${props => props.$isEditing ? 'flex-start' : 'space-between'};
+    justify-content: ${(props) => (props.$isEditing ? "flex-start" : "space-between")};
     gap: 15px;
 
     input, select {
@@ -142,7 +143,7 @@ const ActionButton = styled.button`
     width: 100%;
     padding: 12px;
     margin-top: 40px;
-    background-color: ${props => props.$isSave ? colors.primary : '#888'};
+    background-color: ${(props) => (props.$isSave ? colors.primary : "#888")};
     color: white;
     border: none;
     border-radius: 8px;
@@ -151,11 +152,12 @@ const ActionButton = styled.button`
     cursor: pointer;
 
     &:hover {
-        background-color: ${props => props.$isSave ? colors.textAccent : '#666'};
+        background-color: ${(props) => (props.$isSave ? colors.textAccent : "#666")};
     }
 `;
 
-/* ------------------------ Component Logic ------------------------ */
+
+// ======================= Component =======================
 
 const ProfilePage = () => {
 
@@ -164,13 +166,14 @@ const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const [editedNickname, setEditedNickname] = useState(user?.username || "");
-    const [editedDob, setEditedDob] = useState(user?.dateOfBirth || "");
-    const [editedGender, setEditedGender] = useState(user?.gender || "male");
+    const [editedNickname, setEditedNickname] = useState("");
+    const [editedDob, setEditedDob] = useState("");
+    const [editedGender, setEditedGender] = useState("male");
 
     const [receiveNotifications, setReceiveNotifications] = useState(true);
 
-    /* ---- 서버에서 사용자 정보 불러오기 ---- */
+
+    // === 1. 서버에서 프로필 정보 불러오기 ===
     useEffect(() => {
         const loadProfile = async () => {
             try {
@@ -179,9 +182,9 @@ const ProfilePage = () => {
                 updateUser({
                     username: data.nickname,
                     email: data.email,
-                    dateOfBirth: data.birthdate,
-                    gender: data.gender,
-                    skinType: data.skintype,
+                    dateOfBirth: data.birthDate || data.birthdate,
+                    gender: data.gender?.toLowerCase(),
+                    skinType: data.skinType || data.skintype,
                 });
 
             } catch (err) {
@@ -192,38 +195,45 @@ const ProfilePage = () => {
         loadProfile();
     }, []);
 
-    /* ---- user 변경 시 input 값 업데이트 ---- */
+
+    // === 2. user 변경 시 입력창 초기화 ===
     useEffect(() => {
         setEditedNickname(user?.username || "");
         setEditedDob(user?.dateOfBirth || "");
-        setEditedGender(user?.gender || "male");
+        setEditedGender(user?.gender?.toLowerCase() || "male");
     }, [user]);
 
-    /* ---- 표시용 변환 ---- */
+
+    // === 3. 화면에 표시할 데이터 ===
     const userData = {
         nickname: user?.username || "Guest",
-        email: user?.email || "이메일 정보 없음",
+        email: user?.email || "정보 없음",
         dob: user?.dateOfBirth
             ? new Date(user.dateOfBirth).toISOString().slice(0, 10)
             : "정보 없음",
         gender:
-            user?.gender === 'male'
+            user?.gender?.toLowerCase() === "male"
                 ? "남성"
-                : user?.gender === 'female'
+                : user?.gender?.toLowerCase() === "female"
                 ? "여성"
                 : "기타",
         skinType: user?.skinType || "정보 없음",
     };
 
-    /* ---- 저장하기 ---- */
+
+    // === 4. 저장 버튼 ===
     const handleSave = () => {
         updateUser({
             username: editedNickname,
             dateOfBirth: editedDob,
             gender: editedGender,
         });
+
         setIsEditing(false);
     };
+
+
+    // ======================= UI =======================
 
     return (
         <Container>
@@ -257,12 +267,10 @@ const ProfilePage = () => {
                 {/* Email */}
                 <UserInputGroup>
                     <Label>Email</Label>
-                    <InputDisplay>
-                        {userData.email}
-                    </InputDisplay>
+                    <InputDisplay>{userData.email}</InputDisplay>
                 </UserInputGroup>
 
-                {/* DOB */}
+                {/* Date of Birth */}
                 <UserInputGroup>
                     <Label>Date of Birth</Label>
                     <InputDisplay $isEditing={isEditing}>
@@ -286,7 +294,10 @@ const ProfilePage = () => {
                     <Label>Gender</Label>
                     <InputDisplay $isEditing={isEditing}>
                         {isEditing ? (
-                            <select value={editedGender} onChange={(e) => setEditedGender(e.target.value)}>
+                            <select
+                                value={editedGender}
+                                onChange={(e) => setEditedGender(e.target.value)}
+                            >
                                 <option value="male">남자</option>
                                 <option value="female">여자</option>
                                 <option value="other">기타</option>
@@ -303,12 +314,9 @@ const ProfilePage = () => {
                 {/* Skin Type */}
                 <UserInputGroup>
                     <Label>Skin Type</Label>
-                    <InputDisplay>
-                        {userData.skinType}
-                    </InputDisplay>
+                    <InputDisplay>{userData.skinType}</InputDisplay>
                 </UserInputGroup>
 
-                {/* Toggle */}
                 <ToggleWrapper>
                     <Label>Receive notifications?</Label>
                     <ToggleSwitch>
@@ -321,7 +329,6 @@ const ProfilePage = () => {
                     </ToggleSwitch>
                 </ToggleWrapper>
 
-                {/* Save / Edit Button */}
                 <ActionButton
                     $isSave={isEditing}
                     onClick={isEditing ? handleSave : () => setIsEditing(true)}
@@ -329,7 +336,6 @@ const ProfilePage = () => {
                     {isEditing ? "저장하기" : "프로필 수정"}
                 </ActionButton>
 
-                {/* Change Password */}
                 {!isEditing && (
                     <ActionButton onClick={() => setIsModalOpen(true)}>
                         Change Password

@@ -165,6 +165,8 @@ function RegisterForm() {
       alert('입력 정보를 다시 확인해주세요.');
       return;
     }
+
+    const isoBirthdate = new Date(dob).toISOString(); 
   console.log({
     loginId: userId,
     password,
@@ -176,7 +178,7 @@ function RegisterForm() {
   });
   try {
      // 회원가입 API 호출
-      await registerAPI(userId, password, confirmPassword, nickname, email, dob, gender.toUpperCase());
+      await registerAPI(userId, password, confirmPassword, nickname, email, isoBirthdate, gender.toUpperCase());
       // 회원가입 후 자동 로그인 없이 완료 메시지
       alert('회원가입 성공! 이제 로그인 해주세요.');
       navigate('/login'); // 로그인 페이지로 이동

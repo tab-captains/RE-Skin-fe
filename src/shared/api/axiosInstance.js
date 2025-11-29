@@ -10,7 +10,6 @@ const instance = axios.create({
   },
 });
 
-// 요청 인터셉터
 instance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
@@ -22,19 +21,17 @@ instance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// 응답 인터셉터
 instance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // AccessToken 만료 → 401
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
         const refreshResponse = await axios.post(
-          `${API_BASE_URL}/auth/refresh`,
+          `${API_BASE_URL}/api/auth/refresh`,
           {},
           { withCredentials: true }
         );
@@ -49,11 +46,13 @@ instance.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
         return instance(originalRequest);
-      } catch (refreshError) {
+      } catch (err) {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
+        localStorage.removeItem("user_data");
+
         window.location.href = "/login";
-        return Promise.reject(refreshError);
+        return Promise.reject(err);
       }
     }
 

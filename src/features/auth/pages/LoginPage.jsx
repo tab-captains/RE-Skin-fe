@@ -1,14 +1,12 @@
 import AuthLayout from "../components/AuthLayout";
 import LoginForm from "../components/LoginForm";
-import {useAuth} from "../context/AuthContext";
-import {useNavigate} from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { login as loginAPI, kakaoLogin } from "../../../shared/api/auth";
 
 const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
-
-
 
   const handleLogin = async ({ id, password }) => {
     try {
@@ -16,34 +14,31 @@ const LoginPage = () => {
       console.log("ID:", id);
       console.log("PW:", password);
 
-    const res = await loginAPI(id, password);
-    console.log("API 결과", res);
+      const { accessToken, refreshToken, userData } = await loginAPI(id, password);
 
-    //AuthContext에 로그인 상태 반영.
-    if (res.data?.accessToken){
+      console.log("로그인 성공 - 반환된 userData:", userData);
+
       login({
-        accessToken: res.data.accessToken,
-        refreshToken: res.data.refreshToken,
-        username: id,
+        accessToken,
+        refreshToken,
+        userData,
       });
+
+      alert("로그인 성공!");
+      navigate("/");
+    } catch (error) {
+      console.error("로그인 실패:", error);
+      alert("로그인 실패!");
     }
-    alert("로그인 성공!");
-    navigate('/');
-  } catch(error){
-    console.error("로그인 실패!");
-    alert("로그인 실패!");
-  }
-};
+  };
+
   const handleKakaoLogin = async () => {
     await kakaoLogin();
   };
 
   return (
     <AuthLayout>
-      <LoginForm
-        onLogin={handleLogin}
-        onKakaoLogin={handleKakaoLogin}
-      />
+      <LoginForm onLogin={handleLogin} onKakaoLogin={handleKakaoLogin} />
     </AuthLayout>
   );
 };
