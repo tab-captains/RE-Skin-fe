@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { submitComment, deleteComment, getComments } from "../../../shared/api/comments";
 import { getPostDetail } from "../../../shared/api/posts";
+import { likePost, unlikePost } from "../../../shared/api/contentlike";
+
 
 const heartPop = keyframes`
   0% { transform: scale(1); }
@@ -139,7 +141,11 @@ const PostDetailPage = () => {
   const fetchPost = async () => {
     try {
       const res = await getPostDetail(postId);
-      setPost(res.data);
+      const detail = res.data.data;
+
+      setPost(detail);
+      setLikes(detail.likeCount);
+      setLiked(detail.liked);
     } catch (err) {
       console.error("게시글 불러오기 실패:", err);
     }
@@ -148,26 +154,41 @@ const PostDetailPage = () => {
   const fetchCommentsData = async () => {
     try {
       const res = await getComments(postId);
-      setComments(res); 
+      setComments(res.data); 
     } catch (err) {
       console.error("댓글 불러오기 실패:", err);
     }
   };
 
-  const toggleLike = () => {
-    setLiked(!liked);
-    setLikes(prev => (liked ? prev - 1 : prev + 1));
+  const toggleLike = async () => {
+  try {
+    let res;
+
+    if (!liked) {
+      res = await likePost(postId);
+    } else {
+      res = await unlikePost(postId);
+    }
+    const { likeCount, liked: newLiked } = res.data.data;
+
+    setLikes(likeCount);
+    setLiked(newLiked);
 
     setAnimateHeart(true);
     setTimeout(() => setAnimateHeart(false), 300);
-  };
+
+  } catch (err) {
+    console.error("좋아요 처리 실패:", err);
+  }
+};
+
 
   const addComment = async () => {
     if (!input.trim()) return;
 
     try {
       const newComment = await submitComment(postId, input);
-      setComments([...comments, newComment]);
+      setComments([...comments, newComment.data]);
       setInput("");
     } catch (err) {
       console.error("댓글 등록 실패:", err);
