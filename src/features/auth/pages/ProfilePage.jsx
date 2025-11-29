@@ -6,6 +6,11 @@ import colors from '../../common/colors';
 import { FaUserCircle } from "react-icons/fa";
 import { FiEdit2 } from "react-icons/fi";
 
+import { getMyInfo } from '../../../shared/api/users';
+
+
+// ======================= Styled Components =======================
+
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -62,7 +67,7 @@ const InputDisplay = styled.div`
     font-size: 15px;
     margin-left: 10px;
     min-width: 180px;
-    justify-content: ${props => props.$isEditing ? 'flex-start' : 'space-between'};
+    justify-content: ${(props) => (props.$isEditing ? "flex-start" : "space-between")};
     gap: 15px;
 
     input, select {
@@ -138,7 +143,7 @@ const ActionButton = styled.button`
     width: 100%;
     padding: 12px;
     margin-top: 40px;
-    background-color: ${props => props.$isSave ? colors.primary : '#888'};
+    background-color: ${(props) => (props.$isSave ? colors.primary : "#888")};
     color: white;
     border: none;
     border-radius: 8px;
@@ -147,9 +152,12 @@ const ActionButton = styled.button`
     cursor: pointer;
 
     &:hover {
-        background-color: ${props => props.$isSave ? colors.textAccent : '#666'};
+        background-color: ${(props) => (props.$isSave ? colors.textAccent : "#666")};
     }
 `;
+
+
+// ======================= Component =======================
 
 const ProfilePage = () => {
 
@@ -158,39 +166,74 @@ const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const [editedNickname, setEditedNickname] = useState(user?.username || "");
-    const [editedDob, setEditedDob] = useState(user?.dateOfBirth || "");
-    const [editedGender, setEditedGender] = useState(user?.gender || "male");
+    const [editedNickname, setEditedNickname] = useState("");
+    const [editedDob, setEditedDob] = useState("");
+    const [editedGender, setEditedGender] = useState("male");
 
     const [receiveNotifications, setReceiveNotifications] = useState(true);
 
+
+    // === 1. 서버에서 프로필 정보 불러오기 ===
+    useEffect(() => {
+        const loadProfile = async () => {
+            try {
+                const data = await getMyInfo();
+
+                updateUser({
+                    username: data.nickname,
+                    email: data.email,
+                    dateOfBirth: data.birthDate || data.birthdate,
+                    gender: data.gender?.toLowerCase(),
+                    skinType: data.skinType || data.skintype,
+                });
+
+            } catch (err) {
+                console.error("프로필 정보를 불러오지 못했습니다:", err);
+            }
+        };
+
+        loadProfile();
+    }, []);
+
+
+    // === 2. user 변경 시 입력창 초기화 ===
     useEffect(() => {
         setEditedNickname(user?.username || "");
         setEditedDob(user?.dateOfBirth || "");
-        setEditedGender(user?.gender || "male");
+        setEditedGender(user?.gender?.toLowerCase() || "male");
     }, [user]);
 
+
+    // === 3. 화면에 표시할 데이터 ===
     const userData = {
         nickname: user?.username || "Guest",
-        email: user?.email || "이메일 정보 없음",
-        dob: user?.dateOfBirth || "정보 없음",
+        email: user?.email || "정보 없음",
+        dob: user?.dateOfBirth
+            ? new Date(user.dateOfBirth).toISOString().slice(0, 10)
+            : "정보 없음",
         gender:
-            user?.gender === 'male'
+            user?.gender?.toLowerCase() === "male"
                 ? "남성"
-                : user?.gender === 'female'
+                : user?.gender?.toLowerCase() === "female"
                 ? "여성"
                 : "기타",
-        skinType: "민감성/수분부족형",
+        skinType: user?.skinType || "정보 없음",
     };
 
+
+    // === 4. 저장 버튼 ===
     const handleSave = () => {
         updateUser({
             username: editedNickname,
             dateOfBirth: editedDob,
             gender: editedGender,
         });
+
         setIsEditing(false);
     };
+
+
+    // ======================= UI =======================
 
     return (
         <Container>
@@ -201,6 +244,7 @@ const ProfilePage = () => {
                     <FaUserCircle size={80} color="#1e2a55" />
                 </AvatarContainer>
 
+                {/* Nickname */}
                 <UserInputGroup>
                     <Label>Nickname</Label>
                     <InputDisplay $isEditing={isEditing}>
@@ -220,13 +264,13 @@ const ProfilePage = () => {
                     </InputDisplay>
                 </UserInputGroup>
 
+                {/* Email */}
                 <UserInputGroup>
                     <Label>Email</Label>
-                    <InputDisplay>
-                        {userData.email}
-                    </InputDisplay>
+                    <InputDisplay>{userData.email}</InputDisplay>
                 </UserInputGroup>
 
+                {/* Date of Birth */}
                 <UserInputGroup>
                     <Label>Date of Birth</Label>
                     <InputDisplay $isEditing={isEditing}>
@@ -245,11 +289,15 @@ const ProfilePage = () => {
                     </InputDisplay>
                 </UserInputGroup>
 
+                {/* Gender */}
                 <UserInputGroup>
                     <Label>Gender</Label>
                     <InputDisplay $isEditing={isEditing}>
                         {isEditing ? (
-                            <select value={editedGender} onChange={(e) => setEditedGender(e.target.value)}>
+                            <select
+                                value={editedGender}
+                                onChange={(e) => setEditedGender(e.target.value)}
+                            >
                                 <option value="male">남자</option>
                                 <option value="female">여자</option>
                                 <option value="other">기타</option>
@@ -263,11 +311,10 @@ const ProfilePage = () => {
                     </InputDisplay>
                 </UserInputGroup>
 
+                {/* Skin Type */}
                 <UserInputGroup>
                     <Label>Skin Type</Label>
-                    <InputDisplay>
-                        {userData.skinType}
-                    </InputDisplay>
+                    <InputDisplay>{userData.skinType}</InputDisplay>
                 </UserInputGroup>
 
                 <ToggleWrapper>
