@@ -7,7 +7,7 @@ import instance from "./axiosInstance";
  */
 
 
-export const RoutineDetail = async (routined) => {
+export const RoutineDetail = async (routinId) => {
   if(!routined) {
     throw new Error ("유호한 routineId가 제공되지 않았습니다.");
   }
@@ -23,6 +23,12 @@ export const RoutineDetail = async (routined) => {
   }
 }
 
+
+
+
+
+
+/*=======================mock data========================== */
 
   export const morningRoutine =  [
     {

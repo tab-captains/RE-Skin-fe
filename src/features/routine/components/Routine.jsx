@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import styled, {keyframes} from "styled-components";
 import colors from "../../common/colors";
 import { useAuth } from "../../auth/context/AuthContext";
-import {Routinedetail} from "../../../shared/api/routines";
+import {RoutineDetail} from "../../../shared/api/routines";
 import { IoArrowForward, IoSunny, IoMoon} from "react-icons/io5";
 
 const Routine = ({ routineData, type }) => {
@@ -36,7 +36,6 @@ const Routine = ({ routineData, type }) => {
           <StepWrapper key={idx} >
             <StepBox $delay={`${(idx+1) * 300}ms`}>
               <ProductImg src={step.img} alt={step.title} />
-              {/* StepTitle은 api 연결 시 삭제.*/}
               <StepTitle>{step.title}</StepTitle>
               <StepDesc>{step.desc}</StepDesc>
             </StepBox>
