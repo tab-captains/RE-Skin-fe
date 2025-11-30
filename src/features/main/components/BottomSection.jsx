@@ -40,13 +40,13 @@ const BottomSection = () => {
           e.stopPropagation();
           navigate("/infoboard/skindictionary")}}>
             <MainText>내 피부 타입 제품 추천</MainText>
-          <SubText>초보자 필수 루틴 가이드</SubText>
+          <SubText>맞춤 성분 및 제형 추천</SubText>
           </FeatureItem>
         <FeatureItem onClick={(e)=>{
           e.stopPropagation();
           navigate("/skin-survey")}}>
             <MainText>내 피부 타입 테스트하기</MainText>
-          <SubText>초보자 필수 루틴 가이드</SubText>
+          <SubText>1분 테스트로 내 유형 분석</SubText>
           </FeatureItem>
       </FeatureList>
     </BoardCardItem>)}
