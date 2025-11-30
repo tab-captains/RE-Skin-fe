@@ -43,6 +43,6 @@ const Content = styled.div `
   font-size: 0.75rem;
   color: ${colors.primary};
   line-height: 1.3;
-  margin-top: 15px;
+  margin-top: 7px;
 
 `;
