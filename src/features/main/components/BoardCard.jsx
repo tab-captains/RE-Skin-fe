@@ -2,15 +2,16 @@ import styled from "styled-components";
 import colors from "../../common/colors";
 import useReveal from "../../common/hooks/useReveal"
 import ProfileIcon from "../../common/components/ProfileIcon"
-
+import {useNavigate} from "react-router-dom";
 const BoardCard = () => {
+  const navigate =useNavigate();
   return (
-      <PopularContainer>
+      <PopularContainer onClick={()=> navigate('/community')}>
       <p style={{margin: "5px",marginTop:"7px", fontWeight:"bold"}}>오늘의 인기 게시글</p>
 
 
       <PreviewCardItem >
-        <ProfileIcon  name="윤규리" size={30}/>
+        <ProfileIcon  name="키위새(1번째인기게시글)" size={30}/>
         <TextWrapper>
           <Title>제목이 위치할 자리.</Title>
           <TagWrapper>
@@ -21,7 +22,7 @@ const BoardCard = () => {
       </PreviewCardItem>
 
       <PreviewCardItem >
-        <ProfileIcon  name="윤규리" size={30}/>
+        <ProfileIcon  name="위위새(2번째인기게시글)" size={30}/>
         <TextWrapper>
           <Title>제목이 위치할 자리.</Title>
           <TagWrapper>
@@ -32,7 +33,7 @@ const BoardCard = () => {
       </PreviewCardItem>
 
         <PreviewCardItem >
-        <ProfileIcon  name="윤규리" size={30}/>
+        <ProfileIcon  name="새위새(3번째인기게시글)" size={30}/>
         <TextWrapper>
           <Title>제목이 위치할 자리.</Title>
           <TagWrapper>
