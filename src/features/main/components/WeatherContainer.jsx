@@ -20,21 +20,13 @@ const WeatherContainer = () => {
 
 const handleApplyLocation = async (loc) => {
   try {
-    // 1. 프론트 상태 업데이트
     setLocation(loc);
-
-    // 2. 백에 위치 저장
     await instance.post("/api/user/location", loc);
-
-    // 3. 백에서 날씨 정보 GET 요청
     const res = await instance.get("/api/user/location/weather", {
       params: loc
     });
-
-    // 4. 상태 업데이트
+    console.log("API RESUlT: ",res.data);
     setWeather(res.data);
-
-    // 5. 모달 닫기
     setModalOpen(false);
   } catch (err) {
     console.error("위치/날씨 처리 오류", err);

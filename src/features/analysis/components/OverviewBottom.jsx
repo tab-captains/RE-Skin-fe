@@ -2,22 +2,37 @@ import styled, { keyframes } from "styled-components";
 import colors from "../../common/colors";
 import useReveal from "../../common/hooks/useReveal";
 import analysisPreview from '../../../assets/images/analysisPreview.png';
-
+import {useEffect, useState} from "react";
 const OverviewBottom =()=>{
-
+  const imageReveal = useReveal({ threshold: 0.15 });
   const titleReveal = useReveal({ threshold: 0.2 });
   const descReveal = useReveal({ threshold: 0.2 });
 
+  const [showImage, setShowImage] = useState(false);
+  const [showTitle, setShowTitle] =useState(false);
+  const [showDesc, setShowDesc] = useState(false);
+  useEffect(() => {
+    if (imageReveal.isRevealed) setShowImage(true);
+  }, [imageReveal.isRevealed]);
+
+  useEffect(() => {
+    if (titleReveal.isRevealed) setShowTitle(true);
+  }, [titleReveal.isRevealed]);
+
+  useEffect(() => {
+    if (descReveal.isRevealed) setShowDesc(true);
+  }, [descReveal.isRevealed]);
+
   return(
        <Container>
-        <AnimatedItem ref={titleReveal.ref} className={titleReveal.isRevealed ? "visible" : ""} delay="0s">
+        <AnimatedItem ref={imageReveal.ref} className={showImage? "visible" : ""} delay="0s">
           <Icon src={analysisPreview} alt="../../../assets/images/analysisPreview.png"></Icon>
         </AnimatedItem>
       <Wrapper>
-        <AnimatedItem ref={titleReveal.ref} className={titleReveal.isRevealed ? "visible" : ""} delay="0.4s">
+        <AnimatedItem ref={titleReveal.ref} className={showTitle? "visible" : ""} delay="0.4s">
           <Title>AI가 어떻게 분석하나요?</Title>
         </AnimatedItem>
-        <AnimatedItem ref={descReveal.ref} className={descReveal.isRevealed ? "visible" : ""} delay="0.6s">
+        <AnimatedItem ref={descReveal.ref} className={showDesc? "visible" : ""} delay="0.6s">
           <Description>
             이미지 기반 학습 모델이 얼굴의 여러 지점을 분석해 주요 피부 지표를 도출합니다.
           </Description>
