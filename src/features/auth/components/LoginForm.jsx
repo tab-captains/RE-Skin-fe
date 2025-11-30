@@ -137,10 +137,6 @@ function LoginForm({ onLogin, onKakaoLogin }) {
         onClick={() => navigate("/register")}
         style={{ cursor: "pointer", textDecoration: "underline" }}>
           회원가입
-        </span>{" "}
-        /{" "}
-        <span style={{ cursor: "pointer", textDecoration: "underline" }}>
-          비밀번호찾기
         </span>
       </div>
     </form>

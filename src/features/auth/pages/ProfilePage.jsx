@@ -9,8 +9,6 @@ import { FiEdit2 } from "react-icons/fi";
 import { getMyInfo } from '../../../shared/api/users';
 
 
-// ======================= Styled Components =======================
-
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -90,54 +88,6 @@ const EditButton = styled.button`
     }
 `;
 
-const ToggleWrapper = styled(UserInputGroup)`
-    margin-top: 30px;
-`;
-
-const ToggleSwitch = styled.label`
-    position: relative;
-    display: inline-block;
-    width: 40px;
-    height: 20px;
-
-    input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-
-    span {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        transition: 0.4s;
-        border-radius: 20px;
-    }
-
-    span:before {
-        position: absolute;
-        content: "";
-        height: 16px;
-        width: 16px;
-        left: 2px;
-        bottom: 2px;
-        background-color: white;
-        transition: 0.4s;
-        border-radius: 50%;
-    }
-
-    input:checked + span {
-        background-color: ${colors.primary};
-    }
-
-    input:checked + span:before {
-        transform: translateX(20px);
-    }
-`;
 
 const ActionButton = styled.button`
     width: 100%;
@@ -157,8 +107,6 @@ const ActionButton = styled.button`
 `;
 
 
-// ======================= Component =======================
-
 const ProfilePage = () => {
 
     const { user, updateUser, changePassword } = useAuth();
@@ -170,10 +118,6 @@ const ProfilePage = () => {
     const [editedDob, setEditedDob] = useState("");
     const [editedGender, setEditedGender] = useState("male");
 
-    const [receiveNotifications, setReceiveNotifications] = useState(true);
-
-
-    // === 1. 서버에서 프로필 정보 불러오기 ===
     useEffect(() => {
         const loadProfile = async () => {
             try {
@@ -196,7 +140,6 @@ const ProfilePage = () => {
     }, []);
 
 
-    // === 2. user 변경 시 입력창 초기화 ===
     useEffect(() => {
         setEditedNickname(user?.username || "");
         setEditedDob(user?.dateOfBirth || "");
@@ -204,7 +147,6 @@ const ProfilePage = () => {
     }, [user]);
 
 
-    // === 3. 화면에 표시할 데이터 ===
     const userData = {
         nickname: user?.username || "Guest",
         email: user?.email || "정보 없음",
@@ -220,8 +162,6 @@ const ProfilePage = () => {
         skinType: user?.skinType || "정보 없음",
     };
 
-
-    // === 4. 저장 버튼 ===
     const handleSave = () => {
         updateUser({
             username: editedNickname,
@@ -232,9 +172,6 @@ const ProfilePage = () => {
         setIsEditing(false);
     };
 
-
-    // ======================= UI =======================
-
     return (
         <Container>
             <ContentBox>
@@ -244,7 +181,6 @@ const ProfilePage = () => {
                     <FaUserCircle size={80} color="#1e2a55" />
                 </AvatarContainer>
 
-                {/* Nickname */}
                 <UserInputGroup>
                     <Label>Nickname</Label>
                     <InputDisplay $isEditing={isEditing}>
@@ -264,13 +200,11 @@ const ProfilePage = () => {
                     </InputDisplay>
                 </UserInputGroup>
 
-                {/* Email */}
                 <UserInputGroup>
                     <Label>Email</Label>
                     <InputDisplay>{userData.email}</InputDisplay>
                 </UserInputGroup>
 
-                {/* Date of Birth */}
                 <UserInputGroup>
                     <Label>Date of Birth</Label>
                     <InputDisplay $isEditing={isEditing}>
@@ -289,7 +223,6 @@ const ProfilePage = () => {
                     </InputDisplay>
                 </UserInputGroup>
 
-                {/* Gender */}
                 <UserInputGroup>
                     <Label>Gender</Label>
                     <InputDisplay $isEditing={isEditing}>
@@ -311,23 +244,10 @@ const ProfilePage = () => {
                     </InputDisplay>
                 </UserInputGroup>
 
-                {/* Skin Type */}
                 <UserInputGroup>
                     <Label>Skin Type</Label>
                     <InputDisplay>{userData.skinType}</InputDisplay>
                 </UserInputGroup>
-
-                <ToggleWrapper>
-                    <Label>Receive notifications?</Label>
-                    <ToggleSwitch>
-                        <input
-                            type="checkbox"
-                            checked={receiveNotifications}
-                            onChange={() => setReceiveNotifications(!receiveNotifications)}
-                        />
-                        <span />
-                    </ToggleSwitch>
-                </ToggleWrapper>
 
                 <ActionButton
                     $isSave={isEditing}
