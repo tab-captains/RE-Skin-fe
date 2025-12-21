@@ -4,7 +4,7 @@ import styled from "styled-components";
 import colors from "../../common/colors"
 import { useNavigate } from "react-router-dom";
 import {analyzeImage} from "../../../shared/api/skinAnalysis";
-import axios from "axios";
+import instance from "../../../shared/api/axiosInstance";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -41,51 +41,38 @@ const ImageUploadPage = () => {
 
 
 
-const toBase64 = (file) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file); 
-    reader.onload = () => {
-      const result = reader.result;
-      const pureBase64 = result.split(",")[1]; 
-      resolve(pureBase64);
-    };
-    reader.onerror = reject;
-  });
+const handleStartAnalysis = async () => {
+  if (!allUploaded) return;
+  setLoading(true);
+
+  try {
+    const formData = new FormData();
+    formData.append("files", slots.left);
+    formData.append("files", slots.front);
+    formData.append("files", slots.right);
+
+    const response = await instance.post(
+      "/api/analyze",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    console.log("분석 결과:", response.data);
+    localStorage.setItem("analysisResult", JSON.stringify(response.data));
+    navigate("/analysis");
+
+  } catch (error) {
+    console.error("이미지 분석 실패:", error);
+    alert("이미지 분석에 실패했습니다.");
+  } finally {
+    setLoading(false);
+  }
 };
 
-
-
-  const handleStartAnalysis = async () => { 
-    if (!allUploaded) return;
-    setLoading(true);
-
-    try {
-      // 파일 -> Base64 문자열로 변환
-      const leftBase64 = await toBase64(slots.left);
-      const frontBase64 = await toBase64(slots.front);
-      const rightBase64 = await toBase64(slots.right);
-
-      const params = new URLSearchParams();
-      [leftBase64, frontBase64, rightBase64].forEach(img => params.append("files", img));
-
-
-      const response = await axios.post(`/api/analyze${params.toString()}`, null,{
-        header:{
-          "accept": "application/json"
-        }
-      })
-
-      console.log("분석 결과:", result);
-      localStorage.setItem("analysisResult", JSON.stringify(response.data));
-      navigate("/analysis");
-    } catch (error) {
-      console.error("이미지 분석 실패:", error);
-      alert("이미지 분석에 실패했습니다.");
-    } finally {
-      setLoading(false);
-    }
-  }
 
   return (
     <PageWrapper>
