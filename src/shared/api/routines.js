@@ -1,30 +1,17 @@
 import instance from "./axiosInstance";
 
 /**
- * 특정 ID의 루틴 상세 정보를 조회하는 함수
- * @param {number} routineId - 조회하려는 루틴의 ID
- * @returns {Promise<Object>} 루틴 상세 정보 데이터
+ * 루틴 상세 조회
+ * @param {number} routineId
  */
-
-
-export const RoutineDetail = async (routinId) => {
-  if(!routined) {
-    throw new Error ("유호한 routineId가 제공되지 않았습니다.");
+export const getRoutine = async (routineId) => {
+  if (routineId === undefined || routineId === null) {
+    throw new Error("routineId가 필요합니다.");
   }
 
-  const endpoint = '/api/routines/${routineId}';
-  try {
-    const response = await instance.get(endpoint);
-
-    return response.data;
-  }catch(error){
-    console.error(`루틴 상세 조회 실패 (ID: ${routineId}):`, error);
-    throw error; 
-  }
-}
-
-
-
+  const response = await instance.get(`/api/routines/${routineId}`);
+  return response.data.data;
+};
 
 
 
