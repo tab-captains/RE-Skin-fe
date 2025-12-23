@@ -132,8 +132,11 @@ const ProductCategoryPage = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const categories = await getCategories();
+        const response = await getCategories();
 
+        console.log("API 응답 전체:", response);
+        const categories = Array.isArray(response) ? response : response.data || [];
+        console.log("정제된 카테고리 배열:", categories);
         const target = categories.find((c) => c.slug === key);
 
         setCategoryName(target ? target.name : "카테고리");

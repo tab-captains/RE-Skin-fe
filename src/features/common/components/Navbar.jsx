@@ -238,6 +238,7 @@ const CategoryArrow = styled(IoIosArrowForward)`
 `;
 
 const Sidebar = ({ isOpen, toggleSidebar, user }) => {
+    const { isLoggedIn } = useAuth();
     const [openCategory, setOpenCategory] = useState(null);
 
     const handleToggle = (key) => {
@@ -256,6 +257,14 @@ const Sidebar = ({ isOpen, toggleSidebar, user }) => {
                     </span>
                     <CloseArrow size={22} onClick={toggleSidebar} />
                 </SidebarHeader>
+                        <SidebarCategoryTitle style={{ color: colors.primary }}>관리자 메뉴</SidebarCategoryTitle>
+                        <SidebarLink 
+                            to="/admin/product/write" 
+                            onClick={toggleSidebar}
+                            style={{ color: colors.primary, fontWeight: 'bold' }}
+                        >
+                             제품 등록하기(관리자전용)
+                        </SidebarLink>
 
                 <SidebarCategoryTitle>바로가기</SidebarCategoryTitle>
                 <SidebarLink to="/analysisOverview" onClick={toggleSidebar}>AI 피부 분석</SidebarLink>
