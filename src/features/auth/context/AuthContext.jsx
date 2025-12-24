@@ -1,5 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { logout as logoutAPI } from "../../../shared/api/auth";
+import { getMyInfo } from "../../../shared/api/users";
 
 const AuthContext = createContext();
 
@@ -14,6 +15,37 @@ export function AuthProvider({ children }) {
     const stored = localStorage.getItem("user_data");
     return stored ? JSON.parse(stored) : null;
   });
+
+  // userId가 없으면 사용자 정보 API에서 가져오기
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const token = localStorage.getItem("accessToken");
+      if (token && isLoggedIn && (!user || !user.userId)) {
+        try {
+          console.log("userId가 없어서 사용자 정보를 가져옵니다.");
+          const userInfo = await getMyInfo();
+          console.log("가져온 사용자 정보:", userInfo);
+          
+          const updatedUser = {
+            userId: userInfo.userId || userInfo.id,
+            loginId: userInfo.loginId || user?.loginId,
+            username: userInfo.nickname || user?.username,
+            email: userInfo.email || user?.email,
+            dateOfBirth: userInfo.birthdate || user?.dateOfBirth,
+            gender: userInfo.gender || user?.gender,
+            skinType: userInfo.skintype || user?.skinType,
+          };
+
+          localStorage.setItem("user_data", JSON.stringify(updatedUser));
+          setUser(updatedUser);
+        } catch (err) {
+          console.error("사용자 정보 가져오기 실패:", err);
+        }
+      }
+    };
+
+    fetchUserInfo();
+  }, [isLoggedIn, user]);
 
   // 로그인
   const login = ({ accessToken, refreshToken, userData }) => {

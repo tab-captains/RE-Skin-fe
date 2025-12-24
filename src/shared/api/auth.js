@@ -1,4 +1,5 @@
 import instance from "./axiosInstance";
+import { getMyInfo } from "./users";
 
 /**
  * 로그인 API
@@ -15,18 +16,35 @@ export const login = async (loginId, password) => {
     const accessToken = resData.accessToken;
     const refreshToken = resData.refreshToken;
 
-    // 백엔드가 내려주는 유저 정보 매핑
-    const userData = {
-      username: resData.nickname,
-      email: resData.email,
-      birthdate: resData.birthdate,
-      gender: resData.gender,
-      skinType: resData.skintype,
-    };
-
-    // 토큰 저장
+    // 토큰 저장 (사용자 정보 조회 전에 저장)
     localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("refreshToken", refreshToken);
+
+    // 항상 사용자 정보 API 호출해서 userId 확실하게 가져오기
+    let userInfo = null;
+    try {
+      userInfo = await getMyInfo();
+      console.log("사용자 정보 API 응답:", userInfo);
+    } catch (err) {
+      console.warn("사용자 정보 조회 실패:", err);
+    }
+
+    // userId 우선순위: userInfo > resData
+    const userId = userInfo?.userId || userInfo?.id || resData.userId || resData.id;
+
+    // 백엔드가 내려주는 유저 정보 매핑
+    const userData = {
+      userId: userId, // API 응답에서 가져온 userId
+      loginId: userInfo?.loginId || resData.loginId || loginId, // API 응답에서 가져온 loginId
+      username: userInfo?.nickname || resData.nickname,
+      email: userInfo?.email || resData.email,
+      birthdate: userInfo?.birthdate || resData.birthdate,
+      gender: userInfo?.gender || resData.gender,
+      skinType: userInfo?.skintype || resData.skintype,
+    };
+
+    console.log("로그인 후 userData:", userData);
+    console.log("저장될 userId:", userData.userId);
 
     // LoginPage → AuthContext.login()에서 써야 하는 포맷으로 return
     return {

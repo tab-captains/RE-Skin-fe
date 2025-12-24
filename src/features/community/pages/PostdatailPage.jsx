@@ -4,8 +4,10 @@ import { FaHeart, FaRegComment } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { submitComment, deleteComment, getComments } from "../../../shared/api/comments";
-import { getPostDetail } from "../../../shared/api/posts";
+import { getPostDetail, updatePost, deletePost } from "../../../shared/api/posts";
 import { likePost, unlikePost } from "../../../shared/api/contentlike";
+import { useAuth } from "../../auth/context/AuthContext";
+import { getMyInfo } from "../../../shared/api/users";
 
 
 const heartPop = keyframes`
@@ -122,9 +124,41 @@ const DeleteBtn = styled.button`
   &:hover { text-decoration: underline; }
 `;
 
+const ActionButtons = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1rem;
+  justify-content: flex-end;
+`;
+
+const EditButton = styled.button`
+  padding: 8px 14px;
+  background: #2563EB;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  &:hover { background: #1D4ED8; }
+`;
+
+const DeletePostButton = styled.button`
+  padding: 8px 14px;
+  background: #DC2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  &:hover { background: #B91C1C; }
+`;
+
 const PostDetailPage = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
+  const { user, isLoggedIn, updateUser } = useAuth();
 
   const [post, setPost] = useState(null);
   const [likes, setLikes] = useState(0);
@@ -134,64 +168,140 @@ const PostDetailPage = () => {
   const [input, setInput] = useState("");
 
   useEffect(() => {
-    fetchPost();
-    fetchCommentsData();
+    if (postId) {
+      fetchPost();
+      fetchCommentsData();
+    }
   }, [postId]);
+
+  // userId가 없으면 사용자 정보 API에서 가져오기
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (isLoggedIn && user && !user.userId) {
+        try {
+          console.log("userId가 없어서 사용자 정보를 가져옵니다.");
+          const userInfo = await getMyInfo();
+          console.log("가져온 사용자 정보:", userInfo);
+          
+          // AuthContext의 updateUser를 사용해서 userId 업데이트
+          updateUser({
+            userId: userInfo.userId || userInfo.id,
+            loginId: userInfo.loginId || user.loginId,
+            username: userInfo.nickname || user.username,
+            email: userInfo.email || user.email,
+            birthdate: userInfo.birthdate || user.dateOfBirth,
+            gender: userInfo.gender || user.gender,
+            skinType: userInfo.skintype || user.skinType,
+          });
+        } catch (err) {
+          console.error("사용자 정보 가져오기 실패:", err);
+        }
+      }
+    };
+
+    fetchUserInfo();
+  }, [isLoggedIn, user, updateUser]);
 
   const fetchPost = async () => {
     try {
+      console.log("fetchPost 호출 - postId:", postId);
+      if (!postId) {
+        console.error("postId가 없습니다.");
+        return;
+      }
+      
       const res = await getPostDetail(postId);
-      const detail = res.data.data;
+      console.log("getPostDetail 응답:", res);
+      
+      // 응답 구조: { success: true, code: "OK", message: "...", data: {...} }
+      // getPostDetail이 res.data를 반환하므로, res는 이미 { success, code, message, data } 형태
+      const detail = res.data;
+      console.log("게시글 상세 데이터:", detail);
+
+      if (!detail) {
+        throw new Error("게시글 데이터를 찾을 수 없습니다.");
+      }
 
       setPost(detail);
-      setLikes(detail.likeCount);
-      setLiked(detail.liked);
+      setLikes(detail.likeCount || 0);
+      setLiked(detail.liked || false);
+      // 단건 조회 응답에 comments가 포함되어 있음
+      if (detail.comments) {
+        setComments(detail.comments);
+      }
     } catch (err) {
       console.error("게시글 불러오기 실패:", err);
+      console.error("에러 상세:", err.response?.data);
+      alert("게시글을 불러오는데 실패했습니다. " + (err.response?.data?.message || err.message));
+      navigate('/community');
     }
   };
 
   const fetchCommentsData = async () => {
     try {
       const res = await getComments(postId);
-      setComments(res.data); 
+      // 댓글 목록 응답 구조 확인 필요 (res.data.data 또는 res.data)
+      const commentsData = res.data?.data || res.data || [];
+      setComments(Array.isArray(commentsData) ? commentsData : []); 
     } catch (err) {
       console.error("댓글 불러오기 실패:", err);
     }
   };
 
   const toggleLike = async () => {
-  try {
-    let res;
+    try {
+      if (!postId) {
+        console.error("postId가 없습니다.");
+        return;
+      }
 
-    if (!liked) {
-      res = await likePost(postId);
-    } else {
-      res = await unlikePost(postId);
+      let res;
+
+      if (!liked) {
+        res = await likePost(postId);
+      } else {
+        res = await unlikePost(postId);
+      }
+
+      console.log("좋아요 응답:", res);
+      
+      // 응답 구조 확인: res.data 또는 res.data.data
+      const responseData = res.data || res;
+      const likeData = responseData.data || responseData;
+      
+      console.log("좋아요 데이터:", likeData);
+
+      const likeCount = likeData.likeCount || likes;
+      const newLiked = likeData.liked !== undefined ? likeData.liked : !liked;
+
+      setLikes(likeCount);
+      setLiked(newLiked);
+
+      setAnimateHeart(true);
+      setTimeout(() => setAnimateHeart(false), 300);
+
+    } catch (err) {
+      console.error("좋아요 처리 실패:", err);
+      console.error("에러 상세:", err.response?.data);
+      alert("좋아요 처리에 실패했습니다. " + (err.response?.data?.message || err.message));
     }
-    const { likeCount, liked: newLiked } = res.data.data;
-
-    setLikes(likeCount);
-    setLiked(newLiked);
-
-    setAnimateHeart(true);
-    setTimeout(() => setAnimateHeart(false), 300);
-
-  } catch (err) {
-    console.error("좋아요 처리 실패:", err);
-  }
-};
+  };
 
 
   const addComment = async () => {
     if (!input.trim()) return;
 
     try {
-      const newComment = await submitComment(postId, input);
-      setComments([...comments, newComment.data]);
+      const res = await submitComment(postId, input);
+      // 댓글 등록 응답 구조 확인 필요
+      const newComment = res.data?.data || res.data || res;
+      setComments([...comments, newComment]);
       setInput("");
+      // 댓글 등록 후 목록 새로고침
+      fetchCommentsData();
     } catch (err) {
       console.error("댓글 등록 실패:", err);
+      alert("댓글 등록에 실패했습니다.");
     }
   };
 
@@ -204,15 +314,61 @@ const PostDetailPage = () => {
     }
   };
 
+  const handleEdit = () => {
+    navigate(`/write?postId=${postId}&edit=true`);
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm('정말 이 게시글을 삭제하시겠습니까?')) {
+      return;
+    }
+
+    try {
+      await deletePost(postId);
+      alert('게시글이 삭제되었습니다.');
+      navigate('/community');
+    } catch (err) {
+      console.error("게시글 삭제 실패:", err);
+      alert('게시글 삭제에 실패했습니다.');
+    }
+  };
+
+  // 작성자 본인인지 확인
+  const isAuthor = isLoggedIn && user && post && (
+    user.userId === post.authorId || 
+    String(user.userId) === String(post.authorId)
+  );
+  
+  // 디버깅용 로그
+  useEffect(() => {
+    if (post && user) {
+      console.log("작성자 확인:");
+      console.log("  - user:", user);
+      console.log("  - user.userId:", user.userId, typeof user.userId);
+      console.log("  - post:", post);
+      console.log("  - post.authorId:", post.authorId, typeof post.authorId);
+      console.log("  - isLoggedIn:", isLoggedIn);
+      console.log("  - isAuthor:", isAuthor);
+    }
+  }, [post, user, isLoggedIn]);
+
   if (!post) return <div>Loading...</div>;
 
   return (
     <PageContainer>
-      <BackButton onClick={() => navigate(-1)}>← 뒤로가기</BackButton>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <BackButton onClick={() => navigate(-1)}>← 뒤로가기</BackButton>
+        {isAuthor && (
+          <ActionButtons>
+            <EditButton onClick={handleEdit}>수정</EditButton>
+            <DeletePostButton onClick={handleDelete}>삭제</DeletePostButton>
+          </ActionButtons>
+        )}
+      </div>
 
       <Title>{post.title}</Title>
       <DateText>
-        {post.createdAt} · 작성자: {post.writerName}
+        {post.publishedAt ? new Date(post.publishedAt).toLocaleString('ko-KR') : ''} · 작성자: {post.authorNickname}
       </DateText>
 
       <Content>{post.content}</Content>
