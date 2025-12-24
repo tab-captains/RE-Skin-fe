@@ -28,7 +28,7 @@ export const deleteComment = async (commentId) => {
 export const getComments = async (postId) => {
   try {
     const res = await instance.get(`/api/posts/${postId}/comments`);
-    return res.data; // 배열 반환
+    return res.data; 
   } catch (err) {
     console.error("댓글 목록 조회 API 오류:", err);
     throw err;
