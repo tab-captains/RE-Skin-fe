@@ -83,12 +83,12 @@ export function AuthProvider({ children }) {
     } catch (error) {
       console.warn("서버 로그아웃 실패", error);
     } finally {
-      localStorage.removeItem("accessToken");
+    localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("user_data");
 
-      setUser(null);
-      setIsLoggedIn(false);
+    setUser(null);
+    setIsLoggedIn(false);
     }
   };
 

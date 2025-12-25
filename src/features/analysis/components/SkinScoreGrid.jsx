@@ -1,12 +1,43 @@
 import styled, { keyframes } from "styled-components";
 import colors from "../../common/colors";
-import { skinAnalysis } from "../../../shared/api/skinAnalysis";
 
-const SkinScoreGrid = () => {
-  const result = skinAnalysis;
+const SkinScoreGrid = ({ 
+  acneScore, 
+  acneMessage, 
+  wrinkleScore, 
+  wrinkleMessage, 
+  poresScore, 
+  poresMessage, 
+  lipScore, 
+  lipMessage 
+}) => {
+  // API 응답 데이터를 metrics 형식으로 변환
+  const metrics = [
+    {
+      name: "여드름",
+      score: acneScore || 0,
+      message: acneMessage || "분석 결과가 없습니다."
+    },
+    {
+      name: "주름",
+      score: wrinkleScore || 0,
+      message: wrinkleMessage || "분석 결과가 없습니다."
+    },
+    {
+      name: "모공",
+      score: poresScore || 0,
+      message: poresMessage || "분석 결과가 없습니다."
+    },
+    {
+      name: "입술 건조",
+      score: lipScore || 0,
+      message: lipMessage || "분석 결과가 없습니다."
+    }
+  ];
+
   return (
     <Container>
-      {result.metrics.map((metric, idx) => (
+      {metrics.map((metric, idx) => (
         <Box key={idx}>
           <BoxTitle>{metric.name}</BoxTitle>
           <ScoreRow>
@@ -15,7 +46,7 @@ const SkinScoreGrid = () => {
               <Gauge width={metric.score} idx={idx} />
             </GaugeWrapper>
           </ScoreRow>
-          <Message>{metric.comment}</Message>
+          <Message>{metric.message}</Message>
         </Box>
       ))}
     </Container>
@@ -96,4 +127,5 @@ const Message = styled.div`
   font-size: 0.75rem;
   color: ${colors.primary};
   text-align: left;
+  line-height: 1.4;
 `;

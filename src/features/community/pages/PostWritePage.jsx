@@ -176,10 +176,10 @@ const PostWritePage = () => {
     };
 
     const handlePublish = async () => {
-        if (!postTitle || !postContent) {
-            alert('제목과 내용을 모두 입력해주세요.');
-            return;
-        }
+    if (!postTitle || !postContent) {
+        alert('제목과 내용을 모두 입력해주세요.');
+        return;
+    }
 
         // postType 검증 강화
         const validType = postType === 'ARTICLE' || postType === 'POST' ? postType : 'ARTICLE';
@@ -208,14 +208,14 @@ const PostWritePage = () => {
                 // 작성 모드
                 const res = await writePost(postData);
                 console.log("게시글 등록 응답:", res);
-                alert("게시글이 등록되었습니다!");
+        alert("게시글이 등록되었습니다!");
             }
-            navigate('/community');
-        } catch (err) {
+        navigate('/community');
+    } catch (err) {
             console.error(isEditMode ? "게시글 수정 실패:" : "게시글 등록 실패:", err);
             alert(err.response?.data?.message || (isEditMode ? "게시글 수정 실패!" : "게시글 등록 실패!"));
-        }
-    };
+    }
+};
 
     const handleCancel = () => {
         if (window.confirm('작성 중인 내용을 저장하지 않고 나가시겠습니까?')) {
@@ -231,12 +231,12 @@ const PostWritePage = () => {
                         <option value="ARTICLE">게시글</option>
                         <option value="POST">포스트</option>
                     </TypeSelect>
-                    <TitleInput
-                        type="text"
-                        placeholder="제목을 입력하세요"
-                        value={postTitle}
-                        onChange={(e) => setPostTitle(e.target.value)}
-                    />
+                <TitleInput
+                    type="text"
+                    placeholder="제목을 입력하세요"
+                    value={postTitle}
+                    onChange={(e) => setPostTitle(e.target.value)}
+                />
                 </HeaderLeft>
                 <ButtonGroup>
                     <ActionButton onClick={handleCancel}>

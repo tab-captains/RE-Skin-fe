@@ -16,6 +16,13 @@ instance.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    
+    // FormData인 경우 Content-Type을 자동으로 설정하도록 삭제
+    // axios가 FormData를 감지하면 자동으로 multipart/form-data와 boundary를 설정합니다
+    if (config.data instanceof FormData) {
+      delete config.headers['Content-Type'];
+    }
+    
     return config;
   },
   (error) => Promise.reject(error)

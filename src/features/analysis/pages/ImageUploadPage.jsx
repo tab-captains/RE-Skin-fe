@@ -47,27 +47,76 @@ const handleStartAnalysis = async () => {
 
   try {
     const formData = new FormData();
-    formData.append("files", slots.left);
-    formData.append("files", slots.front);
-    formData.append("files", slots.right);
+    
+    // 파일 유효성 검사
+    if (!slots.left || !slots.front || !slots.right) {
+      alert("모든 이미지를 업로드해주세요.");
+      setLoading(false);
+      return;
+    }
+
+    // FormData에 파일 추가
+    // 백엔드가 각각 다른 파라미터명을 기대하는 경우 (일반적인 패턴)
+    formData.append("left", slots.left);
+    formData.append("front", slots.front);
+    formData.append("right", slots.right);
+    
+    // 만약 백엔드가 배열을 기대한다면 위 코드를 주석 처리하고 아래 코드를 사용하세요:
+    // formData.append("files", slots.left);
+    // formData.append("files", slots.front);
+    // formData.append("files", slots.right);
+
+    // 디버깅: FormData 내용 확인
+    console.log("전송할 파일들:", {
+      left: { name: slots.left.name, size: slots.left.size, type: slots.left.type },
+      front: { name: slots.front.name, size: slots.front.size, type: slots.front.type },
+      right: { name: slots.right.name, size: slots.right.size, type: slots.right.type }
+    });
 
     const response = await instance.post(
       "/api/analyze",
       formData,
       {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        withCredentials: true,
+        // axios가 FormData를 감지하면 자동으로 multipart/form-data와 boundary를 설정합니다
       }
     );
 
     console.log("분석 결과:", response.data);
-    localStorage.setItem("analysisResult", JSON.stringify(response.data));
-    navigate("/analysis");
+    
+    // API 응답 형식: { success, code, message, data: { ... } }
+    if (response.data && response.data.success && response.data.data) {
+      const analysisData = response.data.data;
+      const analysisId = analysisData.id;
+      
+      // 분석 시각을 LocalStorage에 저장 (analysisId를 키로 사용)
+      if (analysisId) {
+        const key = "analysisTimes";
+        const saved = JSON.parse(localStorage.getItem(key) || "{}");
+        saved[analysisId] = new Date().toISOString(); // 요청 완료 시각
+        localStorage.setItem(key, JSON.stringify(saved));
+      }
+      
+      localStorage.setItem("analysisResult", JSON.stringify(analysisData));
+      navigate("/analysis");
+    } else {
+      throw new Error("Invalid response format");
+    }
 
   } catch (error) {
     console.error("이미지 분석 실패:", error);
-    alert("이미지 분석에 실패했습니다.");
+    console.error("에러 상세:", {
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      message: error.message
+    });
+    
+    const errorMessage = error.response?.data?.message || 
+                        error.response?.data?.error || 
+                        error.message || 
+                        "이미지 분석에 실패했습니다.";
+    alert(`이미지 분석 실패: ${errorMessage}`);
   } finally {
     setLoading(false);
   }
@@ -101,7 +150,11 @@ const handleStartAnalysis = async () => {
         ))}
       </SlotsWrapper>
 
-      {allUploaded && <AnalyzeButton onClick={handleStartAnalysis}>분석 시작하기</AnalyzeButton>}
+      {allUploaded && (
+        <AnalyzeButton onClick={handleStartAnalysis} disabled={loading}>
+          {loading ? "분석 중..." : "분석 시작하기"}
+        </AnalyzeButton>
+      )}
     </PageWrapper>
   );
 };
@@ -219,6 +272,8 @@ border-radius:20px;
 background: ${colors.primary};
 color:white;
 border:none;
-cursor:pointer;
+cursor:${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
 font-size:15px;
+opacity:${({ disabled }) => (disabled ? 0.6 : 1)};
+transition: opacity 0.2s ease;
 `;
