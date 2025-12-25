@@ -14,19 +14,18 @@ const RightSection = () => {
 
   useEffect(() => {
     const fetchLatestAnalysis = async () => {
-      // 로그인하지 않은 경우는 하드코딩된 데이터 사용
       if (!isLoggedIn) {
         setAnalysisData(null);
         return;
       }
 
-      // 로그인한 경우에만 API 호출
       try {
         setLoading(true);
         const response = await getLatestAnalysisSummary();
-        
         if (response && response.success && response.data) {
           setAnalysisData(response.data);
+        } else {
+          setAnalysisData(null); // 데이터가 없는 경우
         }
       } catch (error) {
         console.error("최근 분석 결과 조회 실패:", error);
@@ -39,104 +38,95 @@ const RightSection = () => {
     fetchLatestAnalysis();
   }, [isLoggedIn]);
 
-  const handleClick = () => {
-    if (isLoggedIn && analysisData) {
-      navigate("/analysis");
-    }
+  const handleNavigate = () => {
+    navigate("/analysis");
   };
 
-  // 로그인하지 않은 경우: 하드코딩된 데이터
-  const userName = isLoggedIn && user ? (user.nickname || user.username) : null;
-  const skinType = isLoggedIn && analysisData 
-    ? (analysisData.skinTypeLabel || analysisData.skinType || "민감성")
-    : "민감성";
-  const acneLabel = isLoggedIn && analysisData 
-    ? (analysisData.acneLabel || "관리 필요")
-    : "관리 필요";
-  const poresLabel = isLoggedIn && analysisData 
-    ? (analysisData.poresLabel || "적음")
-    : "적음";
-  const wrinkleLabel = isLoggedIn && analysisData 
-    ? (analysisData.wrinkleLabel || "관리 필요")
-    : "관리 필요";
-  const lipLabel = isLoggedIn && analysisData 
-    ? (analysisData.lipLabel || "관리 필요")
-    : "관리 필요";
-
-  // 텍스트 줄바꿈 처리 함수
+  
   const formatLabel = (label) => {
     if (!label) return label;
-    
-    // "정상에 가까움" -> "정상에\n가까움"
-    if (label.includes("정상에 가까움")) {
-      return "정상에\n가까움";
-    }
-    // "가벼운 관리 필요" -> "가벼운\n관리 필요"
-    if (label.includes("가벼운 관리")) {
-      return "가벼운\n관리 필요";
-    }
-    
+    if (label.includes("정상에 가까움")) return "정상에\n가까움";
+    if (label.includes("가벼운 관리")) return "가벼운\n관리 필요";
     return label;
   };
+const userName = isLoggedIn && user ? (user.nickname || user.username) : null;
 
-  // 추천 루틴 텍스트 생성
-  const getRecommendationText = () => {
-    if (isLoggedIn && analysisData) {
-      const skinType = analysisData.skinType || analysisData.skinTypeLabel || "";
-      if (skinType.includes("민감")) {
-        return "진정 위주 스킨케어 + 페이셜 수분 마스크 주 2회 권장";
-      } else if (skinType.includes("지성")) {
-        return "유분 조절 스킨케어 + 클레이 마스크 주 1-2회 권장";
-      } else if (skinType.includes("건성")) {
-        return "수분 보충 스킨케어 + 수분 마스크 주 2-3회 권장";
-      }
-    }
-    return "진정 위주 스킨케어 + 페이셜 수분 마스크 주 2회 권장";
+
+  const getSkinTypeText = () => {
+    if (loading) return "로딩 중...";
+    if (!isLoggedIn) return "민감성"; 
+    if (isLoggedIn && !analysisData) return "분석 데이터 없음"; 
+    return analysisData.skinTypeLabel || analysisData.skinType; 
   };
 
   return (
-      <Wrapper onClick={handleClick} $clickable={isLoggedIn && analysisData}>
-        <BoxSectionTop>
-        <Icon src={skinTypeIcon} alt="../../../assets/images/skinTypeIcon.png"></Icon>
+    <Wrapper 
+      onClick={isLoggedIn && analysisData ? handleNavigate : undefined} 
+      $clickable={isLoggedIn && analysisData}
+    >
+      <BoxSectionTop>
+        <Icon src={skinTypeIcon} alt="Skin Type Icon" />
         <RecentAnalysis>
-          <p style={{fontSize: '10px', height: '11px', margin: '3px', color: "gray"}}>
-             {isLoggedIn && userName
-             ? `${userName} 님의 최근 분석` 
-             : "최근 분석"}
+          <p style={{ fontSize: '10px', margin: '3px', color: "gray" }}>
+            {isLoggedIn && userName ? `${userName} 님의 최근 분석` : "최근 분석"}
           </p>
-          <p style={{fontSize: '17px', height: 'auto',margin: '3px', fontWeight: "bold" , color: colors.primary}}>
-            {isLoggedIn && loading ? "로딩 중..." : skinType}
-          </p> 
-        </RecentAnalysis> 
-        </BoxSectionTop>
-        <BoxSectionBot>
-          <Detail>
-            <Symptom>여드름</Symptom>
-            <ResultPreview>{isLoggedIn && loading ? "-" : formatLabel(acneLabel)}</ResultPreview>
-          </Detail>
-          <Detail>
-            <Symptom>모공</Symptom>
-            <ResultPreview>{isLoggedIn && loading ? "-" : formatLabel(poresLabel)}</ResultPreview>
-          </Detail>
-          <Detail>
-            <Symptom>주름</Symptom>
-            <ResultPreview>{isLoggedIn && loading ? "-" : formatLabel(wrinkleLabel)}</ResultPreview>
-          </Detail>
-          <Detail>
-            <Symptom>입술건조</Symptom>
-            <ResultPreview>{isLoggedIn && loading ? "-" : formatLabel(lipLabel)}</ResultPreview>
-          </Detail>
-        </BoxSectionBot>
-        <FooterWrapper>
-        <FooterText>추천 루틴</FooterText>
-        <FooterText style={{color: colors.primary, marginBottom: "20px"}}>
-          {isLoggedIn && loading ? "로딩 중..." : getRecommendationText()}
-        </FooterText>
-        </FooterWrapper>
-      </Wrapper>
-  )
-}
+          <p style={{ fontSize: '17px', fontWeight: "bold", color: colors.primary, margin: '3px' }}>
+            {getSkinTypeText()}
+          </p>
+        </RecentAnalysis>
+      </BoxSectionTop>
 
+      {isLoggedIn && !analysisData && !loading ? (
+        <EmptyStateWrapper>
+          <EmptyText>정확한 분석을 위해 검사를 진행해 주세요.</EmptyText>
+          <GoToAnalysisBtn onClick={(e) => { e.stopPropagation(); navigate('/skin-survey'); }}>
+            분석하러 가기
+          </GoToAnalysisBtn>
+        </EmptyStateWrapper>
+      ) : (
+
+        <>
+          <BoxSectionBot>
+          </BoxSectionBot>
+          <FooterWrapper>
+          </FooterWrapper>
+        </>
+      )}
+    </Wrapper>
+  );
+};
+
+
+
+const EmptyStateWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 0;
+  gap: 12px;
+`;
+
+const EmptyText = styled.p`
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+`;
+
+const GoToAnalysisBtn = styled.button`
+  background-color: ${colors.primary};
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  &:hover {
+    opacity: 0.9;
+  }
+`;
 
 const Wrapper = styled.div`
   width: 360px;
@@ -156,8 +146,6 @@ const Wrapper = styled.div`
     ${({ $clickable }) => $clickable && "box-shadow: 0 10px 25px rgba(0,0,0,0.2);"}
   }
 `
-
-
 const Icon = styled.img`
   width: 45px;
   height: 45px;
@@ -169,25 +157,21 @@ const RecentAnalysis = styled.div`
   flex-direction: column;
   padding: 0 5px;
 `
-
 const BoxSectionTop=styled.div`
   display:flex;
   flex-direction: row;
   justify-content: flex-start;
-  gap: 5px;              
+  gap: 5px;               
   padding-bottom: 10px;
   border-bottom: 1px solid rgba(54, 54, 54, 0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
 `
 const BoxSectionBot=styled.div`
   display:flex;
   flex-direction: row;
   justify-content: space-between;
   gap: 10px;
-  padding: 10px 0 0 0;     
+  padding: 10px 0 0 0;      
 `
-
 const Detail = styled.div `
   width: 65px;
   min-height: 35px;
@@ -196,21 +180,17 @@ const Detail = styled.div `
   padding: 5px;
   border: 1px solid rgba(54, 54, 54, 0.5);
   background-color: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   display: flex;
   justify-content: center;
   flex-direction: column;
   text-align: center;
 `
-
 const Symptom= styled.div`
   height: 10px;
   font-size: 10px;
   color: gray;
   margin: 3px;
 `
-
 const ResultPreview = styled.div`
   font-size: 12px;
   color: ${colors.primary};
@@ -226,7 +206,6 @@ const FooterWrapper = styled.div`
   gap: 2px;    
   margin: 6px 0 0 2px;
 `
-
 const FooterText =styled.div`
   height: auto;
   color: gray;
@@ -234,6 +213,6 @@ const FooterText =styled.div`
   font-size: 13px;
   padding: 0;
   line-height: 1.2; 
-
 `
+
 export default RightSection;
