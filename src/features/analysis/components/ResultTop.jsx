@@ -1,30 +1,27 @@
 import styled, {keyframes} from "styled-components";
 import colors from "../../common/colors";
-
-/*api */
-import { skinAnalysis } from "../../../shared/api/skinAnalysis";
 import {useNavigate} from "react-router-dom";
 
-const ResultTop = ()=>{
-const result = skinAnalysis;
-const navigate = useNavigate();
- return (
-  <Container>
-    <Wrapper>
+const ResultTop = ({ skinType, skinTypeDescription, summaryMessage }) => {
+  const navigate = useNavigate();
+  
+  return (
+    <Container>
+      <Wrapper>
         <p>피부 타입</p>
-        <Title>{result.skinType}</Title>
-        <Description>{result.skinTypeDescription}</Description>
-    </Wrapper>
-    <Wrapper style={{flex: 1}}>
-      <p>오늘의 리포트 요약</p>
-      <Description>{result.dailySummary}</Description>
-      <ButtonWrapper>
-        <Button onClick={()=> navigate('/routineSelect')}>맞춤 세안 루틴 보러가기</Button>
-        <Button>리포트 저장하기</Button>
-      </ButtonWrapper>
-    </Wrapper>
-  </Container>
- );
+        <Title>{skinType || "분석 중"}</Title>
+        <Description>{skinTypeDescription || "피부 타입 분석 결과가 없습니다."}</Description>
+      </Wrapper>
+      <Wrapper style={{flex: 1}}>
+        <p>오늘의 리포트 요약</p>
+        <Description>{summaryMessage || "리포트 요약이 없습니다."}</Description>
+        <ButtonWrapper>
+          <Button onClick={()=> navigate('/routineSelect')}>맞춤 세안 루틴 보러가기</Button>
+          <Button>리포트 저장하기</Button>
+        </ButtonWrapper>
+      </Wrapper>
+    </Container>
+  );
 };
 export default ResultTop;
 
