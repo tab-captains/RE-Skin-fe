@@ -86,7 +86,18 @@ const handleStartAnalysis = async () => {
     
     // API 응답 형식: { success, code, message, data: { ... } }
     if (response.data && response.data.success && response.data.data) {
-      localStorage.setItem("analysisResult", JSON.stringify(response.data.data));
+      const analysisData = response.data.data;
+      const analysisId = analysisData.id;
+      
+      // 분석 시각을 LocalStorage에 저장 (analysisId를 키로 사용)
+      if (analysisId) {
+        const key = "analysisTimes";
+        const saved = JSON.parse(localStorage.getItem(key) || "{}");
+        saved[analysisId] = new Date().toISOString(); // 요청 완료 시각
+        localStorage.setItem(key, JSON.stringify(saved));
+      }
+      
+      localStorage.setItem("analysisResult", JSON.stringify(analysisData));
       navigate("/analysis");
     } else {
       throw new Error("Invalid response format");

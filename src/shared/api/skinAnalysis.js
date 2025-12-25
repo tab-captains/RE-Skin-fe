@@ -20,6 +20,58 @@ export const analyzeImage = async (payload) => {
   }
 };
 
+/**
+ * 최근 분석 결과 요약 조회
+ * @returns {Promise<object>} - 서버에서 반환한 최근 분석 요약
+ */
+export const getLatestAnalysisSummary = async () => {
+  try {
+    const res = await instance.get("/api/analyze/latest/summary", {
+      withCredentials: true,
+    });
+
+    return res.data;
+  } catch (error) {
+    console.error("최근 분석 결과 조회 실패:", error);
+    throw error;
+  }
+};
+
+/**
+ * 분석 목록 조회
+ * @returns {Promise<object>} - 서버에서 반환한 분석 목록
+ */
+export const getAnalysisList = async () => {
+  try {
+    const res = await instance.get("/api/analyze", {
+      withCredentials: true,
+    });
+
+    return res.data;
+  } catch (error) {
+    console.error("분석 목록 조회 실패:", error);
+    throw error;
+  }
+};
+
+/**
+ * 분석 상세 조회
+ * @param {number} id - 분석 ID
+ * @returns {Promise<object>} - 서버에서 반환한 분석 상세 정보
+ */
+export const getAnalysisDetail = async (id) => {
+  try {
+    const res = await instance.get(`/api/analyze/${id}`, {
+      withCredentials: true,
+    });
+
+    return res.data;
+  } catch (error) {
+    console.error("분석 상세 조회 실패:", error);
+    throw error;
+  }
+};
+
 
 
 
