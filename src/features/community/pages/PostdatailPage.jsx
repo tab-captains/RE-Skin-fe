@@ -35,6 +35,35 @@ const CommentList = styled.div` margin-top: 1rem; `;
 const CommentItem = styled.div` padding: 14px; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; `;
 const DeleteBtn = styled.button` font-size: 0.8rem; background: none; border: none; color: #DC2626; cursor: pointer; `;
 
+const ActionButtons = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1rem;
+  justify-content: flex-end;
+`;
+
+const EditButton = styled.button`
+  padding: 8px 14px;
+  background: #2563EB;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  &:hover { background: #1D4ED8; }
+`;
+
+const DeletePostButton = styled.button`
+  padding: 8px 14px;
+  background: #DC2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  &:hover { background: #B91C1C; }
+`;
+
 const PostDetailPage = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
@@ -141,9 +170,33 @@ const PostDetailPage = () => {
 
   if (!post) return <PageContainer>Loading...</PageContainer>;
 
+  const isAuthor =
+  isLoggedIn &&
+  user &&
+  post &&
+  String(user.userId) === String(post.authorId);
+
   return (
     <PageContainer>
       <BackButton onClick={() => navigate(-1)}>← 뒤로가기</BackButton>
+
+      {isAuthor && (
+      <ActionButtons>
+        <EditButton onClick={() => navigate(`/write?postId=${postId}&edit=true`)}>
+          수정
+        </EditButton>
+      <DeletePostButton
+        onClick={async () => {
+          if (!window.confirm("정말 삭제하시겠습니까?")) return;
+          await deletePost(postId);
+          navigate("/community");
+        }}
+      >
+      삭제
+      </DeletePostButton>
+      </ActionButtons>
+    )}
+      
       <Title>{post.title}</Title>
       <DateText>{new Date(post.publishedAt).toLocaleString()} · 작성자: {post.nickname}</DateText>
       <Content>{post.content}</Content>
