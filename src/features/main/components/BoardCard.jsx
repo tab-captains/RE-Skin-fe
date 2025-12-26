@@ -3,45 +3,43 @@ import colors from "../../common/colors";
 import useReveal from "../../common/hooks/useReveal"
 import ProfileIcon from "../../common/components/ProfileIcon"
 import {useNavigate} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getTopViewedPosts } from "../../../shared/api/posts";
 const BoardCard = () => {
   const navigate =useNavigate();
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+  const fetchTopPosts = async () => {
+    try {
+      const data = await getTopViewedPosts();
+      setPosts(Array.isArray(data) ? data : []);
+    } catch (e) {
+      console.error("인기 게시글 조회 실패", e);
+    }
+  };
+  fetchTopPosts();
+}, []);
   return (
-      <PopularContainer onClick={()=> navigate('/community')}>
+      <PopularContainer>
       <p style={{margin: "5px",marginTop:"7px", fontWeight:"bold"}}>오늘의 인기 게시글</p>
-
-
-      <PreviewCardItem >
-        <ProfileIcon  name="키위새(1번째인기게시글)" size={30}/>
-        <TextWrapper>
-          <Title>제목이 위치할 자리.</Title>
-          <TagWrapper>
-            <Tag>#태그1</Tag>
-            <Tag>#태그2</Tag>
-          </TagWrapper>
-        </TextWrapper>
-      </PreviewCardItem>
-
-      <PreviewCardItem >
-        <ProfileIcon  name="위위새(2번째인기게시글)" size={30}/>
-        <TextWrapper>
-          <Title>제목이 위치할 자리.</Title>
-          <TagWrapper>
-            <Tag>#태그1</Tag>
-            <Tag>#태그2</Tag>
-          </TagWrapper>
-        </TextWrapper>
-      </PreviewCardItem>
-
-        <PreviewCardItem >
-        <ProfileIcon  name="새위새(3번째인기게시글)" size={30}/>
-        <TextWrapper>
-          <Title>제목이 위치할 자리.</Title>
-          <TagWrapper>
-            <Tag>#태그1</Tag>
-            <Tag>#태그2</Tag>
-          </TagWrapper>
-        </TextWrapper>
-      </PreviewCardItem>
+      {posts.map((post, index) => (
+    <PreviewCardItem
+      key={post.postId}
+      onClick={() => navigate(`/community/post/${post.postId}`)}
+    >
+      <ProfileIcon
+        name={`${post.nickname || "익명"} · ${index + 1}위`}
+        size={30}
+      />
+      <TextWrapper>
+        <Title>{post.title}</Title>
+        <TagWrapper>
+          <Tag>조회수 {post.viewCount}</Tag>
+          <Tag>댓글 {post.commentCount}</Tag>
+        </TagWrapper>
+      </TextWrapper>
+    </PreviewCardItem>
+))}
     </PopularContainer>
   );
 };
@@ -49,11 +47,15 @@ const BoardCard = () => {
 export default BoardCard;
 
 
-  const PreviewCardItem = ({ children }) => {
+const PreviewCardItem = ({ children, onClick }) => {
   const { ref, isRevealed } = useReveal({ threshold: [0.5, 0.4] });
 
   return (
-    <PreviewCard ref={ref} className={isRevealed ? "visible" : ""}>
+    <PreviewCard
+      ref={ref}
+      className={isRevealed ? "visible" : ""}
+      onClick={onClick}
+    >
       {children}
     </PreviewCard>
   );
