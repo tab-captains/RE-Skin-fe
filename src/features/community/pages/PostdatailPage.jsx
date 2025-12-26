@@ -4,7 +4,7 @@ import { FaHeart, FaRegComment } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { submitComment, deleteComment, getComments } from "../../../shared/api/comments";
 import { getPostDetail, deletePost } from "../../../shared/api/posts";
-import { likePost, unlikePost } from "../../../shared/api/contentlike";
+import { togglePostLike } from "../../../shared/api/contentlike";
 import { useAuth } from "../../auth/context/AuthContext";
 
 const heartPop = keyframes` 0% { transform: scale(1); } 40% { transform: scale(1.3); } 100% { transform: scale(1); } `;
@@ -15,7 +15,15 @@ const Title = styled.h1` font-size: 2rem; font-weight: 700; margin-bottom: 1rem;
 const DateText = styled.p` color: #6B7280; margin-bottom: 1.5rem; `;
 const Content = styled.p` font-size: 1.1rem; line-height: 1.7; white-space: pre-wrap; margin-bottom: 1.5rem; `;
 const Footer = styled.div` display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-top: 1px solid #E5E7EB; `;
-const Likes = styled.div` display: flex; align-items: center; gap: 0.5rem; color: #EF4444; cursor: pointer; `;
+const Likes = styled.div` 
+  display: flex; 
+  align-items: center; 
+  gap: 0.5rem; 
+  color: #EF4444; 
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'}; 
+  opacity: ${props => props.disabled ? 0.6 : 1};
+  pointer-events: ${props => props.disabled ? 'none' : 'auto'};
+`;
 const BackButton = styled.button` padding: 8px 14px; background: #e5e7eb; border: none; border-radius: 8px; cursor: pointer; margin-bottom: 1rem; `;
 
 const CommentBox = styled.div` margin-top: 2rem; `;
@@ -57,17 +65,51 @@ const PostDetailPage = () => {
   }, [postId, navigate]);
 
   const toggleLike = async () => {
+    // 로그인 체크
+    if (!isLoggedIn) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
+
+    // 중복 클릭 방지
     if (isProcessing) return;
+
+    // 이전 상태 저장 (롤백용)
+    const prevLikes = likes;
+    const prevLiked = liked;
+
     setIsProcessing(true);
+    setAnimateHeart(true);
+    
     try {
-      const res = !liked ? await likePost(postId) : await unlikePost(postId);
-      const data = res.data || res;
-      setLikes(data.likeCount);
-      setLiked(data.liked);
-      setAnimateHeart(true);
+      // 토글 API 호출
+      const res = await togglePostLike(postId);
+      
+      // 응답 구조: { success, code, message, data: { postId, likeCount, liked } }
+      const responseData = res.data || res;
+      
+      // 서버 응답 값을 single source of truth로 사용
+      if (responseData.likeCount !== undefined) {
+        setLikes(responseData.likeCount);
+      }
+      if (responseData.liked !== undefined) {
+        setLiked(responseData.liked);
+      }
+      
       setTimeout(() => setAnimateHeart(false), 300);
-    } catch (err) { alert("좋아요 실패"); }
-    finally { setIsProcessing(false); }
+    } catch (err) {
+      // 에러 발생 시 이전 상태로 롤백
+      setLikes(prevLikes);
+      setLiked(prevLiked);
+      setAnimateHeart(false);
+      
+      console.error("좋아요 토글 실패:", err);
+      const errorMessage = err.response?.data?.message || "좋아요 처리에 실패했습니다.";
+      alert(errorMessage);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const addComment = async () => {
@@ -107,8 +149,9 @@ const PostDetailPage = () => {
       <Content>{post.content}</Content>
 
       <Footer>
-        <Likes onClick={toggleLike}>
-          <AnimatedHeart animate={animateHeart} color={liked ? "red" : "#EF4444"} />
+        <div>👀 조회수 {post.viewCount ?? 0}</div>
+        <Likes onClick={toggleLike} disabled={isProcessing}>
+          <AnimatedHeart animate={animateHeart} color={liked ? "#EF4444" : "#9CA3AF"} />
           <span>좋아요 {likes}</span>
         </Likes>
         <div><FaRegComment /> 댓글 {comments.length}</div>

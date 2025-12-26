@@ -98,7 +98,7 @@ const handleStartAnalysis = async () => {
       }
       
       localStorage.setItem("analysisResult", JSON.stringify(analysisData));
-      navigate("/analysis");
+    navigate("/analysis");
     } else {
       throw new Error("Invalid response format");
     }
