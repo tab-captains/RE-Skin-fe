@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import DetailReport from './Detailreport';
+import DetailReport from './Detailreport'; 
 import { getAnalysisList, getAnalysisDetail } from '../../shared/api/skinAnalysis';
 import { useAuth } from '../auth/context/AuthContext';
 import ResultTop from '../analysis/components/ResultTop';
@@ -214,9 +214,9 @@ const DownloadLink = styled.a`
 
     &:hover {
         ${({ disabled }) => !disabled && `
-            color: #1e2a55;
-            background-color: #e0e5ee;
-            border-color: #aeb8c4;
+        color: #1e2a55;
+        background-color: #e0e5ee;
+        border-color: #aeb8c4;
         `}
     }
 `;
@@ -375,8 +375,8 @@ const SkinReport = () => {
             
             if (response && response.success && response.data) {
                 setDetailData(response.data);
-                setSelectedReport(record);
-                setShowDetail(true);
+        setSelectedReport(record);
+        setShowDetail(true);
             } else {
                 alert("분석 결과를 불러올 수 없습니다.");
             }
@@ -425,17 +425,17 @@ const SkinReport = () => {
                             
                             return (
                                 <RecordItem key={analysisId || index}>
-                                    <RecordPoint /> 
-                                    
-                                    <DateColumn>
+                            <RecordPoint /> 
+                            
+                            <DateColumn>
                                         <DateText>{dateStr}</DateText>
                                         {timeAgo && <AgoText>{timeAgo}</AgoText>}
                                         {dateTime && <DateTimeText>{dateTime}</DateTimeText>}
-                                    </DateColumn>
-                                    
-                                    <CardContent>
-                                        <Summary>
-                                            <span>👤 Report Summary</span>
+                            </DateColumn>
+                            
+                            <CardContent>
+                                <Summary>
+                                    <span>👤 Report Summary</span>
                                             <SummaryContent>
                                                 {record.summaryMessage && (
                                                     <SummaryText>{record.summaryMessage}</SummaryText>
@@ -464,18 +464,18 @@ const SkinReport = () => {
                                                     <SummaryText>분석 결과 요약이 없습니다.</SummaryText>
                                                 )}
                                             </SummaryContent>
-                                        </Summary>
-                                        
-                                        <DownloadLink 
+                                </Summary>
+                                
+                                <DownloadLink 
                                             href="#"
                                             onClick={(e) => handleDownloadClick(record, e)}
                                             disabled={loadingDetail}>
                                             {loadingDetail && (selectedReport?.analysisId === analysisId || selectedReport?.id === analysisId)
                                                 ? "로딩 중..." 
                                                 : "Report Detail"}
-                                        </DownloadLink>
-                                    </CardContent>
-                                </RecordItem>
+                                </DownloadLink>
+                            </CardContent>
+                        </RecordItem>
                             );
                         })
                     )}

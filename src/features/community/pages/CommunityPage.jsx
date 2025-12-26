@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { FaUserCircle, FaRegComment, FaHeart } from "react-icons/fa"; 
 import { useNavigate } from 'react-router-dom';
-import { likePost, unlikePost } from '../../../shared/api/contentlike';
+import { togglePostLike } from '../../../shared/api/contentlike';
 import { submitComment, deleteComment, getComments } from "../../../shared/api/comments";
 import { getPostList } from "../../../shared/api/posts";
 import { useAuth } from "../../auth/context/AuthContext";
@@ -33,7 +33,15 @@ const AuthorInfo = styled.div` display: flex; align-items: center; gap: 0.5rem; 
 const DateText = styled.span` color: #9CA3AF; `;
 const Footer = styled.div` display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; border-top: 1px solid #E5E7EB; `;
 const UserInfo = styled.div` display: flex; align-items: center; gap: 0.5rem; `;
-const Likes = styled.div` display: flex; align-items: center; gap: 0.5rem; color: #EF4444; `;
+const Likes = styled.div` 
+  display: flex; 
+  align-items: center; 
+  gap: 0.5rem; 
+  color: #EF4444; 
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'}; 
+  opacity: ${props => props.disabled ? 0.6 : 1};
+  pointer-events: ${props => props.disabled ? 'none' : 'auto'};
+`;
 const UserIcon = styled(FaUserCircle)` font-size: 1.25rem; color: #3B82F6; `;
 
 const CommentBox = styled.div` padding: 1rem; border-top: 1px solid #E5E7EB; background-color: #F9FAFB; `;
@@ -106,21 +114,52 @@ const PostCard = ({ post }) => {
     };
 
     const handleLike = async (e) => {
-        if (e) e.stopPropagation(); 
+        if (e) e.stopPropagation();
+        
+        // 로그인 체크
+        if (!isLoggedIn) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+        
+        // 중복 클릭 방지
         if (isProcessing) return;
-        setIsProcessing(true);
+        
+        // 이전 상태 저장 (롤백용)
         const originalLiked = liked;
         const originalLikes = likes;
-        setLiked(!liked);
-        setLikes(prev => (liked ? prev - 1 : prev + 1));
+        
+        setIsProcessing(true);
         setAnimateHeart(true);
-        setTimeout(() => setAnimateHeart(false), 300);
+        
         try {
-            const res = originalLiked ? await unlikePost(post.postId) : await likePost(post.postId);
-            const resData = res.data || res;
-            if (resData) { setLiked(resData.liked); setLikes(resData.likeCount); }
-        } catch (err) { setLiked(originalLiked); setLikes(originalLikes); }
-        finally { setIsProcessing(false); }
+            // 토글 API 호출
+            const res = await togglePostLike(post.postId);
+            
+            // 응답 구조: { success, code, message, data: { postId, likeCount, liked } }
+            const responseData = res.data || res;
+            
+            // 서버 응답 값을 single source of truth로 사용
+            if (responseData.likeCount !== undefined) {
+                setLikes(responseData.likeCount);
+            }
+            if (responseData.liked !== undefined) {
+                setLiked(responseData.liked);
+            }
+            
+            setTimeout(() => setAnimateHeart(false), 300);
+        } catch (err) {
+            // 에러 발생 시 이전 상태로 롤백
+            setLiked(originalLiked);
+            setLikes(originalLikes);
+            setAnimateHeart(false);
+            
+            console.error("좋아요 토글 실패:", err);
+            const errorMessage = err.response?.data?.message || "좋아요 처리에 실패했습니다.";
+            alert(errorMessage);
+        } finally {
+            setIsProcessing(false);
+        }
     };
 
     const removeComment = async (commentId, e) => {
@@ -142,12 +181,16 @@ const PostCard = ({ post }) => {
                 </MetaInfo>
             </Content>
             <Footer>
+                <UserInfo>
+                    👀 <span>{post.viewCount ?? 0}</span>
+                </UserInfo>
+                
                 <UserInfo onClick={(e) => { e.stopPropagation(); setShowCommentBox(!showCommentBox); }}>
                     <FaRegComment size={16} />
                     <span>{comments.length > 0 ? comments.length : (post.commentCount || 0)}</span>
                 </UserInfo>
-                <Likes onClick={handleLike}>
-                    <AnimatedHeart animate={animateHeart} color={liked ? "red" : "#EF4444"} size={16} />
+                <Likes onClick={handleLike} disabled={isProcessing}>
+                    <AnimatedHeart animate={animateHeart} color={liked ? "#EF4444" : "#9CA3AF"} size={16} />
                     <span>{likes}</span>
                 </Likes>
             </Footer>

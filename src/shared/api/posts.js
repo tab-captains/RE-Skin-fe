@@ -102,3 +102,13 @@ export const deletePost = async (postId) => {
     throw err;
   }
 };
+
+export const getTopViewedPosts = async () => {
+  try {
+    const res = await instance.get("/api/posts/top-viewed");
+    return res.data;
+  } catch (err) {
+    console.error("조회수 TOP 3 조회 실패:", err);
+    throw err;
+  }
+};
