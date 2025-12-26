@@ -23,17 +23,17 @@ const LoginSuccessPage = () => {
       
       // 사용자 정보 가져오기
       try {
-        const userInfo = await getMyInfo();
-        console.log("카카오 로그인 후 사용자 정보:", userInfo);
+        const userInfoRes = await getMyInfo();
+        const userInfo = userInfoRes?.data || userInfoRes;
         
         const userData = {
-          userId: userInfo.userId || userInfo.id,
-          loginId: userInfo.loginId,
-          username: userInfo.nickname,
-          email: userInfo.email,
-          birthdate: userInfo.birthdate,
-          gender: userInfo.gender,
-          skinType: userInfo.skintype,
+          userId: userInfo?.id || userInfo?.userId,
+          loginId: userInfo?.loginId,
+          username: userInfo?.nickname,
+          email: userInfo?.email,
+          birthdate: userInfo?.birthdate,
+          gender: userInfo?.gender,
+          skinType: userInfo?.skinType, // ✅ skintype 말고 skinType일 가능성 큼
         };
 
         login({

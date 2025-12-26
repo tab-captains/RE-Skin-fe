@@ -127,15 +127,34 @@ export const kakaoCallback = async () => {
  * 로그아웃 API
  */
 export const logout = async () => {
+  const refreshToken = localStorage.getItem("refreshToken");
+
   try {
-    const response = await instance.post("/api/auth/logout");
-    console.log("Logout response:", response.data);
+    if (refreshToken) {
+      await instance.post("/api/auth/logout", null, {
+        params: { refreshToken },
+      });
+    }
   } catch (error) {
     console.error("Logout error:", error);
   } finally {
-    // 항상 정리
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("user_data");
   }
+};
+
+
+export const refresh = async () => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  if (!refreshToken) throw new Error("refreshToken 없음");
+
+  const res = await instance.post("/api/auth/refresh", null, {
+    params: { refreshToken },
+  });
+
+  const data = res.data.data;
+  localStorage.setItem("accessToken", data.accessToken);
+  localStorage.setItem("refreshToken", data.refreshToken);
+  return data;
 };

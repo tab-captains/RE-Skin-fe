@@ -35,7 +35,7 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
 
     // accessToken 만료 (401)
-    if (error.response?.status === 401 ||  error.response?.status === 403 && !originalRequest._retry) {
+    if ((error.response?.status === 401 ||  error.response?.status === 403) && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
@@ -47,7 +47,8 @@ instance.interceptors.response.use(
         // refreshToken을 body에 넣어서 보냄
         const refreshResponse = await axios.post(
           `${API_BASE_URL}/api/auth/refresh`,
-          { refreshToken }
+          null,
+          { params: { refreshToken } }
         );
 
         const newAccessToken = refreshResponse.data.data.accessToken;
@@ -57,7 +58,7 @@ instance.interceptors.response.use(
         localStorage.setItem("refreshToken", newRefreshToken);
 
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        instance.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
+        instance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
 
 
         return instance(originalRequest);
