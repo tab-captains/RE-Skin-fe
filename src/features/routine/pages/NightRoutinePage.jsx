@@ -13,7 +13,6 @@ const NightRoutinePage = () => {
     <Container>
       <Routine  routineData={nightRoutine} type="night"/>
       <Recommended recommendedData={nightSkinType}/>
-      <ProductList productData={nightProducts} />
       <Footer target="/morning" />
     </Container>
     </>
