@@ -1,11 +1,10 @@
 import styled from "styled-components"
 import colors from "../../common/colors";
 import { useAuth } from "../../auth/context/AuthContext";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useMemo} from "react";
 import { useNavigate } from "react-router-dom";
 import ResultTop from "../components/ResultTop";
 import SkinScoreGrid from "../components/SkinScoreGrid";
-
 
 const AnalysisResultPage=()=>{
   const {user} = useAuth();
@@ -31,6 +30,39 @@ const AnalysisResultPage=()=>{
     }
   }, [navigate]);
 
+  const topKeywords = useMemo(() => {
+    if (!analysisData) return [];
+
+    const analysisScores = [
+      { key: "여드름", score: analysisData.acneScore },
+      { key: "주름", score: analysisData.wrinkleScore },
+      { key: "모공", score: analysisData.poresScore },
+      { key: "입술 건조", score: analysisData.lipScore },
+    ];
+
+      const sorted = analysisScores
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 3)
+          .map(item => item.key);
+          
+        console.log("추출된 키워드:", sorted); // 잘 나오는지 확인
+        return sorted;
+        }, [analysisData]);
+
+  useEffect(() => {
+    if (topKeywords.length > 0) {
+      localStorage.setItem(
+        "analysisTopKeywords",
+        JSON.stringify(topKeywords)
+      );
+    }
+  }, [topKeywords]);
+
+
+
+
+  
+
   if (!analysisData) {
     return (
       <Container>
@@ -43,9 +75,7 @@ const AnalysisResultPage=()=>{
   const skinTypeMap = {
     "COMBINATION": "복합성",
     "DRY": "건성",
-    "OILY": "지성",
-    "NORMAL": "중성",
-    "SENSITIVE": "민감성"
+    "OILY": "지성"
   };
 
   const displaySkinType = skinTypeMap[analysisData.skinType] || analysisData.skinType;

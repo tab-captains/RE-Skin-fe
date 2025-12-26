@@ -2,22 +2,27 @@ import styled from "styled-components";
 import colors from "../../common/colors";
 import { useAuth } from "../../auth/context/AuthContext";
 import useReveal from "../../common/hooks/useReveal";
+
 const Recommended = ({recommendedData}) => {
   const { user } = useAuth();
-  const keywords = ["지성", "입술 건조함", "주름"];
   const { ref: titleRef, isRevealed: titleShow } = useReveal();
   const { ref: boxRef, isRevealed: boxShow } = useReveal();
 
   const recommended = recommendedData  || {};
+  const keyword =
+  recommended.typeName || // 매핑된 값
+  recommended.label ||    // 서버 원본
+  "피부";
+
   return (
         <Container>
           <RecommendedTitleWrapper ref={titleRef} $show={titleShow}>
-          <Keyword>{keywords[0]}</Keyword>
+          <Keyword>{keyword}</Keyword>
           <RecommendedTitle>타입의 {user ? user.username : " Guest"}님께 이런 제품을 추천해요!</RecommendedTitle>
           </RecommendedTitleWrapper>
 
           <RecommendedBox ref={boxRef} $show={boxShow}>
-            <BoxTitle>{keywords[0]} 피부 타입 분석</BoxTitle>
+            <BoxTitle>{keyword} 피부 타입 분석</BoxTitle>
             <BoxTypeText>{recommended.description}</BoxTypeText>
             <BoxDes><br />케어 방향만 올바르게 잡으면 맑고 균형 잡힌 피부로 돌아옵니다.<br></br>자 이제 {user? user.username: "Guest"}님께 딱 맞는 제품들을 소개해드릴게요!</BoxDes>
           </RecommendedBox>
