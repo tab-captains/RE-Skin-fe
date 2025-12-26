@@ -24,7 +24,6 @@ const Recommended = ({recommendedData}) => {
           <RecommendedBox ref={boxRef} $show={boxShow}>
             <BoxTitle>{keyword} 피부 타입 분석</BoxTitle>
             <BoxTypeText>{recommended.description}</BoxTypeText>
-            <BoxDes><br />케어 방향만 올바르게 잡으면 맑고 균형 잡힌 피부로 돌아옵니다.<br></br>자 이제 {user? user.username: "Guest"}님께 딱 맞는 제품들을 소개해드릴게요!</BoxDes>
           </RecommendedBox>
         </Container>
   );

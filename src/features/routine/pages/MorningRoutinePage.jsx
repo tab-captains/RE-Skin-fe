@@ -4,7 +4,7 @@ import Recommended from "../components/Recommended";
 import ProductList from "../components/ProductList";
 import Footer from "../components/Footer";
 import ScrolltoTop from "../../common/ScrolltoTop";
-import { morningRoutine, getUserSkinType} from "../../../shared/api/routines";
+import { getUserSkinType} from "../../../shared/api/routines";
 import { useState, useEffect } from "react";
 const MorningRoutinePage = () => {
   const [skinTypeData, setSkinTypeData] = useState(null);
