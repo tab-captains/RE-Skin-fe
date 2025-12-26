@@ -14,6 +14,15 @@ export const getRoutine = async (routineType) => {
 };
 
 
+export const getUserSkinType = async () => {
+  try {
+    const res = await instance.get("/api/user/skin-type/ment");
+    return res.data.data; 
+  } catch (err) {
+    console.error("피부 타입 멘트 조회 실패:", err);
+    throw err;
+  }
+};
 
 /*=======================mock data========================== */
 

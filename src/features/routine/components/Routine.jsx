@@ -5,17 +5,28 @@ import { useAuth } from "../../auth/context/AuthContext";
 import {getRoutine, morningRoutine, nightRoutine} from "../../../shared/api/routines";
 import { IoArrowForward, IoSunny, IoMoon} from "react-icons/io5";
 
+
 const Routine = ({ type }) => {
 
-  const keywords = ["지성", "입술 건조함", "주름"];
   const [routine, setRoutine] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [keywords, setKeywords] = useState([]);
   const { user } = useAuth();
 const ROUTINE_TYPE_BY_PROP = {
   morning: "MORNING",
   night: "NIGHT",
 };
-// Routine.jsx 내 useEffect 수정
+  useEffect(() => {
+    const stored = localStorage.getItem("analysisTopKeywords");
+    if (stored) {
+      try {
+        setKeywords(JSON.parse(stored));
+      } catch (e) {
+        console.error("키워드 파싱 실패", e);
+      }
+    }
+  }, []);
+
 useEffect(() => {
   const routineType = ROUTINE_TYPE_BY_PROP[type];
   const fetchRoutine = async () => {
@@ -25,13 +36,13 @@ useEffect(() => {
       if (data) {
           setRoutine(data);
         } else {
-          // 서버 응답이 비어있을 경우 에러로 간주하고 catch로 던짐
+
           throw new Error("No Data");
         }
     } catch (e) {
       console.error("루틴 조회 실패", e);
       
-      // [임시 조치] 에러 발생 시 박스라도 띄우기 위해 임시 데이터 세팅
+
       const fallbackData = type === "morning" ? morningRoutine : nightRoutine;
       setRoutine({
         steps: fallbackData
@@ -45,14 +56,13 @@ useEffect(() => {
 if (loading) {
   return <div>루틴 불러오는 중...</div>;
 }
-const stepsData = routine?.steps || [];
+const stepsData = routine?.steps ? routine.steps : (Array.isArray(routine) ? routine : []);
 
 const routineSteps = stepsData.map((step) => ({
-    img: "/assets/images/skinTypeIcon.png",
-    // 서버 데이터는 stepName, mock 데이터는 title일 수 있으니 대응
-    title: step.stepName || step.title, 
-    desc: step.stepDescription || step.desc,
-  }));
+    // 서버 응답과 mock 데이터의 필드명을 모두 대응합니다.
+    title: step.stepName || step.title || "정보 없음", 
+    desc: step.stepDescription || step.desc || "상세 설명이 없습니다.",
+}));
 
 
   return (
@@ -65,11 +75,11 @@ const routineSteps = stepsData.map((step) => ({
         )}
 
         <Title>{user ? user.username : "Guest"}님의 피부 고민 키워드는</Title>
-        <Keywords>
-          {keywords.map((k, idx) => (
-            <Keyword key={idx}>{k}</Keyword>
-          ))}
-        </Keywords>
+          <Keywords>
+            {keywords.map((k, idx) => (
+              <Keyword key={idx}>{k}</Keyword>
+            ))}
+          </Keywords>
       </TitleWrapper>
 
       <RoutineWrapper>
@@ -77,7 +87,6 @@ const routineSteps = stepsData.map((step) => ({
         {routineSteps.map((step, idx) => (
           <StepWrapper key={idx} >
             <StepBox $delay={`${(idx+1) * 300}ms`}>
-              <ProductImg src={step.img} alt={step.title} />
               <StepTitle>{step.title}</StepTitle>
               <StepDesc>{step.desc}</StepDesc>
             </StepBox>
