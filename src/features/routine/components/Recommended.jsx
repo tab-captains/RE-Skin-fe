@@ -4,6 +4,7 @@ import { useAuth } from "../../auth/context/AuthContext";
 import useReveal from "../../common/hooks/useReveal";
 
 const Recommended = ({recommendedData}) => {
+  console.log("추천 데이터:", recommendedData);
   const { user } = useAuth();
   const { ref: titleRef, isRevealed: titleShow } = useReveal();
   const { ref: boxRef, isRevealed: boxShow } = useReveal();
@@ -14,6 +15,11 @@ const Recommended = ({recommendedData}) => {
   recommended.label ||    // 서버 원본
   "피부";
 
+const description = 
+    recommended.ment ||          
+    recommended.description ||    
+    "분석 데이터를 불러올 수 없습니다.";
+
   return (
         <Container>
           <RecommendedTitleWrapper ref={titleRef} $show={titleShow}>
@@ -23,7 +29,7 @@ const Recommended = ({recommendedData}) => {
 
           <RecommendedBox ref={boxRef} $show={boxShow}>
             <BoxTitle>{keyword} 피부 타입 분석</BoxTitle>
-            <BoxTypeText>{recommended.description}</BoxTypeText>
+            <BoxTypeText>{description}</BoxTypeText>
           </RecommendedBox>
         </Container>
   );
@@ -114,5 +120,9 @@ const BoxDes = styled.div`
   font-size: 13px;
 `
 const BoxTypeText = styled.div`
-  font-size: 13px;
+font-size: 14px;
+  line-height: 1.6;
+  color: #555;
+  /* 줄바꿈(\n)과 공백을 화면에 그대로 반영하기 위해 반드시 필요합니다 */
+  white-space: pre-wrap;
 `
