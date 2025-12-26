@@ -2,45 +2,57 @@ import {useState, useEffect} from "react";
 import styled, {keyframes} from "styled-components";
 import colors from "../../common/colors";
 import { useAuth } from "../../auth/context/AuthContext";
-import {getRoutine} from "../../../shared/api/routines";
+import {getRoutine, morningRoutine, nightRoutine} from "../../../shared/api/routines";
 import { IoArrowForward, IoSunny, IoMoon} from "react-icons/io5";
 
 const Routine = ({ type }) => {
 
-    //api 연결 시 삭제.
   const keywords = ["지성", "입술 건조함", "주름"];
   const [routine, setRoutine] = useState(null);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
-  const ROUTINE_ID_BY_TYPE = {
-  morning: 0,
-  night: 1,
+const ROUTINE_TYPE_BY_PROP = {
+  morning: "MORNING",
+  night: "NIGHT",
 };
-  useEffect(() => {
+// Routine.jsx 내 useEffect 수정
+useEffect(() => {
+  const routineType = ROUTINE_TYPE_BY_PROP[type];
   const fetchRoutine = async () => {
     try {
-      const routineId = ROUTINE_ID_BY_TYPE[type];
-      const data= await getRoutine(routineId);
-      setRoutine(data);
+      setLoading(true);
+      const data = await getRoutine(routineType);
+      if (data) {
+          setRoutine(data);
+        } else {
+          // 서버 응답이 비어있을 경우 에러로 간주하고 catch로 던짐
+          throw new Error("No Data");
+        }
     } catch (e) {
       console.error("루틴 조회 실패", e);
+      
+      // [임시 조치] 에러 발생 시 박스라도 띄우기 위해 임시 데이터 세팅
+      const fallbackData = type === "morning" ? morningRoutine : nightRoutine;
+      setRoutine({
+        steps: fallbackData
+      });
     } finally {
       setLoading(false);
     }
   };
-
   fetchRoutine();
 }, [type]);
 if (loading) {
   return <div>루틴 불러오는 중...</div>;
 }
+const stepsData = routine?.steps || [];
 
-const routineSteps =
-  routine?.steps?.map((step) => ({
-    img: "/assets/images/skinTypeIcon.png", // 임시 이미지
-    title: step.stepName,
-    desc: step.stepDescription,
-  })) || [];
+const routineSteps = stepsData.map((step) => ({
+    img: "/assets/images/skinTypeIcon.png",
+    // 서버 데이터는 stepName, mock 데이터는 title일 수 있으니 대응
+    title: step.stepName || step.title, 
+    desc: step.stepDescription || step.desc,
+  }));
 
 
   return (

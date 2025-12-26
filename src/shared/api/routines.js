@@ -2,14 +2,14 @@ import instance from "./axiosInstance";
 
 /**
  * 루틴 상세 조회
- * @param {number} routineId
+ * @param {"MORNING" | "NIGHT"} routineType
  */
-export const getRoutine = async (routineId) => {
-  if (routineId === undefined || routineId === null) {
-    throw new Error("routineId가 필요합니다.");
+export const getRoutine = async (routineType) => {
+  if (!routineType) {
+    throw new Error("routineType이 필요합니다.");
   }
 
-  const response = await instance.get(`/api/routines/${routineId}`);
+  const response = await instance.get(`/api/routines/type/${routineType}`);
   return response.data.data;
 };
 
