@@ -24,9 +24,10 @@ import Morning from "./features/routine/pages/MorningRoutinePage";
 import Night from "./features/routine/pages/NightRoutinePage";
 import ProductCategoryPage from "./features/product/ProductCategoryPage";
 import AdminProductPage from "./features/product/AdminProductPage";
+import ProductDetailPage from "./features/product/ProductdetailPage";
 
 const AdminRoute = ({ children }) => {
-  return children;
+  return children;   
 };
 
 function App() {
@@ -55,8 +56,10 @@ function App() {
             <Route path="morning" element={<Morning/>}/>
             <Route path="night" element={<Night/>}/>
             <Route path="login-success" element={ <KakaoCallbackPage />}/>
+            <Route path="product/detail/:productId" element={<ProductDetailPage />} />
             <Route path="product/:category" element={<ProductCategoryPage />} />
             <Route path="admin/product/write" element={<AdminRoute><AdminProductPage /> </AdminRoute> }/>
+            <Route path="admin/product/edit/:productId" element={<AdminRoute><AdminProductPage /></AdminRoute>} />
             
           
           </Route>
